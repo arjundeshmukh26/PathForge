@@ -9,6 +9,7 @@ const InteractiveResumeForm = ({ onAnalyze, isAnalyzing = false }) => {
   const [roles, setRoles] = useState([]);
   const [filteredRoles, setFilteredRoles] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
   const [categories, setCategories] = useState({});
   const [wordCount, setWordCount] = useState(0);
   const [formErrors, setFormErrors] = useState({});
@@ -24,12 +25,24 @@ const InteractiveResumeForm = ({ onAnalyze, isAnalyzing = false }) => {
   }, [formData.resume]);
 
   useEffect(() => {
+    let filtered = [];
+    
+    // Filter by category first
     if (selectedCategory === 'all') {
-      setFilteredRoles(roles);
+      filtered = roles;
     } else {
-      setFilteredRoles(categories[selectedCategory] || []);
+      filtered = categories[selectedCategory] || [];
     }
-  }, [selectedCategory, roles, categories]);
+    
+    // Then filter by search term
+    if (searchTerm.trim()) {
+      filtered = filtered.filter(role => 
+        role.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    setFilteredRoles(filtered);
+  }, [selectedCategory, searchTerm, roles, categories]);
 
   const fetchRoles = async () => {
     const apiUrls = [
@@ -213,6 +226,35 @@ const InteractiveResumeForm = ({ onAnalyze, isAnalyzing = false }) => {
                   </svg>
                   Target Role
                 </label>
+
+                {/* Search Box */}
+                <div className="relative mb-4">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search for roles (e.g., React, Python, DevOps)..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3 text-base border-2 border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:border-slate-500 focus:outline-none transition-all duration-200"
+                    disabled={isAnalyzing}
+                  />
+                  {searchTerm && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchTerm('')}
+                      className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600"
+                      disabled={isAnalyzing}
+                    >
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
 
                 {/* Category Filter */}
                 <div className="flex flex-wrap gap-2 mb-4">

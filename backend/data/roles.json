@@ -6,149 +6,375 @@
       "CSS": { "weight": 5, "resources": [{"title": "CSS-Tricks", "url": "https://css-tricks.com/"}, {"title": "Flexbox Froggy", "url": "https://flexboxfroggy.com/"}] },
       "JavaScript": { "weight": 5, "resources": [{"title": "JavaScript.info", "url": "https://javascript.info/"}, {"title": "freeCodeCamp JS", "url": "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/"}] },
       "Git": { "weight": 3, "resources": [{"title": "Git Tutorial", "url": "https://www.atlassian.com/git/tutorials"}, {"title": "Learn Git Branching", "url": "https://learngitbranching.js.org/"}] },
-      "Responsive Design": { "weight": 4, "resources": [{"title": "Responsive Web Design", "url": "https://web.dev/responsive-web-design-basics/"}, {"title": "CSS Grid Guide", "url": "https://css-tricks.com/snippets/css/complete-guide-grid/"}] }
+      "Responsive Design": { "weight": 4, "resources": [{"title": "Responsive Web Design", "url": "https://web.dev/responsive-web-design-basics/"}, {"title": "CSS Grid Guide", "url": "https://css-tricks.com/snippets/css/complete-guide-grid/"}] },
+      "Browser DevTools": { "weight": 3, "resources": [{"title": "Chrome DevTools", "url": "https://developer.chrome.com/docs/devtools/"}, {"title": "DevTools Tips", "url": "https://devtoolstips.org/"}] },
+      "Accessibility": { "weight": 3, "resources": [{"title": "Web Accessibility", "url": "https://web.dev/accessibility/"}, {"title": "A11y Guidelines", "url": "https://www.a11yproject.com/"}] },
+      "Version Control": { "weight": 3, "resources": [{"title": "Git Basics", "url": "https://git-scm.com/book/en/v2"}, {"title": "GitHub Desktop", "url": "https://desktop.github.com/"}] }
     },
     "junior": {
       "HTML5": { "weight": 4, "resources": [{"title": "HTML5 Features", "url": "https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5"}, {"title": "Semantic HTML", "url": "https://web.dev/semantic-html/"}] },
       "CSS3": { "weight": 4, "resources": [{"title": "CSS3 Features", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS3"}, {"title": "CSS Animations", "url": "https://web.dev/animations/"}] },
       "JavaScript": { "weight": 5, "resources": [{"title": "ES6+ Features", "url": "https://es6.io/"}, {"title": "Modern JavaScript", "url": "https://javascript.info/"}] },
       "React": { "weight": 5, "resources": [{"title": "React Official Docs", "url": "https://react.dev/"}, {"title": "React Roadmap", "url": "https://roadmap.sh/react"}] },
-      "Git": { "weight": 3, "resources": [{"title": "Git Workflow", "url": "https://www.atlassian.com/git/tutorials/comparing-workflows"}, {"title": "GitHub Flow", "url": "https://guides.github.com/introduction/flow/"}] },
+      "TypeScript": { "weight": 4, "resources": [{"title": "TypeScript Handbook", "url": "https://www.typescriptlang.org/docs/"}, {"title": "TypeScript Tutorial", "url": "https://www.typescripttutorial.net/"}] },
       "Webpack": { "weight": 3, "resources": [{"title": "Webpack Guide", "url": "https://webpack.js.org/guides/"}, {"title": "Webpack Tutorial", "url": "https://webpack.js.org/concepts/"}] },
       "Sass": { "weight": 3, "resources": [{"title": "Sass Guide", "url": "https://sass-lang.com/guide"}, {"title": "Sass Basics", "url": "https://sass-lang.com/documentation"}] },
       "REST API": { "weight": 4, "resources": [{"title": "RESTful APIs", "url": "https://restfulapi.net/"}, {"title": "HTTP Methods", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods"}] },
-      "Testing": { "weight": 3, "resources": [{"title": "Jest Testing", "url": "https://jestjs.io/docs/getting-started"}, {"title": "Testing Library", "url": "https://testing-library.com/docs/"}] }
+      "Testing": { "weight": 3, "resources": [{"title": "Jest Testing", "url": "https://jestjs.io/docs/getting-started"}, {"title": "Testing Library", "url": "https://testing-library.com/docs/"}] },
+      "NPM": { "weight": 3, "resources": [{"title": "NPM Guide", "url": "https://docs.npmjs.com/"}, {"title": "Package.json", "url": "https://docs.npmjs.com/cli/v7/configuring-npm/package-json"}] },
+      "Bootstrap": { "weight": 2, "resources": [{"title": "Bootstrap Docs", "url": "https://getbootstrap.com/docs/"}, {"title": "Bootstrap Tutorial", "url": "https://www.w3schools.com/bootstrap4/"}] },
+      "jQuery": { "weight": 2, "resources": [{"title": "jQuery API", "url": "https://api.jquery.com/"}, {"title": "jQuery Tutorial", "url": "https://www.w3schools.com/jquery/"}] }
     },
     "senior": {
-      "TypeScript": { "weight": 5, "resources": [{"title": "TypeScript Handbook", "url": "https://www.typescriptlang.org/docs/"}, {"title": "TypeScript Deep Dive", "url": "https://basarat.gitbook.io/typescript/"}] },
-      "React": { "weight": 5, "resources": [{"title": "Advanced React Patterns", "url": "https://react.dev/learn"}, {"title": "React Performance", "url": "https://react.dev/learn/render-and-commit"}] },
-      "Next.js": { "weight": 4, "resources": [{"title": "Next.js Documentation", "url": "https://nextjs.org/docs"}, {"title": "Next.js Tutorial", "url": "https://nextjs.org/learn"}] },
+      "Advanced JavaScript": { "weight": 5, "resources": [{"title": "You Don't Know JS", "url": "https://github.com/getify/You-Dont-Know-JS"}, {"title": "JavaScript Patterns", "url": "https://addyosmani.com/resources/essentialjsdesignpatterns/book/"}] },
+      "React": { "weight": 5, "resources": [{"title": "React Advanced Patterns", "url": "https://react.dev/learn"}, {"title": "React Performance", "url": "https://web.dev/react/"}] },
+      "TypeScript": { "weight": 5, "resources": [{"title": "Advanced TypeScript", "url": "https://www.typescriptlang.org/docs/handbook/advanced-types.html"}, {"title": "Type Challenges", "url": "https://github.com/type-challenges/type-challenges"}] },
+      "State Management": { "weight": 4, "resources": [{"title": "Redux Toolkit", "url": "https://redux-toolkit.js.org/"}, {"title": "Zustand Guide", "url": "https://zustand-demo.pmnd.rs/"}] },
       "Performance Optimization": { "weight": 4, "resources": [{"title": "Web Performance", "url": "https://web.dev/performance/"}, {"title": "Core Web Vitals", "url": "https://web.dev/vitals/"}] },
-      "Accessibility": { "weight": 4, "resources": [{"title": "Web Accessibility", "url": "https://web.dev/accessibility/"}, {"title": "A11y Guidelines", "url": "https://www.w3.org/WAI/WCAG21/quickref/"}] },
-      "State Management": { "weight": 4, "resources": [{"title": "Redux Toolkit", "url": "https://redux-toolkit.js.org/"}, {"title": "Zustand Guide", "url": "https://github.com/pmndrs/zustand"}] },
-      "Testing": { "weight": 4, "resources": [{"title": "Testing Best Practices", "url": "https://kentcdodds.com/blog/common-mistakes-with-react-testing-library"}, {"title": "E2E Testing", "url": "https://playwright.dev/"}] },
-      "Build Tools": { "weight": 3, "resources": [{"title": "Vite Guide", "url": "https://vitejs.dev/guide/"}, {"title": "ESBuild", "url": "https://esbuild.github.io/"}] },
-      "GraphQL": { "weight": 3, "resources": [{"title": "GraphQL Introduction", "url": "https://graphql.org/learn/"}, {"title": "Apollo Client", "url": "https://www.apollographql.com/docs/react/"}] }
+      "Build Tools": { "weight": 4, "resources": [{"title": "Vite Guide", "url": "https://vitejs.dev/guide/"}, {"title": "Webpack Advanced", "url": "https://webpack.js.org/concepts/"}] },
+      "Testing": { "weight": 4, "resources": [{"title": "Testing Best Practices", "url": "https://kentcdodds.com/blog/common-mistakes-with-react-testing-library"}, {"title": "E2E Testing", "url": "https://playwright.dev/docs/intro"}] },
+      "System Design": { "weight": 3, "resources": [{"title": "Frontend System Design", "url": "https://www.greatfrontend.com/questions/system-design"}, {"title": "Scalable Frontend", "url": "https://blog.webdevsimplified.com/"}] },
+      "Micro-frontends": { "weight": 3, "resources": [{"title": "Micro-frontends", "url": "https://micro-frontends.org/"}, {"title": "Module Federation", "url": "https://webpack.js.org/concepts/module-federation/"}] },
+      "GraphQL": { "weight": 3, "resources": [{"title": "GraphQL Tutorial", "url": "https://graphql.org/learn/"}, {"title": "Apollo Client", "url": "https://www.apollographql.com/docs/react/"}] },
+      "PWA": { "weight": 3, "resources": [{"title": "PWA Guide", "url": "https://web.dev/progressive-web-apps/"}, {"title": "Service Workers", "url": "https://developers.google.com/web/fundamentals/primers/service-workers"}] },
+      "Accessibility": { "weight": 4, "resources": [{"title": "Advanced A11y", "url": "https://webaim.org/"}, {"title": "ARIA Patterns", "url": "https://www.w3.org/WAI/ARIA/apg/patterns/"}] }
     }
   },
   "Backend Engineer": {
     "category": "backend",
     "entry": {
-      "Python": { "weight": 5, "resources": [{"title": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/"}, {"title": "Python for Beginners", "url": "https://www.python.org/about/gettingstarted/"}] },
+      "Python": { "weight": 5, "resources": [{"title": "Python Tutorial", "url": "https://docs.python.org/3/tutorial/"}, {"title": "Automate the Boring Stuff", "url": "https://automatetheboringstuff.com/"}] },
       "SQL": { "weight": 5, "resources": [{"title": "SQL Tutorial", "url": "https://www.w3schools.com/sql/"}, {"title": "SQLBolt", "url": "https://sqlbolt.com/"}] },
-      "Git": { "weight": 3, "resources": [{"title": "Git Basics", "url": "https://git-scm.com/book/en/v2/Getting-Started-Git-Basics"}, {"title": "Git Tutorial", "url": "https://www.atlassian.com/git/tutorials"}] },
-      "REST API": { "weight": 4, "resources": [{"title": "RESTful API Design", "url": "https://restfulapi.net/"}, {"title": "HTTP Status Codes", "url": "https://httpstatuses.com/"}] },
-      "JSON": { "weight": 3, "resources": [{"title": "JSON Introduction", "url": "https://www.json.org/json-en.html"}, {"title": "Working with JSON", "url": "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON"}] }
+      "Git": { "weight": 4, "resources": [{"title": "Git Tutorial", "url": "https://www.atlassian.com/git/tutorials"}, {"title": "Learn Git", "url": "https://learngitbranching.js.org/"}] },
+      "Linux": { "weight": 4, "resources": [{"title": "Linux Command Line", "url": "https://linuxjourney.com/"}, {"title": "Linux Tutorial", "url": "https://ryanstutorials.net/linuxtutorial/"}] },
+      "REST API": { "weight": 4, "resources": [{"title": "REST API Design", "url": "https://restfulapi.net/"}, {"title": "HTTP Status Codes", "url": "https://httpstatuses.com/"}] },
+      "JSON": { "weight": 4, "resources": [{"title": "JSON Introduction", "url": "https://www.json.org/json-en.html"}, {"title": "Working with JSON", "url": "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON"}] },
+      "Database Basics": { "weight": 4, "resources": [{"title": "Database Concepts", "url": "https://www.guru99.com/dbms-tutorial.html"}, {"title": "SQL vs NoSQL", "url": "https://www.mongodb.com/nosql-explained/nosql-vs-sql"}] },
+      "HTTP/HTTPS": { "weight": 3, "resources": [{"title": "HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP"}, {"title": "How HTTPS Works", "url": "https://howhttps.works/"}] }
     },
     "junior": {
-      "Python": { "weight": 5, "resources": [{"title": "Advanced Python", "url": "https://docs.python.org/3/library/"}, {"title": "Python Best Practices", "url": "https://realpython.com/"}] },
-      "FastAPI": { "weight": 5, "resources": [{"title": "FastAPI Documentation", "url": "https://fastapi.tiangolo.com/"}, {"title": "FastAPI Tutorial", "url": "https://fastapi.tiangolo.com/tutorial/"}] },
-      "PostgreSQL": { "weight": 4, "resources": [{"title": "PostgreSQL Tutorial", "url": "https://www.postgresql.org/docs/current/tutorial.html"}, {"title": "PostgreSQL Exercises", "url": "https://pgexercises.com/"}] },
-      "Docker": { "weight": 4, "resources": [{"title": "Docker Getting Started", "url": "https://docs.docker.com/get-started/"}, {"title": "Docker Tutorial", "url": "https://docker-curriculum.com/"}] },
-      "Redis": { "weight": 3, "resources": [{"title": "Redis Tutorial", "url": "https://redis.io/docs/getting-started/"}, {"title": "Redis Commands", "url": "https://redis.io/commands"}] },
-      "JWT": { "weight": 3, "resources": [{"title": "JWT Introduction", "url": "https://jwt.io/introduction/"}, {"title": "JWT Best Practices", "url": "https://auth0.com/blog/a-look-at-the-latest-draft-for-jwt-bcp/"}] },
-      "Testing": { "weight": 4, "resources": [{"title": "PyTest Documentation", "url": "https://docs.pytest.org/"}, {"title": "API Testing", "url": "https://testdriven.io/blog/modern-tdd/"}] },
-      "Linux": { "weight": 3, "resources": [{"title": "Linux Command Line", "url": "https://ubuntu.com/tutorials/command-line-for-beginners"}, {"title": "Linux Basics", "url": "https://www.digitalocean.com/community/tutorial_series/getting-started-with-linux"}] }
+      "Python": { "weight": 5, "resources": [{"title": "Python Advanced", "url": "https://docs.python.org/3/tutorial/"}, {"title": "Real Python", "url": "https://realpython.com/"}] },
+      "Django": { "weight": 4, "resources": [{"title": "Django Tutorial", "url": "https://docs.djangoproject.com/en/4.2/intro/tutorial01/"}, {"title": "Django Best Practices", "url": "https://django-best-practices.readthedocs.io/en/latest/"}] },
+      "FastAPI": { "weight": 4, "resources": [{"title": "FastAPI Tutorial", "url": "https://fastapi.tiangolo.com/tutorial/"}, {"title": "FastAPI Best Practices", "url": "https://github.com/zhanymkanov/fastapi-best-practices"}] },
+      "PostgreSQL": { "weight": 4, "resources": [{"title": "PostgreSQL Tutorial", "url": "https://www.postgresql.org/docs/current/tutorial.html"}, {"title": "PostgreSQL Guide", "url": "https://postgresguide.com/"}] },
+      "Redis": { "weight": 3, "resources": [{"title": "Redis Tutorial", "url": "https://redis.io/docs/getting-started/"}, {"title": "Redis Commands", "url": "https://redis.io/commands/"}] },
+      "Docker": { "weight": 4, "resources": [{"title": "Docker Tutorial", "url": "https://docs.docker.com/get-started/"}, {"title": "Docker Best Practices", "url": "https://docs.docker.com/develop/dev-best-practices/"}] },
+      "AWS": { "weight": 3, "resources": [{"title": "AWS Getting Started", "url": "https://aws.amazon.com/getting-started/"}, {"title": "AWS Free Tier", "url": "https://aws.amazon.com/free/"}] },
+      "Testing": { "weight": 4, "resources": [{"title": "Python Testing", "url": "https://realpython.com/python-testing/"}, {"title": "PyTest Tutorial", "url": "https://docs.pytest.org/en/7.1.x/getting-started.html"}] },
+      "API Documentation": { "weight": 3, "resources": [{"title": "OpenAPI Spec", "url": "https://swagger.io/specification/"}, {"title": "API Design Guidelines", "url": "https://restfulapi.net/"}] },
+      "Authentication": { "weight": 4, "resources": [{"title": "JWT Authentication", "url": "https://jwt.io/introduction/"}, {"title": "OAuth2 Guide", "url": "https://oauth.net/2/"}] },
+      "Error Handling": { "weight": 3, "resources": [{"title": "Python Exceptions", "url": "https://docs.python.org/3/tutorial/errors.html"}, {"title": "Error Handling Best Practices", "url": "https://realpython.com/python-exceptions/"}] },
+      "Logging": { "weight": 3, "resources": [{"title": "Python Logging", "url": "https://docs.python.org/3/howto/logging.html"}, {"title": "Structured Logging", "url": "https://www.structlog.org/en/stable/"}] }
     },
     "senior": {
       "System Design": { "weight": 5, "resources": [{"title": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer"}, {"title": "High Scalability", "url": "http://highscalability.com/"}] },
-      "Microservices": { "weight": 5, "resources": [{"title": "Microservices Pattern", "url": "https://microservices.io/"}, {"title": "Building Microservices", "url": "https://martinfowler.com/articles/microservices.html"}] },
-      "AWS": { "weight": 4, "resources": [{"title": "AWS Getting Started", "url": "https://aws.amazon.com/getting-started/"}, {"title": "AWS Architecture", "url": "https://aws.amazon.com/architecture/"}] },
-      "Kubernetes": { "weight": 4, "resources": [{"title": "Kubernetes Basics", "url": "https://kubernetes.io/docs/tutorials/kubernetes-basics/"}, {"title": "K8s Learning Path", "url": "https://kubernetes.io/docs/concepts/"}] },
+      "Microservices": { "weight": 5, "resources": [{"title": "Microservices Patterns", "url": "https://microservices.io/patterns/"}, {"title": "Building Microservices", "url": "https://samnewman.io/books/building_microservices/"}] },
+      "Kubernetes": { "weight": 4, "resources": [{"title": "Kubernetes Tutorial", "url": "https://kubernetes.io/docs/tutorials/"}, {"title": "Kubernetes Best Practices", "url": "https://kubernetes.io/docs/concepts/"}] },
       "Database Design": { "weight": 4, "resources": [{"title": "Database Design", "url": "https://www.guru99.com/database-design.html"}, {"title": "SQL Performance", "url": "https://use-the-index-luke.com/"}] },
-      "Message Queues": { "weight": 3, "resources": [{"title": "RabbitMQ Tutorial", "url": "https://www.rabbitmq.com/getstarted.html"}, {"title": "Apache Kafka", "url": "https://kafka.apache.org/quickstart"}] },
-      "Caching": { "weight": 3, "resources": [{"title": "Caching Strategies", "url": "https://codeahoy.com/2017/08/11/caching-strategies-and-how-to-choose-the-right-one/"}, {"title": "Redis Caching", "url": "https://redis.io/docs/manual/eviction/"}] },
-      "Security": { "weight": 4, "resources": [{"title": "OWASP Top 10", "url": "https://owasp.org/www-project-top-ten/"}, {"title": "API Security", "url": "https://owasp.org/www-project-api-security/"}] },
-      "Monitoring": { "weight": 3, "resources": [{"title": "Application Monitoring", "url": "https://prometheus.io/docs/introduction/overview/"}, {"title": "Logging Best Practices", "url": "https://logz.io/blog/logging-best-practices/"}] }
+      "Security": { "weight": 4, "resources": [{"title": "OWASP Top 10", "url": "https://owasp.org/www-project-top-ten/"}, {"title": "Web Security", "url": "https://portswigger.net/web-security"}] },
+      "Performance Optimization": { "weight": 4, "resources": [{"title": "Python Performance", "url": "https://wiki.python.org/moin/PythonSpeed/PerformanceTips"}, {"title": "Database Performance", "url": "https://use-the-index-luke.com/"}] },
+      "Message Queues": { "weight": 3, "resources": [{"title": "RabbitMQ Tutorial", "url": "https://www.rabbitmq.com/getstarted.html"}, {"title": "Apache Kafka", "url": "https://kafka.apache.org/documentation/"}] },
+      "Caching": { "weight": 4, "resources": [{"title": "Caching Strategies", "url": "https://codeahoy.com/2017/08/11/caching-strategies-and-how-to-choose-the-right-one/"}, {"title": "Redis Caching", "url": "https://redis.io/docs/manual/"}] },
+      "CI/CD": { "weight": 3, "resources": [{"title": "CI/CD Pipeline", "url": "https://www.atlassian.com/continuous-delivery/principles/continuous-integration-vs-delivery-vs-deployment"}, {"title": "GitHub Actions", "url": "https://docs.github.com/en/actions"}] },
+      "Monitoring": { "weight": 4, "resources": [{"title": "Application Monitoring", "url": "https://prometheus.io/docs/introduction/overview/"}, {"title": "Observability", "url": "https://opentelemetry.io/docs/"}] },
+      "Load Balancing": { "weight": 3, "resources": [{"title": "Load Balancer Types", "url": "https://www.nginx.com/resources/glossary/load-balancing/"}, {"title": "AWS Load Balancers", "url": "https://docs.aws.amazon.com/elasticloadbalancing/"}] },
+      "Database Sharding": { "weight": 3, "resources": [{"title": "Database Sharding", "url": "https://www.digitalocean.com/community/tutorials/understanding-database-sharding"}, {"title": "Sharding Patterns", "url": "https://docs.microsoft.com/en-us/azure/architecture/patterns/sharding"}] }
     }
   },
   "Full Stack Engineer": {
     "category": "fullstack",
     "entry": {
       "HTML": { "weight": 4, "resources": [{"title": "HTML Basics", "url": "https://developer.mozilla.org/en-US/docs/Web/HTML"}, {"title": "HTML Tutorial", "url": "https://www.w3schools.com/html/"}] },
-      "CSS": { "weight": 4, "resources": [{"title": "CSS Fundamentals", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS"}, {"title": "CSS Grid Garden", "url": "https://cssgridgarden.com/"}] },
-      "JavaScript": { "weight": 5, "resources": [{"title": "JavaScript Fundamentals", "url": "https://javascript.info/"}, {"title": "Eloquent JavaScript", "url": "https://eloquentjavascript.net/"}] },
-      "Python": { "weight": 4, "resources": [{"title": "Python Tutorial", "url": "https://docs.python.org/3/tutorial/"}, {"title": "Automate the Boring Stuff", "url": "https://automatetheboringstuff.com/"}] },
-      "SQL": { "weight": 4, "resources": [{"title": "SQL Basics", "url": "https://www.w3schools.com/sql/"}, {"title": "SQL Teaching", "url": "https://www.sqlteaching.com/"}] },
-      "Git": { "weight": 3, "resources": [{"title": "Git Tutorial", "url": "https://www.atlassian.com/git/tutorials"}, {"title": "Learn Git", "url": "https://learngitbranching.js.org/"}] }
-    },
-    "junior": {
-      "React": { "weight": 5, "resources": [{"title": "React Documentation", "url": "https://react.dev/"}, {"title": "React Tutorial", "url": "https://react.dev/learn"}] },
-      "Node.js": { "weight": 5, "resources": [{"title": "Node.js Guide", "url": "https://nodejs.org/en/docs/guides/"}, {"title": "Node.js Tutorial", "url": "https://nodejs.dev/learn"}] },
+      "CSS": { "weight": 4, "resources": [{"title": "CSS Basics", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS"}, {"title": "CSS Tutorial", "url": "https://www.w3schools.com/css/"}] },
+      "JavaScript": { "weight": 5, "resources": [{"title": "JavaScript Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide"}, {"title": "JavaScript Tutorial", "url": "https://www.w3schools.com/js/"}] },
+      "Node.js": { "weight": 4, "resources": [{"title": "Node.js Guide", "url": "https://nodejs.org/en/docs/guides/"}, {"title": "Node.js Tutorial", "url": "https://www.w3schools.com/nodejs/"}] },
       "Express.js": { "weight": 4, "resources": [{"title": "Express.js Guide", "url": "https://expressjs.com/en/guide/routing.html"}, {"title": "Express Tutorial", "url": "https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs"}] },
       "MongoDB": { "weight": 4, "resources": [{"title": "MongoDB Tutorial", "url": "https://docs.mongodb.com/manual/tutorial/"}, {"title": "MongoDB University", "url": "https://university.mongodb.com/"}] },
-      "REST API": { "weight": 4, "resources": [{"title": "REST API Design", "url": "https://restfulapi.net/"}, {"title": "API Best Practices", "url": "https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design"}] },
-      "Authentication": { "weight": 4, "resources": [{"title": "JWT Authentication", "url": "https://jwt.io/introduction/"}, {"title": "Auth0 Documentation", "url": "https://auth0.com/docs"}] },
+      "Git": { "weight": 3, "resources": [{"title": "Git Tutorial", "url": "https://www.atlassian.com/git/tutorials"}, {"title": "Git Guide", "url": "https://git-scm.com/book"}] },
+      "REST API": { "weight": 4, "resources": [{"title": "REST API Tutorial", "url": "https://restfulapi.net/"}, {"title": "API Design", "url": "https://restfulapi.net/rest-api-design-tutorial-with-example/"}] }
+    },
+    "junior": {
+      "React": { "weight": 5, "resources": [{"title": "React Tutorial", "url": "https://react.dev/learn"}, {"title": "React Docs", "url": "https://react.dev/"}] },
+      "Node.js": { "weight": 5, "resources": [{"title": "Node.js Best Practices", "url": "https://github.com/goldbergyoni/nodebestpractices"}, {"title": "Node.js Guide", "url": "https://nodejs.org/en/docs/"}] },
+      "Express.js": { "weight": 4, "resources": [{"title": "Express.js Best Practices", "url": "https://expressjs.com/en/advanced/best-practice-performance.html"}, {"title": "Express Security", "url": "https://expressjs.com/en/advanced/best-practice-security.html"}] },
+      "MongoDB": { "weight": 4, "resources": [{"title": "MongoDB Best Practices", "url": "https://docs.mongodb.com/manual/administration/production-notes/"}, {"title": "Mongoose ODM", "url": "https://mongoosejs.com/docs/guide.html"}] },
+      "PostgreSQL": { "weight": 3, "resources": [{"title": "PostgreSQL Tutorial", "url": "https://www.postgresql.org/docs/current/tutorial.html"}, {"title": "PostgreSQL Guide", "url": "https://postgresguide.com/"}] },
+      "REST API": { "weight": 4, "resources": [{"title": "API Best Practices", "url": "https://restfulapi.net/"}, {"title": "GraphQL vs REST", "url": "https://graphql.org/learn/"}] },
       "Testing": { "weight": 3, "resources": [{"title": "JavaScript Testing", "url": "https://jestjs.io/docs/getting-started"}, {"title": "API Testing", "url": "https://www.postman.com/api-testing/"}] },
+      "Authentication": { "weight": 4, "resources": [{"title": "JWT Guide", "url": "https://jwt.io/introduction/"}, {"title": "Passport.js", "url": "http://www.passportjs.org/docs/"}] },
+      "Deployment": { "weight": 3, "resources": [{"title": "Deployment Guide", "url": "https://create-react-app.dev/docs/deployment/"}, {"title": "Heroku Deployment", "url": "https://devcenter.heroku.com/articles/deploying-nodejs"}] },
       "Version Control": { "weight": 3, "resources": [{"title": "Git Workflow", "url": "https://www.atlassian.com/git/tutorials/comparing-workflows"}, {"title": "GitHub Flow", "url": "https://guides.github.com/introduction/flow/"}] }
     },
     "senior": {
-      "TypeScript": { "weight": 4, "resources": [{"title": "TypeScript Handbook", "url": "https://www.typescriptlang.org/docs/"}, {"title": "TypeScript Deep Dive", "url": "https://basarat.gitbook.io/typescript/"}] },
-      "System Design": { "weight": 5, "resources": [{"title": "System Design Interview", "url": "https://github.com/donnemartin/system-design-primer"}, {"title": "Scalable Architecture", "url": "https://martinfowler.com/architecture/"}] },
-      "Docker": { "weight": 4, "resources": [{"title": "Docker Documentation", "url": "https://docs.docker.com/"}, {"title": "Docker Mastery", "url": "https://docker-curriculum.com/"}] },
-      "AWS": { "weight": 4, "resources": [{"title": "AWS Well-Architected", "url": "https://aws.amazon.com/architecture/well-architected/"}, {"title": "AWS Solutions", "url": "https://aws.amazon.com/solutions/"}] },
-      "GraphQL": { "weight": 3, "resources": [{"title": "GraphQL Tutorial", "url": "https://graphql.org/learn/"}, {"title": "Apollo GraphQL", "url": "https://www.apollographql.com/docs/"}] },
-      "Microservices": { "weight": 4, "resources": [{"title": "Microservices Patterns", "url": "https://microservices.io/"}, {"title": "Building Microservices", "url": "https://martinfowler.com/articles/microservices.html"}] },
-      "Performance": { "weight": 4, "resources": [{"title": "Web Performance", "url": "https://web.dev/performance/"}, {"title": "Database Performance", "url": "https://use-the-index-luke.com/"}] },
+      "System Architecture": { "weight": 5, "resources": [{"title": "System Design", "url": "https://github.com/donnemartin/system-design-primer"}, {"title": "Architecture Patterns", "url": "https://docs.microsoft.com/en-us/azure/architecture/patterns/"}] },
+      "Microservices": { "weight": 4, "resources": [{"title": "Microservices Architecture", "url": "https://microservices.io/"}, {"title": "Microservices Patterns", "url": "https://microservices.io/patterns/"}] },
+      "Database Design": { "weight": 4, "resources": [{"title": "Database Design Principles", "url": "https://www.guru99.com/database-design.html"}, {"title": "SQL Optimization", "url": "https://use-the-index-luke.com/"}] },
+      "Performance Optimization": { "weight": 4, "resources": [{"title": "Web Performance", "url": "https://web.dev/performance/"}, {"title": "Node.js Performance", "url": "https://nodejs.org/en/docs/guides/simple-profiling/"}] },
       "Security": { "weight": 4, "resources": [{"title": "Web Security", "url": "https://owasp.org/www-project-top-ten/"}, {"title": "Secure Coding", "url": "https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/"}] },
-      "DevOps": { "weight": 3, "resources": [{"title": "DevOps Roadmap", "url": "https://roadmap.sh/devops"}, {"title": "CI/CD Best Practices", "url": "https://docs.gitlab.com/ee/ci/"}] }
+      "DevOps": { "weight": 4, "resources": [{"title": "DevOps Practices", "url": "https://aws.amazon.com/devops/what-is-devops/"}, {"title": "CI/CD Pipeline", "url": "https://www.atlassian.com/continuous-delivery"}] },
+      "Cloud Platforms": { "weight": 3, "resources": [{"title": "AWS Guide", "url": "https://aws.amazon.com/getting-started/"}, {"title": "Cloud Architecture", "url": "https://aws.amazon.com/architecture/"}] },
+      "Containerization": { "weight": 4, "resources": [{"title": "Docker Guide", "url": "https://docs.docker.com/get-started/"}, {"title": "Kubernetes Tutorial", "url": "https://kubernetes.io/docs/tutorials/"}] },
+      "Monitoring": { "weight": 3, "resources": [{"title": "Application Monitoring", "url": "https://newrelic.com/resources/articles/what-is-application-monitoring"}, {"title": "Logging Best Practices", "url": "https://www.loggly.com/ultimate-guide/node-logging-basics/"}] },
+      "API Design": { "weight": 4, "resources": [{"title": "API Design Best Practices", "url": "https://restfulapi.net/"}, {"title": "GraphQL Design", "url": "https://graphql.org/learn/best-practices/"}] }
     }
   },
   "DevOps Engineer": {
     "category": "devops",
     "entry": {
-      "Linux": { "weight": 5, "resources": [{"title": "Linux Command Line", "url": "https://ubuntu.com/tutorials/command-line-for-beginners"}, {"title": "Linux Journey", "url": "https://linuxjourney.com/"}] },
-      "Git": { "weight": 4, "resources": [{"title": "Git Basics", "url": "https://git-scm.com/book/en/v2"}, {"title": "Git Workflow", "url": "https://www.atlassian.com/git/tutorials"}] },
-      "Bash": { "weight": 4, "resources": [{"title": "Bash Scripting Guide", "url": "https://www.gnu.org/software/bash/manual/"}, {"title": "Bash Academy", "url": "https://guide.bash.academy/"}] },
-      "Docker": { "weight": 5, "resources": [{"title": "Docker Getting Started", "url": "https://docs.docker.com/get-started/"}, {"title": "Docker Tutorial", "url": "https://docker-curriculum.com/"}] },
-      "Networking": { "weight": 3, "resources": [{"title": "Networking Basics", "url": "https://www.cisco.com/c/en/us/solutions/small-business/resource-center/networking/networking-basics.html"}, {"title": "TCP/IP Guide", "url": "http://www.tcpipguide.com/"}] }
+      "Linux": { "weight": 5, "resources": [{"title": "Linux Command Line", "url": "https://linuxjourney.com/"}, {"title": "Linux Basics", "url": "https://www.guru99.com/unix-linux-tutorial.html"}] },
+      "Git": { "weight": 4, "resources": [{"title": "Git Tutorial", "url": "https://www.atlassian.com/git/tutorials"}, {"title": "Git Branching", "url": "https://learngitbranching.js.org/"}] },
+      "Bash Scripting": { "weight": 4, "resources": [{"title": "Bash Scripting Guide", "url": "https://www.gnu.org/software/bash/manual/"}, {"title": "Shell Scripting Tutorial", "url": "https://www.shellscript.sh/"}] },
+      "Networking": { "weight": 4, "resources": [{"title": "Networking Basics", "url": "https://www.cisco.com/c/en/us/solutions/enterprise-networks/networking-basics.html"}, {"title": "TCP/IP Guide", "url": "http://www.tcpipguide.com/"}] },
+      "Docker": { "weight": 4, "resources": [{"title": "Docker Getting Started", "url": "https://docs.docker.com/get-started/"}, {"title": "Docker Tutorial", "url": "https://docker-curriculum.com/"}] },
+      "Cloud Basics": { "weight": 3, "resources": [{"title": "AWS Free Tier", "url": "https://aws.amazon.com/free/"}, {"title": "Cloud Computing Basics", "url": "https://aws.amazon.com/what-is-cloud-computing/"}] },
+      "SSH": { "weight": 3, "resources": [{"title": "SSH Tutorial", "url": "https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys"}, {"title": "SSH Guide", "url": "https://www.ssh.com/academy/ssh"}] },
+      "System Administration": { "weight": 4, "resources": [{"title": "System Administration", "url": "https://www.linode.com/docs/guides/"}, {"title": "Server Management", "url": "https://www.digitalocean.com/community/tutorials"}] }
     },
     "junior": {
-      "Kubernetes": { "weight": 5, "resources": [{"title": "Kubernetes Basics", "url": "https://kubernetes.io/docs/tutorials/kubernetes-basics/"}, {"title": "K8s by Example", "url": "https://kubernetesbyexample.com/"}] },
-      "AWS": { "weight": 5, "resources": [{"title": "AWS DevOps", "url": "https://aws.amazon.com/devops/"}, {"title": "AWS Well-Architected", "url": "https://aws.amazon.com/architecture/well-architected/"}] },
-      "CI/CD": { "weight": 4, "resources": [{"title": "CI/CD Best Practices", "url": "https://docs.gitlab.com/ee/ci/"}, {"title": "Jenkins Tutorial", "url": "https://www.jenkins.io/doc/tutorials/"}] },
+      "AWS": { "weight": 5, "resources": [{"title": "AWS Solutions Architect", "url": "https://aws.amazon.com/certification/certified-solutions-architect-associate/"}, {"title": "AWS Best Practices", "url": "https://aws.amazon.com/architecture/well-architected/"}] },
+      "Docker": { "weight": 4, "resources": [{"title": "Docker Best Practices", "url": "https://docs.docker.com/develop/dev-best-practices/"}, {"title": "Docker Compose", "url": "https://docs.docker.com/compose/"}] },
+      "Kubernetes": { "weight": 4, "resources": [{"title": "Kubernetes Tutorial", "url": "https://kubernetes.io/docs/tutorials/"}, {"title": "K8s Best Practices", "url": "https://kubernetes.io/docs/concepts/configuration/overview/"}] },
+      "CI/CD": { "weight": 5, "resources": [{"title": "CI/CD Pipeline", "url": "https://www.atlassian.com/continuous-delivery/principles/continuous-integration-vs-delivery-vs-deployment"}, {"title": "Jenkins Tutorial", "url": "https://www.jenkins.io/doc/tutorials/"}] },
       "Infrastructure as Code": { "weight": 4, "resources": [{"title": "Terraform Tutorial", "url": "https://learn.hashicorp.com/terraform"}, {"title": "CloudFormation", "url": "https://docs.aws.amazon.com/cloudformation/"}] },
-      "Monitoring": { "weight": 4, "resources": [{"title": "Prometheus Guide", "url": "https://prometheus.io/docs/introduction/overview/"}, {"title": "Grafana Tutorial", "url": "https://grafana.com/tutorials/"}] },
-      "Configuration Management": { "weight": 3, "resources": [{"title": "Ansible Basics", "url": "https://docs.ansible.com/ansible/latest/user_guide/intro_getting_started.html"}, {"title": "Ansible Tutorial", "url": "https://www.ansible.com/resources/get-started"}] },
-      "Containerization": { "weight": 4, "resources": [{"title": "Container Best Practices", "url": "https://cloud.google.com/architecture/best-practices-for-building-containers"}, {"title": "Docker Compose", "url": "https://docs.docker.com/compose/"}] }
+      "Monitoring": { "weight": 4, "resources": [{"title": "Prometheus Tutorial", "url": "https://prometheus.io/docs/prometheus/latest/getting_started/"}, {"title": "Grafana Guide", "url": "https://grafana.com/tutorials/"}] },
+      "Configuration Management": { "weight": 3, "resources": [{"title": "Ansible Tutorial", "url": "https://docs.ansible.com/ansible/latest/user_guide/intro_getting_started.html"}, {"title": "Chef Tutorial", "url": "https://learn.chef.io/"}] },
+      "Load Balancing": { "weight": 3, "resources": [{"title": "Load Balancer Guide", "url": "https://www.nginx.com/resources/glossary/load-balancing/"}, {"title": "AWS ELB", "url": "https://docs.aws.amazon.com/elasticloadbalancing/"}] },
+      "Security": { "weight": 4, "resources": [{"title": "DevSecOps", "url": "https://www.redhat.com/en/topics/devops/what-is-devsecops"}, {"title": "Security Best Practices", "url": "https://owasp.org/www-project-devsecops-guideline/"}] },
+      "Logging": { "weight": 3, "resources": [{"title": "ELK Stack", "url": "https://www.elastic.co/what-is/elk-stack"}, {"title": "Centralized Logging", "url": "https://www.sumologic.com/glossary/centralized-logging/"}] }
     },
     "senior": {
-      "Terraform": { "weight": 5, "resources": [{"title": "Terraform Best Practices", "url": "https://www.terraform.io/docs/cloud/guides/recommended-practices/"}, {"title": "Terraform Modules", "url": "https://learn.hashicorp.com/collections/terraform/modules"}] },
-      "System Design": { "weight": 4, "resources": [{"title": "Scalable Systems", "url": "https://github.com/donnemartin/system-design-primer"}, {"title": "Site Reliability Engineering", "url": "https://sre.google/"}] },
-      "Security": { "weight": 4, "resources": [{"title": "DevSecOps", "url": "https://owasp.org/www-project-devsecops-guideline/"}, {"title": "Container Security", "url": "https://kubernetes.io/docs/concepts/security/"}] },
-      "Service Mesh": { "weight": 3, "resources": [{"title": "Istio Tutorial", "url": "https://istio.io/latest/docs/concepts/"}, {"title": "Service Mesh Patterns", "url": "https://www.nginx.com/blog/what-is-a-service-mesh/"}] },
-      "Cloud Architecture": { "weight": 5, "resources": [{"title": "AWS Solutions Architecture", "url": "https://aws.amazon.com/solutions/"}, {"title": "Cloud Design Patterns", "url": "https://docs.microsoft.com/en-us/azure/architecture/patterns/"}] },
-      "Cost Optimization": { "weight": 3, "resources": [{"title": "AWS Cost Optimization", "url": "https://aws.amazon.com/aws-cost-management/"}, {"title": "FinOps Foundation", "url": "https://www.finops.org/"}] },
-      "Disaster Recovery": { "weight": 4, "resources": [{"title": "DR Best Practices", "url": "https://aws.amazon.com/disaster-recovery/"}, {"title": "Backup Strategies", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/plan-for-disaster-recovery-dr.html"}] },
-      "Performance Tuning": { "weight": 4, "resources": [{"title": "System Performance", "url": "http://www.brendangregg.com/systems-performance-2nd-edition-book.html"}, {"title": "APM Best Practices", "url": "https://newrelic.com/resources/ebooks/application-performance-monitoring-best-practices"}] }
+      "Cloud Architecture": { "weight": 5, "resources": [{"title": "AWS Well-Architected", "url": "https://aws.amazon.com/architecture/well-architected/"}, {"title": "Cloud Design Patterns", "url": "https://docs.microsoft.com/en-us/azure/architecture/patterns/"}] },
+      "Kubernetes": { "weight": 5, "resources": [{"title": "Kubernetes Production", "url": "https://kubernetes.io/docs/setup/production-environment/"}, {"title": "K8s Security", "url": "https://kubernetes.io/docs/concepts/security/"}] },
+      "Infrastructure as Code": { "weight": 5, "resources": [{"title": "Terraform Enterprise", "url": "https://www.terraform.io/docs/enterprise/"}, {"title": "Pulumi Guide", "url": "https://www.pulumi.com/docs/"}] },
+      "Site Reliability Engineering": { "weight": 4, "resources": [{"title": "SRE Handbook", "url": "https://sre.google/sre-book/"}, {"title": "SLI/SLO/SLA", "url": "https://sre.google/sre-book/service-level-objectives/"}] },
+      "Security": { "weight": 4, "resources": [{"title": "DevSecOps Advanced", "url": "https://www.redhat.com/en/topics/devops/what-is-devsecops"}, {"title": "Zero Trust Architecture", "url": "https://www.nist.gov/publications/zero-trust-architecture"}] },
+      "Disaster Recovery": { "weight": 4, "resources": [{"title": "DR Planning", "url": "https://aws.amazon.com/disaster-recovery/"}, {"title": "Backup Strategies", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/plan-for-disaster-recovery-dr.html"}] },
+      "Performance Optimization": { "weight": 4, "resources": [{"title": "Performance Tuning", "url": "https://aws.amazon.com/architecture/performance-efficiency/"}, {"title": "Cost Optimization", "url": "https://aws.amazon.com/aws-cost-management/aws-cost-optimization/"}] },
+      "Multi-cloud Strategy": { "weight": 3, "resources": [{"title": "Multi-cloud Architecture", "url": "https://cloud.google.com/blog/topics/hybrid-cloud/what-is-a-multi-cloud-strategy-and-why-should-you-care"}, {"title": "Hybrid Cloud", "url": "https://www.ibm.com/cloud/learn/hybrid-cloud"}] },
+      "Compliance": { "weight": 3, "resources": [{"title": "SOC 2 Compliance", "url": "https://www.aicpa.org/interestareas/frc/assuranceadvisoryservices/aicpasoc2report.html"}, {"title": "GDPR Compliance", "url": "https://gdpr.eu/"}] },
+      "Observability": { "weight": 4, "resources": [{"title": "OpenTelemetry", "url": "https://opentelemetry.io/docs/"}, {"title": "Distributed Tracing", "url": "https://opentracing.io/docs/overview/what-is-tracing/"}] }
     }
   },
   "Data Engineer": {
     "category": "data",
     "entry": {
-      "Python": { "weight": 5, "resources": [{"title": "Python for Data", "url": "https://docs.python.org/3/tutorial/"}, {"title": "Python Data Science", "url": "https://jakevdp.github.io/PythonDataScienceHandbook/"}] },
-      "SQL": { "weight": 5, "resources": [{"title": "SQL for Data Analysis", "url": "https://mode.com/sql-tutorial/"}, {"title": "Advanced SQL", "url": "https://sqlbolt.com/"}] },
-      "Git": { "weight": 3, "resources": [{"title": "Git for Data Science", "url": "https://git-scm.com/book/en/v2"}, {"title": "Version Control", "url": "https://www.atlassian.com/git/tutorials"}] },
-      "Data Modeling": { "weight": 4, "resources": [{"title": "Data Modeling Basics", "url": "https://www.guru99.com/data-modelling-conceptual-logical.html"}, {"title": "Database Design", "url": "https://www.lucidchart.com/pages/database-diagram/database-design"}] },
-      "ETL Basics": { "weight": 4, "resources": [{"title": "ETL Process", "url": "https://www.integrate.io/blog/what-is-etl/"}, {"title": "Data Pipeline Basics", "url": "https://www.stitchdata.com/resources/what-is-etl/"}] }
+      "Python": { "weight": 5, "resources": [{"title": "Python for Data", "url": "https://www.python.org/about/apps/#scientific-and-numeric"}, {"title": "Python Data Science", "url": "https://www.datacamp.com/courses/intro-to-python-for-data-science"}] },
+      "SQL": { "weight": 5, "resources": [{"title": "SQL for Data Science", "url": "https://www.w3schools.com/sql/"}, {"title": "PostgreSQL Tutorial", "url": "https://www.postgresql.org/docs/current/tutorial.html"}] },
+      "Pandas": { "weight": 4, "resources": [{"title": "Pandas Documentation", "url": "https://pandas.pydata.org/docs/"}, {"title": "10 Minutes to Pandas", "url": "https://pandas.pydata.org/docs/user_guide/10min.html"}] },
+      "NumPy": { "weight": 4, "resources": [{"title": "NumPy Quickstart", "url": "https://numpy.org/doc/stable/user/quickstart.html"}, {"title": "NumPy Tutorial", "url": "https://numpy.org/doc/stable/user/absolute_beginners.html"}] },
+      "JSON": { "weight": 3, "resources": [{"title": "Working with JSON", "url": "https://docs.python.org/3/library/json.html"}, {"title": "JSON Processing", "url": "https://realpython.com/working-with-json-data-python/"}] },
+      "CSV": { "weight": 3, "resources": [{"title": "CSV Processing", "url": "https://docs.python.org/3/library/csv.html"}, {"title": "Pandas CSV", "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html"}] },
+      "Git": { "weight": 3, "resources": [{"title": "Git for Data Science", "url": "https://www.datacamp.com/tutorial/git-for-data-science"}, {"title": "Git Tutorial", "url": "https://www.atlassian.com/git/tutorials"}] },
+      "Linux": { "weight": 3, "resources": [{"title": "Linux for Data Engineers", "url": "https://linuxjourney.com/"}, {"title": "Command Line Basics", "url": "https://ubuntu.com/tutorials/command-line-for-beginners"}] }
     },
     "junior": {
-      "Apache Spark": { "weight": 5, "resources": [{"title": "Spark Documentation", "url": "https://spark.apache.org/docs/latest/"}, {"title": "Spark Tutorial", "url": "https://spark.apache.org/docs/latest/quick-start.html"}] },
-      "PostgreSQL": { "weight": 4, "resources": [{"title": "PostgreSQL Tutorial", "url": "https://www.postgresql.org/docs/current/tutorial.html"}, {"title": "PostgreSQL for Data", "url": "https://pgexercises.com/"}] },
-      "Apache Airflow": { "weight": 4, "resources": [{"title": "Airflow Documentation", "url": "https://airflow.apache.org/docs/"}, {"title": "Airflow Tutorial", "url": "https://airflow.apache.org/docs/apache-airflow/stable/tutorial.html"}] },
-      "Docker": { "weight": 3, "resources": [{"title": "Docker for Data", "url": "https://docs.docker.com/get-started/"}, {"title": "Containerization", "url": "https://docker-curriculum.com/"}] },
-      "Data Warehousing": { "weight": 4, "resources": [{"title": "Data Warehouse Design", "url": "https://www.kimballgroup.com/"}, {"title": "Dimensional Modeling", "url": "https://www.1keydata.com/datawarehousing/dimensional-modeling.html"}] },
-      "Pandas": { "weight": 4, "resources": [{"title": "Pandas Documentation", "url": "https://pandas.pydata.org/docs/"}, {"title": "Pandas Tutorial", "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/"}] },
-      "NoSQL": { "weight": 3, "resources": [{"title": "MongoDB Tutorial", "url": "https://docs.mongodb.com/manual/tutorial/"}, {"title": "NoSQL Basics", "url": "https://www.mongodb.com/nosql-explained"}] }
+      "Apache Spark": { "weight": 4, "resources": [{"title": "Spark Tutorial", "url": "https://spark.apache.org/docs/latest/quick-start.html"}, {"title": "PySpark Guide", "url": "https://spark.apache.org/docs/latest/api/python/"}] },
+      "ETL Pipelines": { "weight": 5, "resources": [{"title": "ETL Best Practices", "url": "https://www.integrate.io/blog/etl-best-practices/"}, {"title": "Data Pipeline Design", "url": "https://www.oreilly.com/library/view/data-pipelines-with/9781492025719/"}] },
+      "Apache Airflow": { "weight": 4, "resources": [{"title": "Airflow Tutorial", "url": "https://airflow.apache.org/docs/apache-airflow/stable/tutorial.html"}, {"title": "Airflow Best Practices", "url": "https://airflow.apache.org/docs/apache-airflow/stable/best-practices.html"}] },
+      "Data Warehousing": { "weight": 4, "resources": [{"title": "Data Warehouse Concepts", "url": "https://www.guru99.com/data-warehousing-tutorial.html"}, {"title": "Snowflake Guide", "url": "https://docs.snowflake.com/en/user-guide-getting-started.html"}] },
+      "NoSQL Databases": { "weight": 3, "resources": [{"title": "MongoDB Tutorial", "url": "https://docs.mongodb.com/manual/tutorial/"}, {"title": "Cassandra Guide", "url": "https://cassandra.apache.org/doc/latest/"}] },
+      "Cloud Storage": { "weight": 4, "resources": [{"title": "AWS S3 Guide", "url": "https://docs.aws.amazon.com/s3/"}, {"title": "Data Lake Architecture", "url": "https://aws.amazon.com/big-data/datalakes-and-analytics/"}] },
+      "Docker": { "weight": 3, "resources": [{"title": "Docker for Data", "url": "https://docs.docker.com/get-started/"}, {"title": "Containerizing Data Apps", "url": "https://www.docker.com/blog/containerized-python-development/"}] },
+      "APIs": { "weight": 3, "resources": [{"title": "REST APIs", "url": "https://restfulapi.net/"}, {"title": "API Integration", "url": "https://realpython.com/api-integration-in-python/"}] },
+      "Data Quality": { "weight": 4, "resources": [{"title": "Data Quality Framework", "url": "https://www.talend.com/resources/what-is-data-quality/"}, {"title": "Great Expectations", "url": "https://greatexpectations.io/"}] },
+      "Version Control": { "weight": 3, "resources": [{"title": "Git for Data", "url": "https://www.datacamp.com/tutorial/git-for-data-science"}, {"title": "DVC Tutorial", "url": "https://dvc.org/doc/start"}] }
     },
     "senior": {
-      "Apache Kafka": { "weight": 5, "resources": [{"title": "Kafka Documentation", "url": "https://kafka.apache.org/documentation/"}, {"title": "Kafka Streams", "url": "https://kafka.apache.org/documentation/streams/"}] },
-      "AWS Data Services": { "weight": 4, "resources": [{"title": "AWS Data Analytics", "url": "https://aws.amazon.com/big-data/datalakes-and-analytics/"}, {"title": "AWS Glue", "url": "https://docs.aws.amazon.com/glue/"}] },
-      "Data Lake Architecture": { "weight": 4, "resources": [{"title": "Data Lake Best Practices", "url": "https://aws.amazon.com/big-data/datalakes-and-analytics/what-is-a-data-lake/"}, {"title": "Lake House Architecture", "url": "https://aws.amazon.com/big-data/datalakes-and-analytics/modern-data-architecture/"}] },
-      "Stream Processing": { "weight": 4, "resources": [{"title": "Stream Processing", "url": "https://kafka.apache.org/documentation/streams/"}, {"title": "Real-time Analytics", "url": "https://www.confluent.io/blog/building-a-microservices-ecosystem-with-kafka-streams-and-ksql/"}] },
-      "System Design": { "weight": 4, "resources": [{"title": "Data Systems Design", "url": "https://github.com/donnemartin/system-design-primer"}, {"title": "Scalable Data Architecture", "url": "https://martinfowler.com/articles/data-monolith-to-mesh.html"}] },
-      "Data Governance": { "weight": 3, "resources": [{"title": "Data Governance Framework", "url": "https://www.collibra.com/blog/data-governance-framework"}, {"title": "Data Quality", "url": "https://www.talend.com/resources/what-is-data-governance/"}] },
-      "MLOps": { "weight": 3, "resources": [{"title": "MLOps Practices", "url": "https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning"}, {"title": "ML Engineering", "url": "https://developers.google.com/machine-learning/guides/rules-of-ml"}] }
+      "Data Architecture": { "weight": 5, "resources": [{"title": "Data Architecture Guide", "url": "https://www.oracle.com/big-data/what-is-data-architecture/"}, {"title": "Modern Data Stack", "url": "https://www.getdbt.com/analytics-engineering/"}] },
+      "Big Data Technologies": { "weight": 5, "resources": [{"title": "Hadoop Ecosystem", "url": "https://hadoop.apache.org/docs/current/"}, {"title": "Kafka Streams", "url": "https://kafka.apache.org/documentation/streams/"}] },
+      "Stream Processing": { "weight": 4, "resources": [{"title": "Apache Kafka", "url": "https://kafka.apache.org/documentation/"}, {"title": "Real-time Processing", "url": "https://kafka.apache.org/documentation/streams/tutorial"}] },
+      "Data Modeling": { "weight": 4, "resources": [{"title": "Dimensional Modeling", "url": "https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/"}, {"title": "dbt Guide", "url": "https://docs.getdbt.com/docs/introduction"}] },
+      "Performance Optimization": { "weight": 4, "resources": [{"title": "SQL Performance", "url": "https://use-the-index-luke.com/"}, {"title": "Spark Optimization", "url": "https://spark.apache.org/docs/latest/tuning.html"}] },
+      "Data Governance": { "weight": 4, "resources": [{"title": "Data Governance Framework", "url": "https://www.collibra.com/data-governance"}, {"title": "Data Lineage", "url": "https://www.monte-carlo.ai/blog/data-lineage/"}] },
+      "ML Pipeline": { "weight": 3, "resources": [{"title": "MLflow Guide", "url": "https://mlflow.org/docs/latest/tutorials-and-examples/index.html"}, {"title": "Kubeflow Tutorial", "url": "https://www.kubeflow.org/docs/started/getting-started/"}] },
+      "Security": { "weight": 4, "resources": [{"title": "Data Security", "url": "https://www.imperva.com/learn/data-security/"}, {"title": "Encryption Best Practices", "url": "https://www.nist.gov/itl/applied-cybersecurity/nice/resources/encryption-101-how-protect-your-privacy-and-security-online"}] },
+      "Cost Optimization": { "weight": 3, "resources": [{"title": "Cloud Cost Management", "url": "https://aws.amazon.com/aws-cost-management/"}, {"title": "Data Pipeline Cost", "url": "https://www.integrate.io/blog/data-pipeline-cost-optimization/"}] },
+      "Monitoring": { "weight": 4, "resources": [{"title": "Data Pipeline Monitoring", "url": "https://www.monte-carlo.ai/blog/data-pipeline-monitoring/"}, {"title": "DataOps Practices", "url": "https://www.dataops.live/"}] }
+    }
+  },
+  "Data Scientist": {
+    "category": "data",
+    "entry": {
+      "Python": { "weight": 5, "resources": [{"title": "Python for Data Science", "url": "https://www.python.org/about/apps/"}, {"title": "Python Data Science Handbook", "url": "https://jakevdp.github.io/PythonDataScienceHandbook/"}] },
+      "Statistics": { "weight": 5, "resources": [{"title": "Statistics for Data Science", "url": "https://www.khanacademy.org/math/statistics-probability"}, {"title": "Think Stats", "url": "https://greenteapress.com/thinkstats2/"}] },
+      "Pandas": { "weight": 4, "resources": [{"title": "Pandas Tutorial", "url": "https://pandas.pydata.org/docs/user_guide/"}, {"title": "Data Analysis with Python", "url": "https://www.coursera.org/learn/data-analysis-with-python"}] },
+      "NumPy": { "weight": 4, "resources": [{"title": "NumPy Basics", "url": "https://numpy.org/doc/stable/user/"}, {"title": "Scientific Computing", "url": "https://scipy-lectures.org/"}] },
+      "Matplotlib": { "weight": 3, "resources": [{"title": "Matplotlib Tutorial", "url": "https://matplotlib.org/stable/tutorials/index.html"}, {"title": "Data Visualization", "url": "https://python-graph-gallery.com/"}] },
+      "Jupyter": { "weight": 4, "resources": [{"title": "Jupyter Notebook", "url": "https://jupyter-notebook.readthedocs.io/"}, {"title": "JupyterLab Guide", "url": "https://jupyterlab.readthedocs.io/"}] },
+      "SQL": { "weight": 4, "resources": [{"title": "SQL for Data Science", "url": "https://www.w3schools.com/sql/"}, {"title": "Advanced SQL", "url": "https://mode.com/sql-tutorial/"}] },
+      "Excel": { "weight": 3, "resources": [{"title": "Excel for Data Analysis", "url": "https://support.microsoft.com/en-us/excel"}, {"title": "Data Analysis Toolkit", "url": "https://www.excel-easy.com/"}] }
+    },
+    "junior": {
+      "Machine Learning": { "weight": 5, "resources": [{"title": "Scikit-learn Tutorial", "url": "https://scikit-learn.org/stable/tutorial/"}, {"title": "ML Course", "url": "https://www.coursera.org/learn/machine-learning"}] },
+      "Scikit-learn": { "weight": 4, "resources": [{"title": "Scikit-learn User Guide", "url": "https://scikit-learn.org/stable/user_guide.html"}, {"title": "ML Examples", "url": "https://scikit-learn.org/stable/auto_examples/"}] },
+      "Data Visualization": { "weight": 4, "resources": [{"title": "Seaborn Tutorial", "url": "https://seaborn.pydata.org/tutorial.html"}, {"title": "Plotly Guide", "url": "https://plotly.com/python/"}] },
+      "Feature Engineering": { "weight": 4, "resources": [{"title": "Feature Engineering Guide", "url": "https://www.kaggle.com/learn/feature-engineering"}, {"title": "Feature Selection", "url": "https://machinelearningmastery.com/feature-selection-with-real-and-categorical-data/"}] },
+      "Model Evaluation": { "weight": 4, "resources": [{"title": "Model Evaluation Metrics", "url": "https://scikit-learn.org/stable/modules/model_evaluation.html"}, {"title": "Cross Validation", "url": "https://machinelearningmastery.com/k-fold-cross-validation/"}] },
+      "A/B Testing": { "weight": 3, "resources": [{"title": "A/B Testing Guide", "url": "https://www.optimizely.com/optimization-glossary/ab-testing/"}, {"title": "Statistical Significance", "url": "https://blog.minitab.com/blog/adventures-in-statistics-2/understanding-statistical-power-and-significance-testing"}] },
+      "Data Cleaning": { "weight": 4, "resources": [{"title": "Data Cleaning Techniques", "url": "https://towardsdatascience.com/data-cleaning-with-python-and-pandas-detecting-missing-values-3e9c6ebcf78b"}, {"title": "Pandas Data Cleaning", "url": "https://realpython.com/python-data-cleaning-numpy-pandas/"}] },
+      "Hypothesis Testing": { "weight": 3, "resources": [{"title": "Statistical Tests", "url": "https://machinelearningmastery.com/statistical-hypothesis-tests/"}, {"title": "Hypothesis Testing in Python", "url": "https://realpython.com/python-statistics/"}] },
+      "R Programming": { "weight": 2, "resources": [{"title": "R for Data Science", "url": "https://r4ds.had.co.nz/"}, {"title": "R Tutorial", "url": "https://www.tutorialspoint.com/r/"}] },
+      "Git": { "weight": 3, "resources": [{"title": "Git for Data Science", "url": "https://www.datacamp.com/tutorial/git-for-data-science"}, {"title": "Version Control", "url": "https://git-scm.com/book"}] }
+    },
+    "senior": {
+      "Deep Learning": { "weight": 5, "resources": [{"title": "TensorFlow Tutorial", "url": "https://www.tensorflow.org/tutorials"}, {"title": "PyTorch Guide", "url": "https://pytorch.org/tutorials/"}] },
+      "Neural Networks": { "weight": 4, "resources": [{"title": "Neural Networks Course", "url": "https://www.coursera.org/learn/neural-networks-deep-learning"}, {"title": "Deep Learning Book", "url": "https://www.deeplearningbook.org/"}] },
+      "NLP": { "weight": 4, "resources": [{"title": "spaCy Tutorial", "url": "https://spacy.io/usage/spacy-101"}, {"title": "NLTK Guide", "url": "https://www.nltk.org/book/"}] },
+      "Computer Vision": { "weight": 3, "resources": [{"title": "OpenCV Tutorial", "url": "https://docs.opencv.org/master/d9/df8/tutorial_root.html"}, {"title": "Computer Vision Course", "url": "https://www.coursera.org/learn/convolutional-neural-networks"}] },
+      "MLOps": { "weight": 4, "resources": [{"title": "MLflow Guide", "url": "https://mlflow.org/docs/latest/tutorials-and-examples/"}, {"title": "Model Deployment", "url": "https://towardsdatascience.com/guide-to-file-formats-for-machine-learning-columnar-training-inferencing-and-the-feature-store-2e0c3d18d4f9"}] },
+      "Big Data": { "weight": 3, "resources": [{"title": "Apache Spark", "url": "https://spark.apache.org/docs/latest/quick-start.html"}, {"title": "PySpark Tutorial", "url": "https://spark.apache.org/docs/latest/api/python/"}] },
+      "Time Series Analysis": { "weight": 3, "resources": [{"title": "Time Series with Python", "url": "https://www.statsmodels.org/stable/tsa.html"}, {"title": "Prophet Tutorial", "url": "https://facebook.github.io/prophet/docs/quick_start.html"}] },
+      "Experiment Design": { "weight": 4, "resources": [{"title": "Experimental Design", "url": "https://www.coursera.org/learn/experiment-design"}, {"title": "Causal Inference", "url": "https://mixtape.scunning.com/"}] },
+      "Business Intelligence": { "weight": 3, "resources": [{"title": "Tableau Guide", "url": "https://www.tableau.com/learn/training"}, {"title": "Power BI Tutorial", "url": "https://docs.microsoft.com/en-us/power-bi/"}] },
+      "Model Deployment": { "weight": 4, "resources": [{"title": "Docker for ML", "url": "https://docs.docker.com/get-started/"}, {"title": "Kubernetes ML", "url": "https://www.kubeflow.org/docs/"}] }
+    }
+  },
+  "AI/ML Engineer": {
+    "category": "ai",
+    "entry": {
+      "Python": { "weight": 5, "resources": [{"title": "Python Programming", "url": "https://docs.python.org/3/tutorial/"}, {"title": "Python for ML", "url": "https://realpython.com/python-machine-learning/"}] },
+      "Mathematics": { "weight": 4, "resources": [{"title": "Linear Algebra", "url": "https://www.khanacademy.org/math/linear-algebra"}, {"title": "Calculus", "url": "https://www.khanacademy.org/math/calculus-1"}] },
+      "Statistics": { "weight": 4, "resources": [{"title": "Statistics Fundamentals", "url": "https://www.khanacademy.org/math/statistics-probability"}, {"title": "Probability Theory", "url": "https://seeing-theory.brown.edu/"}] },
+      "Pandas": { "weight": 4, "resources": [{"title": "Pandas Guide", "url": "https://pandas.pydata.org/docs/user_guide/"}, {"title": "Data Manipulation", "url": "https://www.datacamp.com/courses/data-manipulation-with-pandas"}] },
+      "NumPy": { "weight": 4, "resources": [{"title": "NumPy Tutorial", "url": "https://numpy.org/doc/stable/user/quickstart.html"}, {"title": "Scientific Computing", "url": "https://scipy-lectures.org/"}] },
+      "Scikit-learn": { "weight": 4, "resources": [{"title": "Scikit-learn Tutorial", "url": "https://scikit-learn.org/stable/tutorial/"}, {"title": "ML Basics", "url": "https://scikit-learn.org/stable/user_guide.html"}] },
+      "Jupyter": { "weight": 3, "resources": [{"title": "Jupyter Notebooks", "url": "https://jupyter.org/documentation"}, {"title": "Data Science Workflow", "url": "https://jupyter-notebook.readthedocs.io/"}] },
+      "Git": { "weight": 3, "resources": [{"title": "Version Control", "url": "https://git-scm.com/book"}, {"title": "Git for Data Science", "url": "https://www.datacamp.com/tutorial/git-for-data-science"}] }
+    },
+    "junior": {
+      "TensorFlow": { "weight": 5, "resources": [{"title": "TensorFlow Guide", "url": "https://www.tensorflow.org/guide"}, {"title": "TensorFlow Tutorials", "url": "https://www.tensorflow.org/tutorials"}] },
+      "PyTorch": { "weight": 4, "resources": [{"title": "PyTorch Tutorial", "url": "https://pytorch.org/tutorials/"}, {"title": "Deep Learning with PyTorch", "url": "https://pytorch.org/deep-learning-with-pytorch"}] },
+      "Neural Networks": { "weight": 5, "resources": [{"title": "Neural Network Basics", "url": "https://www.coursera.org/learn/neural-networks-deep-learning"}, {"title": "Deep Learning Specialization", "url": "https://www.coursera.org/specializations/deep-learning"}] },
+      "Computer Vision": { "weight": 4, "resources": [{"title": "OpenCV Guide", "url": "https://docs.opencv.org/master/d9/df8/tutorial_root.html"}, {"title": "CV Course", "url": "https://www.coursera.org/learn/convolutional-neural-networks"}] },
+      "NLP": { "weight": 4, "resources": [{"title": "Natural Language Processing", "url": "https://www.coursera.org/learn/language-processing"}, {"title": "spaCy Tutorial", "url": "https://spacy.io/usage/spacy-101"}] },
+      "Model Training": { "weight": 4, "resources": [{"title": "Training Deep Networks", "url": "https://towardsdatascience.com/training-deep-neural-networks-9fdb1964b964"}, {"title": "Optimization Techniques", "url": "https://distill.pub/2017/momentum/"}] },
+      "Data Preprocessing": { "weight": 3, "resources": [{"title": "Data Preprocessing", "url": "https://towardsdatascience.com/data-preprocessing-concepts-fa946d11c825"}, {"title": "Feature Engineering", "url": "https://www.kaggle.com/learn/feature-engineering"}] },
+      "Model Evaluation": { "weight": 4, "resources": [{"title": "ML Metrics", "url": "https://scikit-learn.org/stable/modules/model_evaluation.html"}, {"title": "Model Validation", "url": "https://machinelearningmastery.com/evaluate-performance-machine-learning-algorithms-python-using-resampling/"}] },
+      "Docker": { "weight": 3, "resources": [{"title": "Containerization", "url": "https://docs.docker.com/get-started/"}, {"title": "Docker for ML", "url": "https://www.docker.com/blog/containerized-python-development/"}] },
+      "APIs": { "weight": 3, "resources": [{"title": "REST APIs", "url": "https://restfulapi.net/"}, {"title": "FastAPI Tutorial", "url": "https://fastapi.tiangolo.com/tutorial/"}] }
+    },
+    "senior": {
+      "MLOps": { "weight": 5, "resources": [{"title": "MLOps Principles", "url": "https://ml-ops.org/"}, {"title": "MLflow Production", "url": "https://mlflow.org/docs/latest/"}] },
+      "Model Deployment": { "weight": 5, "resources": [{"title": "ML in Production", "url": "https://madewithml.com/"}, {"title": "Kubernetes for ML", "url": "https://www.kubeflow.org/docs/"}] },
+      "Distributed Training": { "weight": 4, "resources": [{"title": "Distributed TensorFlow", "url": "https://www.tensorflow.org/guide/distributed_training"}, {"title": "PyTorch Distributed", "url": "https://pytorch.org/tutorials/intermediate/ddp_tutorial.html"}] },
+      "Model Optimization": { "weight": 4, "resources": [{"title": "Model Compression", "url": "https://heartbeat.fritz.ai/research-guide-model-compression-for-deep-learning-ca0700b3b76c"}, {"title": "TensorRT Guide", "url": "https://developer.nvidia.com/tensorrt"}] },
+      "AutoML": { "weight": 3, "resources": [{"title": "AutoML Concepts", "url": "https://www.automl.org/automl/"}, {"title": "AutoKeras Tutorial", "url": "https://autokeras.com/tutorial/overview/"}] },
+      "Reinforcement Learning": { "weight": 3, "resources": [{"title": "RL Course", "url": "https://www.coursera.org/learn/practical-rl"}, {"title": "OpenAI Gym", "url": "https://gym.openai.com/docs/"}] },
+      "Edge AI": { "weight": 3, "resources": [{"title": "TensorFlow Lite", "url": "https://www.tensorflow.org/lite"}, {"title": "ONNX Runtime", "url": "https://onnxruntime.ai/"}] },
+      "A/B Testing": { "weight": 3, "resources": [{"title": "Experiment Design", "url": "https://www.coursera.org/learn/experiment-design"}, {"title": "Statistical Testing", "url": "https://blog.minitab.com/blog/adventures-in-statistics-2/understanding-statistical-power-and-significance-testing"}] },
+      "Data Privacy": { "weight": 3, "resources": [{"title": "Differential Privacy", "url": "https://github.com/opendp/opendp"}, {"title": "Federated Learning", "url": "https://federated.withgoogle.com/"}] },
+      "Research": { "weight": 4, "resources": [{"title": "Research Methodology", "url": "https://www.coursera.org/learn/research-methods"}, {"title": "Paper Implementation", "url": "https://paperswithcode.com/"}] }
+    }
+  },
+  "Security Engineer": {
+    "category": "security",
+    "entry": {
+      "Networking": { "weight": 5, "resources": [{"title": "Network Fundamentals", "url": "https://www.cisco.com/c/en/us/solutions/enterprise-networks/networking-basics.html"}, {"title": "TCP/IP Guide", "url": "http://www.tcpipguide.com/"}] },
+      "Linux": { "weight": 4, "resources": [{"title": "Linux Security", "url": "https://linuxjourney.com/"}, {"title": "Command Line Security", "url": "https://overthewire.org/wargames/bandit/"}] },
+      "Cryptography": { "weight": 4, "resources": [{"title": "Cryptography Basics", "url": "https://cryptopals.com/"}, {"title": "Applied Cryptography", "url": "https://www.coursera.org/learn/crypto"}] },
+      "Web Security": { "weight": 4, "resources": [{"title": "OWASP Top 10", "url": "https://owasp.org/www-project-top-ten/"}, {"title": "Web Security Academy", "url": "https://portswigger.net/web-security"}] },
+      "Python": { "weight": 3, "resources": [{"title": "Python for Security", "url": "https://realpython.com/"}, {"title": "Security Scripting", "url": "https://automatetheboringstuff.com/"}] },
+      "SQL": { "weight": 3, "resources": [{"title": "SQL Injection", "url": "https://portswigger.net/web-security/sql-injection"}, {"title": "Database Security", "url": "https://owasp.org/www-community/attacks/SQL_Injection"}] },
+      "Vulnerability Assessment": { "weight": 4, "resources": [{"title": "Vulnerability Scanning", "url": "https://www.rapid7.com/fundamentals/vulnerability-management/"}, {"title": "Security Testing", "url": "https://owasp.org/www-project-web-security-testing-guide/"}] },
+      "Risk Assessment": { "weight": 3, "resources": [{"title": "Risk Management", "url": "https://www.nist.gov/cyberframework"}, {"title": "Security Frameworks", "url": "https://www.cisecurity.org/controls/"}] }
+    },
+    "junior": {
+      "Penetration Testing": { "weight": 4, "resources": [{"title": "Penetration Testing Guide", "url": "https://owasp.org/www-project-web-security-testing-guide/"}, {"title": "Kali Linux", "url": "https://www.kali.org/docs/"}] },
+      "SIEM": { "weight": 4, "resources": [{"title": "Security Information and Event Management", "url": "https://www.splunk.com/en_us/data-insider/what-is-siem.html"}, {"title": "Log Analysis", "url": "https://www.elastic.co/what-is/elk-stack"}] },
+      "Incident Response": { "weight": 4, "resources": [{"title": "Incident Response Guide", "url": "https://www.sans.org/white-papers/33901/"}, {"title": "Digital Forensics", "url": "https://www.autopsy.com/"}] },
+      "Firewall Management": { "weight": 3, "resources": [{"title": "Firewall Concepts", "url": "https://www.cisco.com/c/en/us/products/security/firewalls/what-is-a-firewall.html"}, {"title": "pfSense Guide", "url": "https://docs.netgate.com/pfsense/en/latest/"}] },
+      "IDS/IPS": { "weight": 3, "resources": [{"title": "Intrusion Detection", "url": "https://www.snort.org/documents"}, {"title": "Network Security Monitoring", "url": "https://suricata-ids.org/docs/"}] },
+      "Cloud Security": { "weight": 4, "resources": [{"title": "AWS Security", "url": "https://aws.amazon.com/security/"}, {"title": "Cloud Security Alliance", "url": "https://cloudsecurityalliance.org/"}] },
+      "Compliance": { "weight": 3, "resources": [{"title": "SOC 2 Guide", "url": "https://www.aicpa.org/interestareas/frc/assuranceadvisoryservices/aicpasoc2report.html"}, {"title": "GDPR Compliance", "url": "https://gdpr.eu/"}] },
+      "Scripting": { "weight": 3, "resources": [{"title": "PowerShell Security", "url": "https://docs.microsoft.com/en-us/powershell/scripting/security/overview"}, {"title": "Bash Scripting", "url": "https://www.gnu.org/software/bash/manual/"}] },
+      "Malware Analysis": { "weight": 3, "resources": [{"title": "Malware Analysis", "url": "https://www.sans.org/white-papers/2103/"}, {"title": "Reverse Engineering", "url": "https://beginners.re/"}] },
+      "Security Tools": { "weight": 4, "resources": [{"title": "Metasploit Guide", "url": "https://docs.rapid7.com/metasploit/"}, {"title": "Burp Suite", "url": "https://portswigger.net/burp/documentation"}] }
+    },
+    "senior": {
+      "Security Architecture": { "weight": 5, "resources": [{"title": "Security Architecture Design", "url": "https://www.sabsa.org/"}, {"title": "Zero Trust Architecture", "url": "https://www.nist.gov/publications/zero-trust-architecture"}] },
+      "Threat Modeling": { "weight": 5, "resources": [{"title": "Threat Modeling Process", "url": "https://owasp.org/www-community/Threat_Modeling"}, {"title": "STRIDE Methodology", "url": "https://docs.microsoft.com/en-us/azure/security/develop/threat-modeling-tool"}] },
+      "Red Team Operations": { "weight": 4, "resources": [{"title": "Red Team Guide", "url": "https://www.sans.org/white-papers/37949/"}, {"title": "Adversary Emulation", "url": "https://attack.mitre.org/"}] },
+      "DevSecOps": { "weight": 4, "resources": [{"title": "DevSecOps Practices", "url": "https://www.redhat.com/en/topics/devops/what-is-devsecops"}, {"title": "Security in CI/CD", "url": "https://owasp.org/www-project-devsecops-guideline/"}] },
+      "Cryptographic Implementation": { "weight": 4, "resources": [{"title": "Cryptographic Standards", "url": "https://csrc.nist.gov/publications"}, {"title": "HSM Management", "url": "https://safenet.gemalto.com/data-encryption/hardware-security-modules-hsms/"}] },
+      "Governance": { "weight": 4, "resources": [{"title": "Information Security Governance", "url": "https://www.isaca.org/"}, {"title": "Risk Management Framework", "url": "https://csrc.nist.gov/projects/risk-management/risk-management-framework-(RMF)-Overview"}] },
+      "Digital Forensics": { "weight": 3, "resources": [{"title": "Computer Forensics", "url": "https://www.sans.org/cyber-aces/courses/digital-forensics"}, {"title": "Memory Analysis", "url": "https://volatilityfoundation.org/"}] },
+      "Business Continuity": { "weight": 3, "resources": [{"title": "Disaster Recovery Planning", "url": "https://www.ready.gov/business-continuity-planning"}, {"title": "Crisis Management", "url": "https://www.fema.gov/emergency-managers/practitioners/continuity-planning"}] },
+      "Security Metrics": { "weight": 3, "resources": [{"title": "Security KPIs", "url": "https://www.sans.org/white-papers/33515/"}, {"title": "Risk Quantification", "url": "https://www.fairinstitute.org/"}] },
+      "Emerging Threats": { "weight": 4, "resources": [{"title": "Threat Intelligence", "url": "https://www.mitre.org/capabilities/cybersecurity/overview/cybersecurity-blog/threat-intelligence"}, {"title": "IoT Security", "url": "https://www.nist.gov/cybersecurity/iot"}] }
+    }
+  },
+  "QA Engineer": {
+    "category": "qa",
+    "entry": {
+      "Manual Testing": { "weight": 5, "resources": [{"title": "Software Testing Fundamentals", "url": "https://www.guru99.com/software-testing.html"}, {"title": "Testing Techniques", "url": "https://www.softwaretestinghelp.com/types-of-software-testing/"}] },
+      "Test Case Design": { "weight": 5, "resources": [{"title": "Test Case Writing", "url": "https://www.softwaretestinghelp.com/how-to-write-test-cases-test-case-template/"}, {"title": "Test Design Techniques", "url": "https://www.guru99.com/testing-techniques.html"}] },
+      "Bug Reporting": { "weight": 4, "resources": [{"title": "Bug Life Cycle", "url": "https://www.guru99.com/defect-life-cycle.html"}, {"title": "Effective Bug Reports", "url": "https://www.softwaretestinghelp.com/how-to-write-good-bug-report/"}] },
+      "SDLC": { "weight": 4, "resources": [{"title": "Software Development Life Cycle", "url": "https://www.guru99.com/software-development-life-cycle-tutorial.html"}, {"title": "Agile Testing", "url": "https://www.agilealliance.org/agile101/agile-glossary/"}] },
+      "SQL": { "weight": 3, "resources": [{"title": "SQL for Testers", "url": "https://www.w3schools.com/sql/"}, {"title": "Database Testing", "url": "https://www.guru99.com/database-testing.html"}] },
+      "Web Technologies": { "weight": 3, "resources": [{"title": "HTML/CSS Basics", "url": "https://www.w3schools.com/html/"}, {"title": "Browser DevTools", "url": "https://developer.chrome.com/docs/devtools/"}] },
+      "API Testing": { "weight": 3, "resources": [{"title": "REST API Testing", "url": "https://www.postman.com/api-testing/"}, {"title": "Postman Tutorial", "url": "https://learning.postman.com/docs/getting-started/introduction/"}] },
+      "Test Management": { "weight": 3, "resources": [{"title": "Test Planning", "url": "https://www.guru99.com/what-everybody-ought-to-know-about-test-planing.html"}, {"title": "Jira for Testing", "url": "https://www.atlassian.com/software/jira/guides/use-cases/test-tracking"}] }
+    },
+    "junior": {
+      "Automation Testing": { "weight": 5, "resources": [{"title": "Test Automation Pyramid", "url": "https://martinfowler.com/articles/practical-test-pyramid.html"}, {"title": "Automation Strategy", "url": "https://www.guru99.com/automation-testing.html"}] },
+      "Selenium": { "weight": 4, "resources": [{"title": "Selenium WebDriver", "url": "https://selenium-python.readthedocs.io/"}, {"title": "Selenium Grid", "url": "https://www.selenium.dev/documentation/grid/"}] },
+      "API Testing": { "weight": 4, "resources": [{"title": "RestAssured", "url": "https://rest-assured.io/"}, {"title": "API Test Automation", "url": "https://www.postman.com/automated-testing/"}] },
+      "Test Frameworks": { "weight": 4, "resources": [{"title": "TestNG Guide", "url": "https://testng.org/doc/documentation-main.html"}, {"title": "JUnit Tutorial", "url": "https://junit.org/junit5/docs/current/user-guide/"}] },
+      "CI/CD Testing": { "weight": 3, "resources": [{"title": "Jenkins for Testing", "url": "https://www.jenkins.io/doc/book/using/using-agents/"}, {"title": "GitHub Actions", "url": "https://docs.github.com/en/actions"}] },
+      "Performance Testing": { "weight": 4, "resources": [{"title": "JMeter Tutorial", "url": "https://jmeter.apache.org/usermanual/get-started.html"}, {"title": "Load Testing", "url": "https://www.guru99.com/performance-testing.html"}] },
+      "Mobile Testing": { "weight": 3, "resources": [{"title": "Appium Guide", "url": "http://appium.io/docs/en/about-appium/intro/"}, {"title": "Mobile Test Strategy", "url": "https://www.guru99.com/mobile-testing.html"}] },
+      "Version Control": { "weight": 3, "resources": [{"title": "Git for Testers", "url": "https://www.atlassian.com/git/tutorials"}, {"title": "Code Review", "url": "https://github.com/features/code-review/"}] },
+      "Programming": { "weight": 4, "resources": [{"title": "Java for Testers", "url": "https://www.guru99.com/java-tutorial.html"}, {"title": "Python for Testing", "url": "https://realpython.com/python-testing/"}] },
+      "Database Testing": { "weight": 3, "resources": [{"title": "SQL Testing", "url": "https://www.guru99.com/database-testing.html"}, {"title": "Data Validation", "url": "https://www.softwaretestinghelp.com/database-testing/"}] }
+    },
+    "senior": {
+      "Test Strategy": { "weight": 5, "resources": [{"title": "Test Strategy Document", "url": "https://www.guru99.com/how-to-create-test-strategy-document.html"}, {"title": "Quality Assurance Strategy", "url": "https://www.softwaretestinghelp.com/test-strategy/"}] },
+      "Test Architecture": { "weight": 4, "resources": [{"title": "Test Automation Architecture", "url": "https://martinfowler.com/articles/practical-test-pyramid.html"}, {"title": "Framework Design", "url": "https://www.guru99.com/test-automation-framework.html"}] },
+      "Team Leadership": { "weight": 4, "resources": [{"title": "Leading QA Teams", "url": "https://www.ministryoftesting.com/"}, {"title": "QA Management", "url": "https://www.softwaretestinghelp.com/qa-manager-interview-questions/"}] },
+      "Process Improvement": { "weight": 4, "resources": [{"title": "Quality Metrics", "url": "https://www.guru99.com/software-testing-metrics-complete-tutorial.html"}, {"title": "Test Process Optimization", "url": "https://www.softwaretestinghelp.com/test-process-improvement/"}] },
+      "Risk-Based Testing": { "weight": 4, "resources": [{"title": "Risk Assessment in Testing", "url": "https://www.guru99.com/risk-based-testing.html"}, {"title": "Test Prioritization", "url": "https://www.softwaretestinghelp.com/risk-based-testing/"}] },
+      "Security Testing": { "weight": 3, "resources": [{"title": "Security Testing Guide", "url": "https://owasp.org/www-project-web-security-testing-guide/"}, {"title": "Penetration Testing", "url": "https://www.guru99.com/what-is-penetration-testing.html"}] },
+      "Compliance Testing": { "weight": 3, "resources": [{"title": "Regulatory Testing", "url": "https://www.softwaretestinghelp.com/compliance-testing/"}, {"title": "Standards and Guidelines", "url": "https://www.iso.org/standard/29119.html"}] },
+      "Metrics and Reporting": { "weight": 4, "resources": [{"title": "Test Metrics", "url": "https://www.guru99.com/software-testing-metrics-complete-tutorial.html"}, {"title": "Quality Dashboards", "url": "https://www.softwaretestinghelp.com/test-metrics-and-measurements/"}] },
+      "Vendor Management": { "weight": 3, "resources": [{"title": "QA Outsourcing", "url": "https://www.guru99.com/software-testing-outsourcing.html"}, {"title": "Tool Evaluation", "url": "https://www.softwaretestinghelp.com/test-management-tools/"}] },
+      "Innovation": { "weight": 3, "resources": [{"title": "AI in Testing", "url": "https://www.ministryoftesting.com/dojo/series/ai-for-testing"}, {"title": "Future of QA", "url": "https://www.guru99.com/software-testing-trends.html"}] }
+    }
+  },
+  "Product Manager": {
+    "category": "product",
+    "entry": {
+      "Product Strategy": { "weight": 5, "resources": [{"title": "Product Strategy Guide", "url": "https://www.productplan.com/glossary/product-strategy/"}, {"title": "Strategy Frameworks", "url": "https://www.mindtheproduct.com/product-strategy-frameworks/"}] },
+      "Market Research": { "weight": 4, "resources": [{"title": "User Research Methods", "url": "https://www.nngroup.com/articles/which-ux-research-methods/"}, {"title": "Competitive Analysis", "url": "https://blog.hubspot.com/marketing/competitive-analysis-kit"}] },
+      "User Stories": { "weight": 4, "resources": [{"title": "Writing User Stories", "url": "https://www.atlassian.com/agile/project-management/user-stories"}, {"title": "Story Mapping", "url": "https://www.jpattonassociates.com/story-mapping/"}] },
+      "Requirements Gathering": { "weight": 4, "resources": [{"title": "Requirements Analysis", "url": "https://www.productplan.com/glossary/requirements-gathering/"}, {"title": "Stakeholder Management", "url": "https://www.mindtheproduct.com/stakeholder-management-for-product-managers/"}] },
+      "Wireframing": { "weight": 3, "resources": [{"title": "Wireframing Basics", "url": "https://www.usability.gov/how-to-and-tools/methods/wireframing.html"}, {"title": "Figma Tutorial", "url": "https://help.figma.com/hc/en-us/categories/360002051613"}] },
+      "Analytics": { "weight": 4, "resources": [{"title": "Product Analytics", "url": "https://amplitude.com/blog/product-analytics-guide"}, {"title": "Google Analytics", "url": "https://analytics.google.com/analytics/academy/"}] },
+      "Agile Methodologies": { "weight": 4, "resources": [{"title": "Scrum Guide", "url": "https://scrumguides.org/"}, {"title": "Agile Product Management", "url": "https://www.atlassian.com/agile/product-management"}] },
+      "Communication": { "weight": 4, "resources": [{"title": "Product Communication", "url": "https://www.mindtheproduct.com/communication-skills-for-product-managers/"}, {"title": "Presentation Skills", "url": "https://blog.hubspot.com/marketing/easy-powerpoint-design-tricks-ht"}] }
+    },
+    "junior": {
+      "Product Roadmapping": { "weight": 5, "resources": [{"title": "Product Roadmap Guide", "url": "https://www.productplan.com/roadmap-basics/"}, {"title": "Roadmap Prioritization", "url": "https://www.mindtheproduct.com/entering-the-product-discovery-mindset/"}] },
+      "A/B Testing": { "weight": 4, "resources": [{"title": "Experimentation Guide", "url": "https://www.optimizely.com/optimization-glossary/ab-testing/"}, {"title": "Statistical Significance", "url": "https://blog.hubspot.com/marketing/how-to-do-a-b-testing"}] },
+      "SQL": { "weight": 4, "resources": [{"title": "SQL for Product Managers", "url": "https://mode.com/sql-tutorial/"}, {"title": "Data Analysis", "url": "https://www.codecademy.com/learn/learn-sql"}] },
+      "UX/UI Design": { "weight": 3, "resources": [{"title": "UX Principles", "url": "https://www.nngroup.com/articles/ten-usability-heuristics/"}, {"title": "Design Thinking", "url": "https://www.ideou.com/blogs/inspiration/what-is-design-thinking"}] },
+      "Project Management": { "weight": 4, "resources": [{"title": "PM Tools", "url": "https://www.atlassian.com/software/jira/guides"}, {"title": "Project Planning", "url": "https://www.asana.com/guide/project-management/project-planning"}] },
+      "Feature Prioritization": { "weight": 4, "resources": [{"title": "Prioritization Frameworks", "url": "https://www.productplan.com/glossary/feature-prioritization/"}, {"title": "RICE Framework", "url": "https://blog.intercom.com/rice-simple-prioritization-for-product-managers/"}] },
+      "Customer Development": { "weight": 4, "resources": [{"title": "Customer Interviews", "url": "https://www.productplan.com/glossary/customer-development/"}, {"title": "Jobs to be Done", "url": "https://hbr.org/2016/09/know-your-customers-jobs-to-be-done"}] },
+      "KPIs and Metrics": { "weight": 4, "resources": [{"title": "Product Metrics", "url": "https://amplitude.com/blog/product-kpis"}, {"title": "North Star Framework", "url": "https://amplitude.com/blog/product-north-star-metric"}] },
+      "Go-to-Market": { "weight": 3, "resources": [{"title": "GTM Strategy", "url": "https://blog.hubspot.com/marketing/go-to-market-strategy"}, {"title": "Product Launch", "url": "https://www.productplan.com/glossary/product-launch/"}] },
+      "Competitive Analysis": { "weight": 3, "resources": [{"title": "Competitor Research", "url": "https://blog.hubspot.com/marketing/competitive-analysis-kit"}, {"title": "Market Positioning", "url": "https://www.mindtheproduct.com/positioning-and-messaging-for-product-managers/"}] }
+    },
+    "senior": {
+      "Product Vision": { "weight": 5, "resources": [{"title": "Vision and Strategy", "url": "https://www.romanpichler.com/blog/product-vision-board/"}, {"title": "Vision Communication", "url": "https://www.mindtheproduct.com/how-to-create-a-good-product-vision/"}] },
+      "Strategic Planning": { "weight": 5, "resources": [{"title": "Strategic Frameworks", "url": "https://www.productplan.com/glossary/product-strategy/"}, {"title": "OKRs for Products", "url": "https://blog.weekdone.com/okrs-for-product-managers/"}] },
+      "Team Leadership": { "weight": 4, "resources": [{"title": "Leading Product Teams", "url": "https://www.mindtheproduct.com/building-and-leading-a-product-team/"}, {"title": "Cross-functional Leadership", "url": "https://hbr.org/2019/05/cross-functional-teams-are-essential-but-we-need-them-to-be-more-effective"}] },
+      "Business Strategy": { "weight": 4, "resources": [{"title": "Business Model Canvas", "url": "https://www.strategyzer.com/canvas/business-model-canvas"}, {"title": "Unit Economics", "url": "https://www.forentrepreneurs.com/saas-metrics-2/"}] },
+      "Data-Driven Decisions": { "weight": 4, "resources": [{"title": "Advanced Analytics", "url": "https://amplitude.com/blog/north-star-playbook"}, {"title": "Cohort Analysis", "url": "https://blog.hubspot.com/service/what-is-cohort-analysis"}] },
+      "Stakeholder Management": { "weight": 4, "resources": [{"title": "Executive Communication", "url": "https://www.mindtheproduct.com/stakeholder-management-for-product-managers/"}, {"title": "Board Presentations", "url": "https://firstround.com/review/how-to-tell-your-companys-story/"}] },
+      "Platform Strategy": { "weight": 3, "resources": [{"title": "Platform Business Models", "url": "https://hbr.org/2016/04/pipelines-platforms-and-the-new-rules-of-strategy"}, {"title": "API Strategy", "url": "https://a16z.com/2018/03/13/api-economy-why-your-business-model-api/"}] },
+      "Pricing Strategy": { "weight": 3, "resources": [{"title": "Product Pricing", "url": "https://www.priceintelligently.com/hubfs/Price-Intelligently-SaaS-Pricing-Strategy.pdf"}, {"title": "Value-Based Pricing", "url": "https://blog.hubspot.com/service/what-does-it-mean-to-be-customer-centric"}] },
+      "Innovation Management": { "weight": 3, "resources": [{"title": "Innovation Frameworks", "url": "https://hbr.org/2015/12/what-is-disruptive-innovation"}, {"title": "Technology Assessment", "url": "https://www.mckinsey.com/business-functions/mckinsey-digital/our-insights/the-age-of-analytics-competing-in-a-data-driven-world"}] },
+      "Portfolio Management": { "weight": 4, "resources": [{"title": "Product Portfolio", "url": "https://www.productplan.com/glossary/product-portfolio/"}, {"title": "Resource Allocation", "url": "https://www.mckinsey.com/business-functions/strategy-and-corporate-finance/our-insights/resource-allocation-practices"}] }
     }
   }
 }

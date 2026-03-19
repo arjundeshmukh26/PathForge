@@ -342,3 +342,220 @@ async def delete_session(session_id: str):
         return {"message": "Session deleted successfully"}
     else:
         raise HTTPException(status_code=404, detail="Session not found")
+
+
+@router.post("/suggest-roles")
+async def suggest_matching_roles(request: dict):
+    """
+    AI-powered role suggestion based on user profile
+    
+    Analyzes user skills and suggests other matching roles they might be interested in
+    """
+    try:
+        user_skills = request.get("user_skills", [])
+        current_role = request.get("current_role", "")
+        current_level = request.get("current_level", "entry")
+        resume_text = request.get("resume_text", "")
+        
+        if not user_skills and not resume_text:
+            raise HTTPException(status_code=400, detail="Either user_skills or resume_text is required")
+        
+        # Load available roles
+        try:
+            roles_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'roles.json')
+            with open(roles_path, 'r') as f:
+                roles_data = json.load(f)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to load roles data: {e}")
+        
+        # Prepare role information for AI analysis
+        available_roles = []
+        for role_name, role_info in roles_data.items():
+            if role_name == current_role:
+                continue  # Skip the current role
+                
+            category = role_info.get("category", "general")
+            
+            # Get skills for the user's level (or closest available level)
+            level_skills = {}
+            if current_level in role_info:
+                level_skills = role_info[current_level]
+            elif "junior" in role_info:
+                level_skills = role_info["junior"]
+            elif "entry" in role_info:
+                level_skills = role_info["entry"]
+            
+            skills_list = list(level_skills.keys())
+            
+            available_roles.append({
+                "name": role_name,
+                "category": category,
+                "skills": skills_list[:10],  # Limit to top 10 skills
+                "skill_count": len(skills_list)
+            })
+        
+        # Prepare AI prompt for role matching
+        skills_text = ", ".join(user_skills[:20]) if user_skills else "Skills extracted from resume"
+        
+        prompt = f"""
+        You are a senior career counselor specializing in technology career transitions. Analyze the candidate's profile and suggest the top 3-4 alternative roles that would be the best matches.
+
+        **CANDIDATE PROFILE:**
+        Current Target Role: {current_role}
+        Experience Level: {current_level.title()}
+        Key Skills: {skills_text}
+        
+        Resume Context:
+        {resume_text[:1000] if resume_text else "No additional context provided"}
+
+        **AVAILABLE ROLES TO CONSIDER:**
+        {json.dumps(available_roles[:15], indent=2)}  # Limit to prevent token overflow
+
+        **ANALYSIS CRITERIA:**
+        1. **Skill Overlap**: How many of their current skills transfer to this role?
+        2. **Learning Curve**: How manageable is the transition given their experience level?
+        3. **Career Progression**: Does this role offer good growth opportunities?
+        4. **Market Demand**: Is this role in high demand in the current market?
+        5. **Salary Potential**: Does this role offer competitive compensation?
+
+        **MATCHING LOGIC:**
+        - Prioritize roles where 40%+ of their skills are relevant
+        - Consider complementary skills that show natural progression
+        - Factor in the experience level (don't suggest roles too advanced or too basic)
+        - Look for roles in growing fields with good career prospects
+
+        **OUTPUT FORMAT:**
+        Return a JSON array of the top 3-4 role suggestions, ordered by match strength:
+
+        [
+          {{
+            "role": "Role Name",
+            "category": "role category",
+            "match_percentage": 75,
+            "transition_difficulty": "Easy|Moderate|Challenging",
+            "why_good_fit": "2-3 sentence explanation of why this role matches their profile and what makes the transition feasible.",
+            "key_overlapping_skills": ["skill1", "skill2", "skill3"],
+            "skills_to_learn": ["newskill1", "newskill2"],
+            "growth_potential": "Brief description of career growth opportunities",
+            "market_outlook": "Brief market demand assessment"
+          }}
+        ]
+
+        **IMPORTANT GUIDELINES:**
+        - Only suggest realistic transitions based on their current skills
+        - Provide specific, actionable insights in the explanations
+        - Consider both technical skills and implied soft skills from their experience
+        - Don't suggest roles that are completely unrelated to their background
+        """
+        
+        # Try AI enhancement with fallback
+        ai_suggestions = []
+        
+        # Try direct Gemini client first
+        if direct_gemini_client.is_available():
+            try:
+                response_text = await direct_gemini_client.generate_content(prompt, timeout=25)
+                
+                # Parse JSON response
+                content = response_text.strip()
+                if content.startswith('```json'):
+                    content = content.replace('```json', '').replace('```', '').strip()
+                elif content.startswith('```'):
+                    content = content.replace('```', '').strip()
+                
+                ai_suggestions = json.loads(content)
+                
+            except Exception as e:
+                print(f"Direct Gemini client role suggestion failed: {e}")
+        
+        # Try regular Gemini service if direct client failed
+        if not ai_suggestions and gemini_service.model:
+            try:
+                import asyncio
+                response = await asyncio.wait_for(
+                    asyncio.to_thread(
+                        gemini_service.model.generate_content,
+                        prompt,
+                        generation_config=gemini_service.genai.types.GenerationConfig(
+                            temperature=0.3,
+                            max_output_tokens=2000,
+                        )
+                    ),
+                    timeout=20.0
+                )
+                
+                response_text = response.text
+                
+                # Parse JSON response
+                content = response_text.strip()
+                if content.startswith('```json'):
+                    content = content.replace('```json', '').replace('```', '').strip()
+                elif content.startswith('```'):
+                    content = content.replace('```', '').strip()
+                
+                ai_suggestions = json.loads(content)
+                
+            except Exception as e:
+                print(f"Gemini service role suggestion failed: {e}")
+        
+        # Fallback: deterministic role matching based on skill overlap
+        if not ai_suggestions:
+            print("AI role suggestion failed, using fallback logic")
+            fallback_suggestions = []
+            
+            user_skills_lower = [skill.lower() for skill in user_skills]
+            
+            for role_info in available_roles:
+                role_skills_lower = [skill.lower() for skill in role_info["skills"]]
+                
+                # Calculate skill overlap
+                overlap = len(set(user_skills_lower) & set(role_skills_lower))
+                total_role_skills = len(role_skills_lower)
+                
+                if total_role_skills > 0:
+                    match_percentage = min(int((overlap / total_role_skills) * 100), 95)
+                    
+                    # Only suggest roles with reasonable overlap
+                    if overlap >= 2 or match_percentage >= 30:
+                        difficulty = "Easy" if match_percentage >= 60 else "Moderate" if match_percentage >= 40 else "Challenging"
+                        
+                        fallback_suggestions.append({
+                            "role": role_info["name"],
+                            "category": role_info["category"],
+                            "match_percentage": match_percentage,
+                            "transition_difficulty": difficulty,
+                            "why_good_fit": f"You already have {overlap} relevant skills for this {role_info['category']} role. The transition appears {difficulty.lower()} based on your current skill set.",
+                            "key_overlapping_skills": [skill for skill in role_info["skills"][:3] if skill.lower() in user_skills_lower],
+                            "skills_to_learn": [skill for skill in role_info["skills"][:3] if skill.lower() not in user_skills_lower],
+                            "growth_potential": f"Good growth opportunities in the {role_info['category']} field",
+                            "market_outlook": "Growing demand in tech industry"
+                        })
+            
+            # Sort by match percentage and take top 4
+            ai_suggestions = sorted(fallback_suggestions, key=lambda x: x["match_percentage"], reverse=True)[:4]
+        
+        # Ensure we have valid suggestions
+        if not ai_suggestions:
+            ai_suggestions = [{
+                "role": "Consider exploring related roles",
+                "category": "general",
+                "match_percentage": 0,
+                "transition_difficulty": "Moderate",
+                "why_good_fit": "Based on your skills, consider exploring roles in adjacent fields that leverage your existing expertise.",
+                "key_overlapping_skills": user_skills[:3] if user_skills else [],
+                "skills_to_learn": ["Research specific roles", "Identify skill gaps"],
+                "growth_potential": "Many growth opportunities available",
+                "market_outlook": "Technology roles continue to be in demand"
+            }]
+        
+        return {
+            "suggested_roles": ai_suggestions[:4],  # Limit to top 4
+            "analysis_method": "ai_enhanced" if len(ai_suggestions) > 1 else "fallback",
+            "total_roles_considered": len(available_roles)
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Unexpected error in suggest_matching_roles: {e}")
+        raise HTTPException(status_code=500, detail=f"Role suggestion failed: {str(e)}")

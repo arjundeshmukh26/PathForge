@@ -6,11 +6,12 @@ const InteractiveScoreCard = ({
   missingSkills = [], 
   totalSkills = 0,
   sessionId,
-  onSkillsUpdated 
+  onSkillsUpdated,
+  learnedSkills: initialLearnedSkills = []
 }) => {
   const [animatedScore, setAnimatedScore] = useState(0);
   const [selectedTab, setSelectedTab] = useState('overview');
-  const [learnedSkills, setLearnedSkills] = useState(new Set());
+  const [learnedSkills, setLearnedSkills] = useState(new Set(initialLearnedSkills));
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -27,6 +28,12 @@ const InteractiveScoreCard = ({
     }, 300);
     return () => clearTimeout(timer);
   }, [score]);
+
+  // Update learned skills when prop changes (e.g., loading from localStorage)
+  useEffect(() => {
+    console.log('InteractiveScoreCard: Updating learned skills from prop:', initialLearnedSkills);
+    setLearnedSkills(new Set(initialLearnedSkills || []));
+  }, [initialLearnedSkills]);
 
   const getScoreData = (score) => {
     if (score >= 85) return {
@@ -82,6 +89,8 @@ const InteractiveScoreCard = ({
       'http://localhost:8000/api/v1/update-skills'
     ];
     
+    let serverUpdated = false;
+    
     for (const url of apiUrls) {
       try {
         const response = await fetch(url, {
@@ -94,16 +103,60 @@ const InteractiveScoreCard = ({
         });
         
         if (response.ok) {
-          const updatedData = await response.json();
+          const serverData = await response.json();
+          
+          // Include learned_skills in the update data since server might not return it
+          const updatedData = {
+            ...serverData,
+            learned_skills: Array.from(newLearnedSkills)
+          };
+          
+          console.log('Server update successful, calling onSkillsUpdated with:', {
+            learned_skills: updatedData.learned_skills,
+            learned_skills_length: updatedData.learned_skills.length
+          });
+          
           onSkillsUpdated && onSkillsUpdated(updatedData);
+          serverUpdated = true;
           return; // Success
+        } else if (response.status === 404) {
+          console.log(`Session not found on server (${url}), using client-side update`);
+          // Session doesn't exist on server, continue to fallback
         }
       } catch (error) {
         console.log(`Failed to update skills with ${url}:`, error.message);
       }
     }
     
-    console.error('Failed to update skills on all endpoints');
+    // Fallback: Update client-side when server session doesn't exist
+    if (!serverUpdated) {
+      console.log('Using client-side skill update fallback');
+      
+      // Calculate updated score (simplified calculation)
+      const learnedSkillsArray = Array.from(newLearnedSkills);
+      
+      const updatedMissingSkills = missingSkills.filter(
+        skillItem => !learnedSkillsArray.includes(skillItem.skill)
+      );
+      
+      // Simple score recalculation based on remaining missing skills
+      const totalSkillsCount = matchedSkills.length + missingSkills.length;
+      const matchedSkillsCount = matchedSkills.length + learnedSkillsArray.length;
+      const updatedScore = totalSkillsCount > 0 ? (matchedSkillsCount / totalSkillsCount) * 100 : 0;
+      
+      const updatedData = {
+        session_id: sessionId,
+        compatibility_score: Math.round(updatedScore),
+        matched_skills: matchedSkills,
+        missing_skills: updatedMissingSkills,
+        learned_skills: learnedSkillsArray,
+        user_skills: [...(matchedSkills.map(s => s.skill)), ...learnedSkillsArray]
+      };
+      
+      console.log('Client-side fallback: Updated learned skills to', learnedSkillsArray);
+      
+      onSkillsUpdated && onSkillsUpdated(updatedData);
+    }
   };
 
   const tabs = [

@@ -2,12 +2,28 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import InteractiveResumeForm from './components/InteractiveResumeForm';
 import InteractiveScoreCard from './components/InteractiveScoreCard';
+import PastAnalyses from './components/PastAnalyses';
+import SuggestedRoles from './components/SuggestedRoles';
+import { saveAnalysis, updateLearnedSkills, getAnalysis, isStorageAvailable } from './utils/localStorage';
 
 function App() {
   const [analysisData, setAnalysisData] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [showPastAnalyses, setShowPastAnalyses] = useState(false);
   const [error, setError] = useState(null);
+  const [storageAvailable, setStorageAvailable] = useState(false);
+
+  useEffect(() => {
+    setStorageAvailable(isStorageAvailable());
+  }, []);
+
+  // Debug: Log when learned_skills change
+  useEffect(() => {
+    if (analysisData?.learned_skills !== undefined) {
+      console.log('App.js: learned_skills updated:', analysisData.learned_skills.length, 'skills');
+    }
+  }, [analysisData?.learned_skills]);
 
   const handleAnalyze = async (formData) => {
     setIsAnalyzing(true);
@@ -34,8 +50,57 @@ function App() {
         }
 
         const data = await response.json();
-        setAnalysisData(data);
+        
+        console.log('Analysis response data:', {
+          session_id: data.session_id,
+          role: data.role,
+          level: data.level,
+          resumeInResponse: data.resume ? `${data.resume.length} chars` : 'No resume in response'
+        });
+        
+        // Ensure resume from form data is included in analysis data
+        const analysisDataWithResume = {
+          ...data,
+          resume: formData.resume // Ensure resume text is preserved
+        };
+        
+        console.log('Setting analysisData with resume:', {
+          resumeLength: analysisDataWithResume.resume?.length || 0,
+          resumePreview: analysisDataWithResume.resume?.substring(0, 100) || 'No resume'
+        });
+        
+        setAnalysisData(analysisDataWithResume);
         setShowResults(true);
+        
+        // Save to localStorage if available (suggested roles will be added later)
+        if (storageAvailable && data.session_id) {
+          const analysisToSave = {
+            id: data.session_id,
+            session_id: data.session_id,
+            resume: formData.resume,
+            role: data.role,
+            level: data.level,
+            compatibility_score: data.compatibility_score,
+            user_skills: data.user_skills,
+            matched_skills: data.matched_skills,
+            missing_skills: data.missing_skills,
+            ai_summary: data.ai_summary,
+            learned_skills: [], // Initialize with empty array
+            timestamp: data.timestamp || new Date().toISOString()
+          };
+          
+          console.log('Saving analysis to localStorage:', {
+            id: analysisToSave.id,
+            resumeLength: analysisToSave.resume?.length || 0,
+            resumePreview: analysisToSave.resume?.substring(0, 100) || 'No resume'
+          });
+          
+          if (!saveAnalysis(analysisToSave)) {
+            console.warn('Failed to save analysis to localStorage');
+          } else {
+            console.log('Analysis saved successfully to localStorage');
+          }
+        }
         
         // Smooth scroll to results
         setTimeout(() => {
@@ -59,14 +124,105 @@ function App() {
   };
 
   const handleSkillsUpdated = (updatedData) => {
-    setAnalysisData(updatedData);
+    // Update analysis data with learned skills info
+    const updatedAnalysis = {
+      ...analysisData,
+      ...updatedData,
+      learned_skills: updatedData.learned_skills || []
+    };
+    
+    setAnalysisData(updatedAnalysis);
+    
+    // Save learned skills progress to localStorage
+    // Use the analysis ID for localStorage lookup (could be different from session_id)
+    const analysisId = updatedAnalysis.id || updatedAnalysis.session_id;
+    if (storageAvailable && analysisId && updatedAnalysis.learned_skills !== undefined) {
+      const success = updateLearnedSkills(analysisId, updatedAnalysis.learned_skills);
+      if (success) {
+        console.log('Successfully updated learned skills in localStorage');
+        
+        // Force re-read from localStorage to ensure React state matches localStorage
+        const freshAnalysis = getAnalysis(analysisId);
+        if (freshAnalysis) {
+          // Update React state with fresh localStorage data to ensure synchronization
+          // Use the full fresh analysis to avoid state merge issues
+          setAnalysisData({
+            ...updatedAnalysis,
+            learned_skills: freshAnalysis.learned_skills || [],
+            compatibility_score: freshAnalysis.compatibility_score,
+            missing_skills: freshAnalysis.missing_skills
+          });
+        }
+      } else {
+        console.warn('Failed to update learned skills in localStorage');
+      }
+    }
   };
 
   const startNewAnalysis = () => {
     setAnalysisData(null);
     setShowResults(false);
+    setShowPastAnalyses(false);
     setError(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLoadAnalysis = (analysis) => {
+    console.log('Loading analysis from localStorage:', {
+      id: analysis.id,
+      session_id: analysis.session_id,
+      learned_skills: analysis.learned_skills,
+      resume_length: analysis.resume?.length || 0,
+      resume_preview: analysis.resume?.substring(0, 100) || 'No resume text',
+      role: analysis.role,
+      level: analysis.level
+    });
+    
+    // Ensure learned_skills is always an array and resume is included
+    const analysisWithDefaults = {
+      ...analysis,
+      learned_skills: analysis.learned_skills || [],
+      resume: analysis.resume || '' // Ensure resume text is available
+    };
+    
+    console.log('Setting analysisData from localStorage with resume:', {
+      resumeLength: analysisWithDefaults.resume?.length || 0,
+      resumePreview: analysisWithDefaults.resume?.substring(0, 100) || 'No resume'
+    });
+    
+    setAnalysisData(analysisWithDefaults);
+    setShowResults(true);
+    setShowPastAnalyses(false);
+    
+    // Smooth scroll to results
+    setTimeout(() => {
+      const resultsElement = document.getElementById('results-section');
+      if (resultsElement) {
+        resultsElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
+  const togglePastAnalyses = () => {
+    setShowPastAnalyses(!showPastAnalyses);
+    setShowResults(false);
+  };
+
+  const handleSuggestedRolesLoaded = (suggestedRoles) => {
+    // Update both state and localStorage with suggested roles
+    if (analysisData && suggestedRoles) {
+      const updatedData = {
+        ...analysisData,
+        suggested_roles: suggestedRoles
+      };
+      
+      setAnalysisData(updatedData);
+      
+      // Update localStorage with suggested roles
+      if (storageAvailable && analysisData.session_id) {
+        saveAnalysis(updatedData);
+      }
+    }
   };
 
   return (
@@ -87,17 +243,34 @@ function App() {
               </div>
             </div>
             
-            {showResults && (
-              <button
-                onClick={startNewAnalysis}
-                className="flex items-center space-x-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-semibold transition-all duration-200 hover:shadow-lg"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                <span>New Analysis</span>
-              </button>
-            )}
+            <div className="flex items-center space-x-3">
+              {storageAvailable && (
+                <button
+                  onClick={togglePastAnalyses}
+                  className={`flex items-center space-x-2 px-4 py-2 font-semibold rounded-xl transition-all duration-200 ${
+                    showPastAnalyses
+                      ? 'bg-slate-900 text-white'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>Past Analyses</span>
+                </button>
+              )}
+              {showResults && (
+                <button
+                  onClick={startNewAnalysis}
+                  className="flex items-center space-x-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-semibold transition-all duration-200 hover:shadow-lg"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  <span>New Analysis</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </nav>
@@ -119,8 +292,15 @@ function App() {
         </div>
       )}
 
+      {/* Past Analyses */}
+      {showPastAnalyses && (
+        <div className="max-w-4xl mx-auto px-6 py-8">
+          <PastAnalyses onLoadAnalysis={handleLoadAnalysis} />
+        </div>
+      )}
+
       {/* Main Form */}
-      {!showResults && (
+      {!showResults && !showPastAnalyses && (
         <InteractiveResumeForm 
           onAnalyze={handleAnalyze} 
           isAnalyzing={isAnalyzing} 
@@ -163,6 +343,7 @@ function App() {
                 totalSkills={(analysisData.matched_skills?.length || 0) + (analysisData.missing_skills?.length || 0)}
                 sessionId={analysisData.session_id}
                 onSkillsUpdated={handleSkillsUpdated}
+                learnedSkills={analysisData.learned_skills || []}
               />
             </div>
 
@@ -184,6 +365,21 @@ function App() {
                     </div>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* Suggested Roles */}
+            {analysisData.user_skills && analysisData.user_skills.length > 0 && (
+              <div className="mb-8">
+                <SuggestedRoles
+                  userSkills={analysisData.user_skills}
+                  currentRole={analysisData.role}
+                  currentLevel={analysisData.level}
+                  resumeText={analysisData.resume || ""}
+                  suggestedRoles={analysisData.suggested_roles}
+                  onSuggestedRolesLoaded={handleSuggestedRolesLoaded}
+                  onAnalyzeRole={handleAnalyze}
+                />
               </div>
             )}
 
