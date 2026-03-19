@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { calculateCompatibilityScore, updateMissingSkills, debugScoring } from '../utils/scoringUtils';
 import SkillQuizModal from './SkillQuizModal';
+import { API_ENDPOINTS, fetchWithFallback } from '../config/api';
 
 const InteractiveScoreCard = ({ 
   score, 
@@ -97,25 +98,19 @@ const InteractiveScoreCard = ({
     const newLearnedSkills = new Set([...learnedSkills, skill]);
     setLearnedSkills(newLearnedSkills);
     
-    const apiUrls = [
-      'http://127.0.0.1:8000/api/v1/update-skills',
-      'http://localhost:8000/api/v1/update-skills'
-    ];
-    
     let serverUpdated = false;
     
-    for (const url of apiUrls) {
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            session_id: sessionId,
-            learned_skills: Array.from(newLearnedSkills)
-          })
-        });
-        
-        if (response.ok) {
+    try {
+      const response = await fetchWithFallback(API_ENDPOINTS.updateSkills, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: sessionId,
+          learned_skills: Array.from(newLearnedSkills)
+        })
+      });
+      
+      if (response.ok) {
           const serverData = await response.json();
           
           // Include learned_skills in the update data since server might not return it
@@ -131,14 +126,13 @@ const InteractiveScoreCard = ({
           
           onSkillsUpdated && onSkillsUpdated(updatedData);
           serverUpdated = true;
-          return; // Success
-        } else if (response.status === 404) {
-          console.log(`Session not found on server (${url}), using client-side update`);
-          // Session doesn't exist on server, continue to fallback
-        }
-      } catch (error) {
-        console.log(`Failed to update skills with ${url}:`, error.message);
+        return; // Success
+      } else if (response.status === 404) {
+        console.log('Session not found on server, using client-side update');
+        // Session doesn't exist on server, continue to fallback
       }
+    } catch (error) {
+      console.log('Failed to update skills on server:', error.message);
     }
     
     // Fallback: Update client-side when server session doesn't exist

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { API_ENDPOINTS, fetchWithFallback } from '../config/api';
+import AIProcessingIndicator from './AIProcessingIndicator';
 
 const SkillQuizModal = ({ isOpen, skill, onClose, onPass, onFail }) => {
   const [quizData, setQuizData] = useState(null);
@@ -32,23 +34,9 @@ const SkillQuizModal = ({ isOpen, skill, onClose, onPass, onFail }) => {
     setError(null);
 
     try {
-      const apiUrls = [
-        `http://127.0.0.1:8000/api/v1/quiz/${encodeURIComponent(skill)}`,
-        `http://localhost:8000/api/v1/quiz/${encodeURIComponent(skill)}`
-      ];
+      const response = await fetchWithFallback(API_ENDPOINTS.getQuiz(skill));
 
-      let response = null;
-      for (const url of apiUrls) {
-        try {
-          response = await fetch(url);
-          if (response.ok) break;
-        } catch (error) {
-          console.log(`Failed to fetch from ${url}:`, error.message);
-          continue;
-        }
-      }
-
-      if (!response || !response.ok) {
+      if (!response.ok) {
         throw new Error('Failed to load quiz questions');
       }
 
@@ -85,34 +73,72 @@ const SkillQuizModal = ({ isOpen, skill, onClose, onPass, onFail }) => {
     setIsLoading(true);
 
     try {
-      // Convert answers object to array in question order
-      const answersArray = quizData.questions.map((_, index) => answers[index] ?? -1);
-
-      const apiUrls = [
-        'http://127.0.0.1:8000/api/v1/quiz/submit',
-        'http://localhost:8000/api/v1/quiz/submit'
-      ];
-
-      let response = null;
-      for (const url of apiUrls) {
-        try {
-          response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              skill: skill,
-              answers: answersArray
-            })
-          });
-          if (response.ok) break;
-        } catch (error) {
-          console.log(`Failed to submit to ${url}:`, error.message);
-          continue;
-        }
+      // Check if all questions are answered
+      const unansweredQuestions = quizData.questions.filter((_, index) => answers[index] === undefined);
+      if (unansweredQuestions.length > 0) {
+        alert(`Please answer all questions before submitting. ${unansweredQuestions.length} questions remaining.`);
+        setIsLoading(false);
+        return;
       }
 
-      if (!response || !response.ok) {
-        throw new Error('Failed to submit quiz');
+      // Convert answers object to array with question IDs
+      const answersArray = quizData.questions.map((question, index) => {
+        const selectedOption = answers[index];
+        
+        // Validate the data before conversion
+        const questionId = question.id;
+        if (questionId === undefined || questionId === null) {
+          throw new Error(`Question at index ${index} has invalid ID: ${questionId}`);
+        }
+        
+        if (selectedOption === undefined || selectedOption === null) {
+          throw new Error(`Answer for question ${questionId} is undefined or null`);
+        }
+        
+        // Convert to integers, ensuring they're valid
+        const parsedQuestionId = Number.isInteger(questionId) ? questionId : parseInt(questionId, 10);
+        const parsedSelectedOption = Number.isInteger(selectedOption) ? selectedOption : parseInt(selectedOption, 10);
+        
+        if (isNaN(parsedQuestionId) || isNaN(parsedSelectedOption)) {
+          throw new Error(`Invalid data - QuestionID: ${questionId} -> ${parsedQuestionId}, SelectedOption: ${selectedOption} -> ${parsedSelectedOption}`);
+        }
+        
+        console.log(`Question ${parsedQuestionId}: selected option ${parsedSelectedOption}`);
+        
+        return {
+          question_id: parsedQuestionId,
+          selected_option: parsedSelectedOption
+        };
+      });
+
+      console.log('Submitting quiz data:', {
+        skill: skill,
+        answers: answersArray,
+        totalAnswers: answersArray.length
+      });
+
+      const submissionData = {
+        skill: skill,
+        answers: answersArray
+      };
+
+      console.log('Submitting quiz data:', submissionData);
+
+      const response = await fetchWithFallback(API_ENDPOINTS.submitQuiz, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submissionData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        const errorMessage = errorData?.detail || response.statusText || 'Failed to submit quiz';
+        console.error('Quiz submission failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorData: errorData
+        });
+        throw new Error(`Quiz submission failed (${response.status}): ${errorMessage}`);
       }
 
       const results = await response.json();
@@ -184,11 +210,12 @@ const SkillQuizModal = ({ isOpen, skill, onClose, onPass, onFail }) => {
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
           {isLoading && (
-            <div className="flex items-center justify-center py-12">
-              <div className="text-center">
-                <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading quiz questions...</p>
-              </div>
+            <div className="py-12">
+              <AIProcessingIndicator 
+                isVisible={true}
+                message={showResults ? "Processing your answers..." : "Generating quiz questions"}
+                className="mx-auto max-w-md"
+              />
             </div>
           )}
 

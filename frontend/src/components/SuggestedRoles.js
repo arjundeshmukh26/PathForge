@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ResumeSelector from './ResumeSelector';
+import AIProcessingIndicator from './AIProcessingIndicator';
+import { API_ENDPOINTS, fetchWithFallback } from '../config/api';
 
 const SuggestedRoles = ({ 
   userSkills, 
@@ -55,11 +57,6 @@ const SuggestedRoles = ({
     setIsLoading(true);
     setError(null);
 
-    const apiUrls = [
-      'http://127.0.0.1:8000/api/v1/suggest-roles',
-      'http://localhost:8000/api/v1/suggest-roles'
-    ];
-
     const requestData = {
       user_skills: userSkills,
       current_role: currentRole,
@@ -67,19 +64,18 @@ const SuggestedRoles = ({
       resume_text: resumeText
     };
 
-    for (const url of apiUrls) {
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestData)
-        });
+    try {
+      const response = await fetchWithFallback(API_ENDPOINTS.suggestRoles, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+      });
 
-        if (!response.ok) {
-          throw new Error(`Server responded with status ${response.status}`);
-        }
+      if (!response.ok) {
+        throw new Error(`Server responded with status ${response.status}`);
+      }
 
         const data = await response.json();
         const fetchedSuggestions = data.suggested_roles || [];
@@ -91,17 +87,14 @@ const SuggestedRoles = ({
           onSuggestedRolesLoaded(fetchedSuggestions);
         }
         
-        setIsLoading(false);
-        return; // Success, exit function
+      setIsLoading(false);
+      return; // Success, exit function
 
-      } catch (error) {
-        console.log(`Failed to fetch suggestions from ${url}:`, error.message);
-      }
+    } catch (error) {
+      console.log('Failed to fetch suggestions from API:', error.message);
+      setError('Unable to fetch role suggestions. Please try again later.');
+      setIsLoading(false);
     }
-
-    // If all URLs failed
-    setError('Unable to fetch role suggestions. Please try again later.');
-    setIsLoading(false);
   };
 
   const handleAnalyzeRole = (role) => {
@@ -289,9 +282,12 @@ const SuggestedRoles = ({
       {/* Content */}
       <div className="p-8">
         {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-600"></div>
-            <span className="ml-4 text-gray-600">Finding matching roles...</span>
+          <div className="py-8">
+            <AIProcessingIndicator 
+              isVisible={true}
+              message="AI is analyzing role compatibility"
+              className="mx-auto max-w-md"
+            />
           </div>
         ) : error ? (
           <div className="flex items-center justify-center py-12">

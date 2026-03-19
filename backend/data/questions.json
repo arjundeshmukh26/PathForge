@@ -1137,5 +1137,139 @@
       "correct": 1,
       "explanation": "Content management requires structured templates, accessibility-aware editing tools, and validation systems that guide content creators toward semantic, accessible HTML output."
     }
+  ],
+  "Version Control": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your team is working on the same codebase and conflicts keep arising when merging changes. Team members are overwriting each other's work. What version control workflow should you implement?",
+      "options": [
+        "Everyone works directly on the main branch",
+        "Use feature branches with pull requests and code review before merging",
+        "Take turns working on files one person at a time",
+        "Create copies of files with different names"
+      ],
+      "correct": 1,
+      "explanation": "Feature branches with pull requests enable parallel development while preventing conflicts and ensuring code quality through review."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "You accidentally committed sensitive information (API keys) to your Git repository. The commit is already pushed to the remote repository. What should you do?",
+      "options": [
+        "Just delete the files and commit again",
+        "Use git revert to undo the commit, rotate the compromised keys, and ensure .gitignore excludes sensitive files",
+        "Hope nobody notices and continue working",
+        "Delete the entire repository and start over"
+      ],
+      "correct": 1,
+      "explanation": "Security breaches require immediate key rotation, proper cleanup with git revert, and preventive measures with .gitignore."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your team needs to implement GitOps for a production deployment pipeline. Code changes must trigger automated deployments while maintaining security and rollback capabilities. What comprehensive strategy do you establish?",
+      "options": [
+        "Allow developers to deploy directly to production",
+        "Implement automated CI/CD with protected branches, signed commits, automated testing, and deployment approval workflows",
+        "Use manual deployment scripts only",
+        "Deploy only during scheduled maintenance windows"
+      ],
+      "correct": 1,
+      "explanation": "GitOps requires automated pipelines with security controls, testing validation, and proper approval workflows for safe production deployments."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "You're managing a monorepo with multiple microservices where changes to one service shouldn't trigger deployments of others. You need sophisticated version control and CI/CD integration. How do you architect this?",
+      "options": [
+        "Trigger all deployments for any change",
+        "Implement path-based change detection, selective triggering, service-specific versioning, and dependency tracking",
+        "Split into separate repositories immediately",
+        "Use manual deployment for each service"
+      ],
+      "correct": 1,
+      "explanation": "Monorepo CI/CD requires intelligent change detection, selective pipelines, proper versioning strategies, and automated dependency management."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "Your organization requires compliance with SOX regulations for financial software. Version control must provide audit trails, change approvals, and immutable history. What enterprise Git strategy do you implement?",
+      "options": [
+        "Use standard Git with no special requirements",
+        "Implement signed commits, protected branches, required reviews, audit logging, and immutable tag-based releases",
+        "Allow only senior developers to commit",
+        "Backup repositories daily"
+      ],
+      "correct": 1,
+      "explanation": "SOX compliance requires cryptographic signatures, mandatory reviews, comprehensive audit trails, and immutable release management for financial systems."
+    }
+  ],
+  "Deployment": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your web application needs to be deployed to production for the first time. Users should experience zero downtime. What deployment strategy should you implement?",
+      "options": [
+        "Deploy directly to production server during business hours",
+        "Use blue-green deployment with health checks before switching traffic",
+        "Upload files via FTP and restart the server",
+        "Deploy to all servers simultaneously"
+      ],
+      "correct": 1,
+      "explanation": "Blue-green deployment allows you to deploy to a separate environment, test it, then switch traffic only when the new version is confirmed working, ensuring zero downtime."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "Your deployment failed halfway through and your production site is broken. Users are reporting errors. What's your immediate action plan?",
+      "options": [
+        "Continue debugging the deployment issue while users wait",
+        "Immediately rollback to the last known working version, then investigate the issue in a separate environment",
+        "Take the site offline for maintenance",
+        "Ask users to wait while you fix the problems"
+      ],
+      "correct": 1,
+      "explanation": "Production incidents require immediate rollback to restore service, then root cause analysis happens in non-production environments to avoid extended downtime."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "You're implementing CI/CD for a microservices architecture with 15 services, each with different dependencies and deployment windows. Service failures must not cascade. How do you design the deployment pipeline?",
+      "options": [
+        "Deploy all services at once during maintenance windows",
+        "Implement service-specific pipelines with circuit breakers, health checks, canary releases, and automated rollback triggers",
+        "Deploy services manually one by one",
+        "Use a single pipeline for all services"
+      ],
+      "correct": 1,
+      "explanation": "Complex microservices require independent pipelines with failure isolation, gradual rollouts, comprehensive monitoring, and automated recovery mechanisms."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "Your company requires deployments to be compliant with SOC 2 and must support instant rollback for a financial application handling millions of transactions. What comprehensive deployment strategy do you architect?",
+      "options": [
+        "Use basic deployment scripts with manual verification",
+        "Implement immutable infrastructure with automated testing, approval workflows, audit logging, canary deployments, and database migration strategies",
+        "Deploy only during scheduled maintenance windows",
+        "Use simple file upload deployments"
+      ],
+      "correct": 1,
+      "explanation": "Compliance and high-availability requirements demand immutable infrastructure, comprehensive automation, audit trails, gradual rollouts, and bulletproof rollback mechanisms."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "You need to deploy a critical update across 200 servers in multiple geographic regions during peak traffic, with zero tolerance for service disruption. How do you orchestrate this deployment?",
+      "options": [
+        "Deploy to all servers simultaneously",
+        "Implement progressive deployment with load balancer integration, real-time monitoring, automated canary analysis, and region-by-region rollout with automatic rollback triggers",
+        "Deploy during low-traffic hours only",
+        "Use manual deployment to each server"
+      ],
+      "correct": 1,
+      "explanation": "Large-scale deployments require sophisticated orchestration with traffic management, automated quality gates, progressive rollouts, and intelligent failure detection and recovery."
+    }
   ]
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PDFUpload from './PDFUpload';
+import { API_ENDPOINTS, fetchWithFallback } from '../config/api';
 
 const InteractiveResumeForm = ({ onAnalyze, isAnalyzing = false }) => {
   const [formData, setFormData] = useState({
@@ -48,25 +49,14 @@ const InteractiveResumeForm = ({ onAnalyze, isAnalyzing = false }) => {
   }, [selectedCategory, searchTerm, roles, categories]);
 
   const fetchRoles = async () => {
-    const apiUrls = [
-      'http://127.0.0.1:8000/api/v1/roles',
-      'http://localhost:8000/api/v1/roles'
-    ];
-    
-    for (const url of apiUrls) {
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        setRoles(data.roles);
-        setCategories(data.categories);
-        return; // Success, exit the loop
-      } catch (error) {
-        console.log(`Failed to fetch from ${url}:`, error.message);
-      }
+    try {
+      const response = await fetchWithFallback(API_ENDPOINTS.roles);
+      const data = await response.json();
+      setRoles(data.roles);
+      setCategories(data.categories);
+    } catch (error) {
+      console.error('Failed to fetch roles from API:', error.message);
     }
-    
-    // If all URLs failed
-    console.error('Failed to fetch roles from all endpoints');
   };
 
   const handleInputChange = (e) => {

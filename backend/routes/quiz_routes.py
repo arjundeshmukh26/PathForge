@@ -5,9 +5,9 @@ import json
 import logging
 import random
 from pathlib import Path
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from typing import List, Dict, Any
+from fastapi import APIRouter, HTTPException, Request, Body
+from pydantic import BaseModel, ValidationError
+from typing import List, Dict, Any, Union
 
 logger = logging.getLogger(__name__)
 
@@ -19,9 +19,14 @@ class QuizResponse(BaseModel):
     total_questions: int
     pass_threshold: int
 
+class QuizAnswer(BaseModel):
+    question_id: int
+    selected_option: int
+
 class QuizSubmission(BaseModel):
     skill: str
-    answers: List[int]  # List of selected option indices
+    answers: List[QuizAnswer]
+
 
 class QuizResult(BaseModel):
     skill: str
@@ -105,8 +110,9 @@ async def get_skill_quiz(skill_name: str):
         logger.error(f"Failed to generate quiz for skill '{skill_name}': {e}")
         raise HTTPException(status_code=500, detail=f"Failed to generate quiz for skill: {skill_name}")
 
+
 @router.post("/quiz/submit", response_model=QuizResult)
-async def submit_quiz(submission: QuizSubmission):
+async def submit_quiz(data: dict = Body(...)):
     """
     Submit quiz answers and get results.
     
@@ -117,10 +123,44 @@ async def submit_quiz(submission: QuizSubmission):
         Quiz results with score and explanations
     """
     try:
+        # Manual validation and parsing
+        if not isinstance(data, dict):
+            raise HTTPException(status_code=400, detail="Request body must be a JSON object")
+        
+        if "skill" not in data or "answers" not in data:
+            raise HTTPException(status_code=400, detail="Missing required fields: skill and answers")
+        
+        skill = data["skill"]
+        answers_data = data["answers"]
+        
+        logger.info(f"Quiz submission received - Skill: {skill}, Answers: {len(answers_data)}")
+        
+        # Validate and convert answers
+        validated_answers = []
+        for i, answer_obj in enumerate(answers_data):
+            if not isinstance(answer_obj, dict):
+                raise HTTPException(status_code=400, detail=f"Answer {i+1} must be an object")
+            
+            if "question_id" not in answer_obj or "selected_option" not in answer_obj:
+                raise HTTPException(status_code=400, detail=f"Answer {i+1} missing question_id or selected_option")
+            
+            try:
+                question_id = int(answer_obj["question_id"])
+                selected_option = int(answer_obj["selected_option"])
+            except (ValueError, TypeError):
+                raise HTTPException(status_code=400, detail=f"Answer {i+1} contains invalid integers")
+            
+            validated_answers.append({
+                "question_id": question_id,
+                "selected_option": selected_option
+            })
+            
+            logger.info(f"  Answer {i+1}: question_id={question_id}, selected_option={selected_option}")
+        
         questions_data = load_questions()
         
         # Get the original questions for this skill
-        normalized_skill = submission.skill.strip()
+        normalized_skill = skill.strip()
         skill_questions = None
         
         if normalized_skill in questions_data:
@@ -135,23 +175,39 @@ async def submit_quiz(submission: QuizSubmission):
         if not skill_questions:
             skill_questions = generate_default_questions(normalized_skill)
         
-        if len(submission.answers) != len(skill_questions):
+        if len(validated_answers) != len(skill_questions):
             raise HTTPException(
                 status_code=400, 
-                detail=f"Expected {len(skill_questions)} answers, got {len(submission.answers)}"
+                detail=f"Expected {len(skill_questions)} answers, got {len(validated_answers)}"
             )
         
-        # Calculate score
+        # Create lookup for questions by ID
+        question_lookup = {q["id"]: q for q in skill_questions}
+        
+        # Calculate score by matching question IDs
         correct_count = 0
         correct_answers = []
         explanations = []
         
-        for i, (user_answer, question) in enumerate(zip(submission.answers, skill_questions)):
+        # Sort answers by question ID to ensure consistent ordering
+        sorted_answers = sorted(validated_answers, key=lambda x: x["question_id"])
+        
+        for answer in sorted_answers:
+            question_id = answer["question_id"]
+            user_selection = answer["selected_option"]
+            
+            if question_id not in question_lookup:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Question ID {question_id} not found for skill {normalized_skill}"
+                )
+            
+            question = question_lookup[question_id]
             correct_answer = question["correct"]
             correct_answers.append(correct_answer)
             explanations.append(question.get("explanation", "No explanation available."))
             
-            if user_answer == correct_answer:
+            if user_selection == correct_answer:
                 correct_count += 1
         
         pass_threshold = 3
@@ -172,7 +228,7 @@ async def submit_quiz(submission: QuizSubmission):
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to process quiz submission for skill '{submission.skill}': {e}")
+        logger.error(f"Failed to process quiz submission for skill '{skill}': {e}")
         raise HTTPException(status_code=500, detail="Failed to process quiz submission")
 
 def generate_default_questions(skill_name: str) -> List[Dict[str, Any]]:
@@ -252,3 +308,15 @@ def generate_default_questions(skill_name: str) -> List[Dict[str, Any]]:
             "explanation": f"Expert-level {skill_name} skills involve building systems that are performant, monitorable, testable, and adaptable to changing requirements."
         }
     ]
+
+
+@router.post("/quiz/debug-submit")
+async def debug_submit_quiz(request: Request):
+    """Debug endpoint to see raw request data"""
+    try:
+        body = await request.json()
+        logger.info(f"Raw quiz submission body: {body}")
+        return {"received": body, "status": "success"}
+    except Exception as e:
+        logger.error(f"Debug submit error: {e}")
+        return {"error": str(e), "status": "failed"}

@@ -104,7 +104,7 @@ MODEL_NAME = "gemini-3.1-flash-lite-preview"  # Using stable model for better co
 
 logger.info(f"Initializing Gemini service...")
 if GEMINI_API_KEY:
-    logger.info(f"Gemini API key found: {GEMINI_API_KEY[:10]}...")
+    logger.info("Gemini API key configured successfully")
 else:
     logger.warning("No Gemini API key found in environment variables")
 

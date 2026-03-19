@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { API_ENDPOINTS, fetchWithFallback } from '../config/api';
 
 const PDFUpload = ({ onTextExtracted, disabled = false, className = "" }) => {
   const [isDragOver, setIsDragOver] = useState(false);
@@ -15,29 +16,12 @@ const PDFUpload = ({ onTextExtracted, disabled = false, className = "" }) => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const apiUrls = [
-        'http://127.0.0.1:8000/api/v1/extract-pdf-text',
-        'http://localhost:8000/api/v1/extract-pdf-text'
-      ];
-
-      let response = null;
-      for (const url of apiUrls) {
-        try {
-          setExtractionProgress({ step: 2, message: 'Processing PDF...' });
-          response = await fetch(url, {
-            method: 'POST',
-            body: formData
-          });
-          break; // Success, exit loop
-        } catch (error) {
-          console.log(`Failed to upload to ${url}:`, error.message);
-          continue; // Try next URL
-        }
-      }
-
-      if (!response) {
-        throw new Error('Unable to connect to the PDF processing service');
-      }
+      setExtractionProgress({ step: 2, message: 'Processing PDF...' });
+      
+      const response = await fetchWithFallback(API_ENDPOINTS.extractPdfText, {
+        method: 'POST',
+        body: formData
+      });
 
       setExtractionProgress({ step: 3, message: 'Extracting text...' });
       const result = await response.json();

@@ -1,6 +1,12 @@
 import React from 'react';
 
-const FullScreenLoader = ({ isVisible, message = "Analyzing your profile...", subMessage = "Please wait while we process your request" }) => {
+const FullScreenLoader = ({ 
+  isVisible, 
+  message = "Analyzing your profile...", 
+  subMessage = "Please wait while we process your request",
+  currentStep = 1,
+  totalSteps = 3 
+}) => {
   if (!isVisible) return null;
 
   return (
@@ -34,19 +40,61 @@ const FullScreenLoader = ({ isVisible, message = "Analyzing your profile...", su
           
           {/* Progress Steps */}
           <div className="mt-6 space-y-2">
-            <div className="flex items-center text-sm text-gray-500">
-              <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              Processing resume content
+            {/* Step 1: Processing */}
+            <div className={`flex items-center text-sm ${currentStep >= 1 ? 'text-gray-600' : 'text-gray-400'}`}>
+              {currentStep > 1 ? (
+                <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              ) : currentStep === 1 ? (
+                <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2"></div>
+              ) : (
+                <div className="w-4 h-4 border-2 border-gray-300 rounded-full mr-2"></div>
+              )}
+              <span className={currentStep === 1 ? 'font-medium text-blue-600' : ''}>Processing resume content</span>
             </div>
-            <div className="flex items-center text-sm text-blue-600 font-medium">
-              <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2"></div>
-              Analyzing skills and experience
+
+            {/* Step 2: AI Analysis */}
+            <div className={`flex items-center text-sm ${currentStep >= 2 ? 'text-gray-600' : 'text-gray-400'}`}>
+              {currentStep > 2 ? (
+                <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              ) : currentStep === 2 ? (
+                <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2"></div>
+              ) : (
+                <div className="w-4 h-4 border-2 border-gray-300 rounded-full mr-2"></div>
+              )}
+              <span className={currentStep === 2 ? 'font-medium text-blue-600' : ''}>AI skill extraction & analysis</span>
             </div>
-            <div className="flex items-center text-sm text-gray-400">
-              <div className="w-4 h-4 border-2 border-gray-300 rounded-full mr-2"></div>
-              Generating compatibility report
+
+            {/* Step 3: Final Processing */}
+            <div className={`flex items-center text-sm ${currentStep >= 3 ? 'text-gray-600' : 'text-gray-400'}`}>
+              {currentStep > 3 ? (
+                <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              ) : currentStep === 3 ? (
+                <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2"></div>
+              ) : (
+                <div className="w-4 h-4 border-2 border-gray-300 rounded-full mr-2"></div>
+              )}
+              <span className={currentStep === 3 ? 'font-medium text-blue-600' : ''}>Generating compatibility report</span>
+            </div>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="mt-4">
+            <div className="w-full bg-gray-200 rounded-full h-1.5">
+              <div 
+                className="bg-blue-600 h-1.5 rounded-full transition-all duration-1000 ease-out"
+                style={{ width: `${Math.min(100, (currentStep / totalSteps) * 100)}%` }}
+              ></div>
+            </div>
+            <div className="text-center mt-2">
+              <span className="text-xs text-gray-500">
+                Step {Math.min(totalSteps, currentStep)} of {totalSteps}
+              </span>
             </div>
           </div>
         </div>

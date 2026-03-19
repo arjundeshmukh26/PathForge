@@ -21,7 +21,7 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
-from routes.enhanced_analyze import router as analyze_router
+from routes.analyze import router as analyze_router
 from routes.pdf_routes import router as pdf_router
 from routes.quiz_routes import router as quiz_router
 

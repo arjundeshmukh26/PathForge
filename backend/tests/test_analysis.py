@@ -1,5 +1,5 @@
 """
-Tests for the enhanced skill analysis system
+Tests for the skill analysis system
 """
 
 import pytest
@@ -13,14 +13,14 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from main import app
-from services.enhanced_skill_service import skill_service
+from services.skill_service import skill_service
 from services.gemini_service import gemini_service
 
 client = TestClient(app)
 
 
-class TestEnhancedSkillService:
-    """Test the enhanced skill service functionality"""
+class TestSkillService:
+    """Test the skill service functionality"""
     
     def test_normalize_skill(self):
         """Test skill normalization with synonyms"""
@@ -86,8 +86,8 @@ class TestEnhancedSkillService:
         assert result["missing_skills"][0]["skill"] == "TypeScript"
 
 
-class TestEnhancedAnalyzeEndpoint:
-    """Test the enhanced analyze endpoint"""
+class TestAnalyzeEndpoint:
+    """Test the analyze endpoint"""
     
     def test_analyze_successful_request(self):
         """Test successful resume analysis"""

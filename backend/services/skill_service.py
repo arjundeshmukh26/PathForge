@@ -1,351 +1,402 @@
 """
-Enhanced Skill Service - Handles hybrid skill extraction, normalization, and processing
+Skill Service - Comprehensive skill analysis with hybrid AI + deterministic approach
 """
 
 import re
 import json
 import os
-from typing import List, Dict, Set, Any, Optional
+import asyncio
+import logging
+from typing import List, Dict, Set, Any, Optional, Tuple
 from collections import Counter
 
+from .gemini_service import gemini_service
+from .direct_gemini_client import direct_gemini_client
 
-def load_synonyms() -> Dict[str, str]:
-    """Load skill synonyms mapping"""
-    try:
-        data_dir = os.path.join(os.path.dirname(__file__), '..', 'data')
-        with open(os.path.join(data_dir, 'synonyms.json'), 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {}
+# Configure logging
+logger = logging.getLogger(__name__)
 
 
-def fallback_skill_extraction(resume_text: str, skills_db: Dict) -> List[str]:
-    """
-    Extract skills from resume using keyword matching as fallback
+class SkillService:
+    def __init__(self):
+        self.synonyms = self._load_synonyms()
+        self.known_skills = self._load_skills_from_roles_and_synonyms()
     
-    Args:
-        resume_text: Raw resume text
-        skills_db: Database of known skills from skills.json
+    def _load_synonyms(self) -> Dict[str, str]:
+        """Load skill synonyms mapping"""
+        try:
+            data_dir = os.path.join(os.path.dirname(__file__), '..', 'data')
+            with open(os.path.join(data_dir, 'synonyms.json'), 'r') as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return {}
+    
+    def _load_skills_from_roles_and_synonyms(self) -> List[str]:
+        """Load skills from roles.json and synonyms.json for comprehensive coverage"""
+        skills = set()
         
-    Returns:
-        List of matched skills
-    """
-    if not resume_text or not skills_db:
-        return []
-    
-    # Get the skills list from the database
-    known_skills = skills_db.get("skills", [])
-    if not known_skills:
-        return []
-    
-    # Normalize resume text for better matching
-    resume_lower = resume_text.lower()
-    
-    # Remove common non-skill words and clean text
-    cleaned_resume = _clean_resume_text(resume_lower)
-    
-    found_skills = []
-    
-    # Direct skill matching
-    for skill in known_skills:
-        if _skill_matches_in_text(skill, cleaned_resume):
-            found_skills.append(skill)
-    
-    # Additional pattern-based extraction
-    pattern_skills = _extract_skills_by_patterns(resume_text)
-    found_skills.extend(pattern_skills)
-    
-    # Remove duplicates while preserving order
-    return list(dict.fromkeys(found_skills))
-
-
-def _clean_resume_text(text: str) -> str:
-    """Clean resume text for better skill matching"""
-    # Remove common resume noise words
-    noise_words = [
-        "experience", "years", "year", "months", "month", "proficient", 
-        "familiar", "knowledge", "skilled", "expert", "advanced", "basic",
-        "intermediate", "working", "hands-on", "strong", "excellent", "good"
-    ]
-    
-    # Replace noise words with spaces
-    for word in noise_words:
-        text = re.sub(rf'\b{word}\b', ' ', text, flags=re.IGNORECASE)
-    
-    # Clean up extra whitespace
-    text = re.sub(r'\s+', ' ', text).strip()
-    
-    return text
-
-
-def _skill_matches_in_text(skill: str, text: str) -> bool:
-    """
-    Check if a skill matches in the text with various patterns
-    """
-    skill_lower = skill.lower()
-    
-    # Direct word boundary match
-    if re.search(rf'\b{re.escape(skill_lower)}\b', text):
-        return True
-    
-    # Match with common variations
-    variations = _get_skill_variations(skill_lower)
-    for variation in variations:
-        if re.search(rf'\b{re.escape(variation)}\b', text):
-            return True
-    
-    # Match with dots, hyphens (e.g., "react.js", "node-js")
-    skill_pattern = skill_lower.replace('.', r'\.?').replace('-', r'[-\s]?')
-    if re.search(rf'\b{skill_pattern}\b', text):
-        return True
-    
-    return False
-
-
-def _get_skill_variations(skill: str) -> List[str]:
-    """Get common variations of a skill name"""
-    variations = []
-    
-    # Common abbreviations and variations
-    variation_map = {
-        "javascript": ["js", "ecmascript"],
-        "typescript": ["ts"],
-        "python": ["py"],
-        "c#": ["csharp", "c-sharp"],
-        "c++": ["cpp", "cplusplus"],
-        "postgresql": ["postgres", "psql"],
-        "mongodb": ["mongo"],
-        "kubernetes": ["k8s"],
-        "amazon web services": ["aws"],
-        "google cloud platform": ["gcp", "google cloud"],
-        "microsoft azure": ["azure"],
-        "react": ["reactjs", "react.js"],
-        "vue.js": ["vue", "vuejs"],
-        "node.js": ["nodejs", "node"],
-        "express.js": ["express", "expressjs"],
-        "spring boot": ["springboot", "spring"],
-        "ruby on rails": ["rails", "ror"],
-    }
-    
-    # Add variations from map
-    for key, vars_list in variation_map.items():
-        if skill.lower() == key:
-            variations.extend(vars_list)
-        elif skill.lower() in vars_list:
-            variations.append(key)
-            variations.extend([v for v in vars_list if v != skill.lower()])
-    
-    return variations
-
-
-def _extract_skills_by_patterns(text: str) -> List[str]:
-    """
-    Extract skills using common resume patterns
-    """
-    skills = []
-    
-    # Pattern 1: "Skills: X, Y, Z"
-    skills_sections = re.findall(
-        r'(?:skills?|technologies?|tools?|languages?)[:\s-]+([^.\n]+)', 
-        text, 
-        re.IGNORECASE
-    )
-    
-    for section in skills_sections:
-        # Split by common separators
-        items = re.split(r'[,;|&\n]+', section)
-        for item in items:
-            clean_item = item.strip().title()
-            if len(clean_item) > 1 and len(clean_item) < 30:
-                skills.append(clean_item)
-    
-    # Pattern 2: Programming languages pattern
-    prog_langs = re.findall(
-        r'\b(Java|Python|JavaScript|C\+\+|C#|PHP|Ruby|Go|Swift|Kotlin|Rust|TypeScript|Scala|Perl|R|MATLAB)\b',
-        text,
-        re.IGNORECASE
-    )
-    skills.extend([lang.title() for lang in prog_langs])
-    
-    # Pattern 3: Frameworks and libraries
-    frameworks = re.findall(
-        r'\b(React|Angular|Vue|Django|Flask|Spring|Laravel|Rails|Express|Node\.js|jQuery|Bootstrap)\b',
-        text,
-        re.IGNORECASE
-    )
-    skills.extend([fw.title() for fw in frameworks])
-    
-    return skills
-
-
-def normalize_skills(skills: List[str]) -> List[str]:
-    """
-    Normalize and deduplicate skills list
-    
-    Args:
-        skills: Raw skills list (may contain duplicates and variations)
-        
-    Returns:
-        Normalized and deduplicated skills list
-    """
-    if not skills:
-        return []
-    
-    # Skill normalization mappings (standard names)
-    normalization_map = {
-        # Programming languages
-        "js": "JavaScript",
-        "javascript": "JavaScript",
-        "ts": "TypeScript", 
-        "typescript": "TypeScript",
-        "py": "Python",
-        "python": "Python",
-        "java": "Java",
-        "c#": "C#",
-        "csharp": "C#",
-        "c-sharp": "C#",
-        "cpp": "C++",
-        "c++": "C++",
-        "cplusplus": "C++",
-        "php": "PHP",
-        "ruby": "Ruby",
-        "go": "Go",
-        "golang": "Go",
-        "rust": "Rust",
-        "swift": "Swift",
-        "kotlin": "Kotlin",
-        "scala": "Scala",
-        
-        # Frontend
-        "react": "React",
-        "reactjs": "React",
-        "react.js": "React",
-        "vue": "Vue.js",
-        "vuejs": "Vue.js",
-        "vue.js": "Vue.js",
-        "angular": "Angular",
-        "angularjs": "Angular",
-        "html": "HTML",
-        "html5": "HTML5",
-        "css": "CSS",
-        "css3": "CSS3",
-        "sass": "Sass",
-        "scss": "Sass",
-        "less": "Less",
-        "jquery": "jQuery",
-        "bootstrap": "Bootstrap",
-        "tailwind": "Tailwind CSS",
-        "tailwindcss": "Tailwind CSS",
-        
-        # Backend
-        "node.js": "Node.js",
-        "nodejs": "Node.js",
-        "node": "Node.js",
-        "express": "Express.js",
-        "expressjs": "Express.js",
-        "express.js": "Express.js",
-        "django": "Django",
-        "flask": "Flask",
-        "fastapi": "FastAPI",
-        "spring": "Spring Boot",
-        "springboot": "Spring Boot",
-        "spring boot": "Spring Boot",
-        "laravel": "Laravel",
-        "rails": "Ruby on Rails",
-        "ruby on rails": "Ruby on Rails",
-        "ror": "Ruby on Rails",
-        ".net": ".NET",
-        "dotnet": ".NET",
-        "asp.net": "ASP.NET",
-        
-        # Databases
-        "sql": "SQL",
-        "mysql": "MySQL",
-        "postgresql": "PostgreSQL",
-        "postgres": "PostgreSQL",
-        "psql": "PostgreSQL",
-        "mongodb": "MongoDB",
-        "mongo": "MongoDB",
-        "redis": "Redis",
-        "sqlite": "SQLite",
-        "oracle": "Oracle",
-        "cassandra": "Cassandra",
-        "elasticsearch": "Elasticsearch",
-        
-        # Cloud & DevOps
-        "aws": "AWS",
-        "amazon web services": "AWS",
-        "azure": "Microsoft Azure",
-        "microsoft azure": "Microsoft Azure",
-        "gcp": "Google Cloud Platform",
-        "google cloud": "Google Cloud Platform",
-        "google cloud platform": "Google Cloud Platform",
-        "docker": "Docker",
-        "kubernetes": "Kubernetes",
-        "k8s": "Kubernetes",
-        "jenkins": "Jenkins",
-        "gitlab ci": "GitLab CI",
-        "github actions": "GitHub Actions",
-        "terraform": "Terraform",
-        "ansible": "Ansible",
-        
-        # Tools & Others
-        "git": "Git",
-        "github": "GitHub",
-        "gitlab": "GitLab",
-        "bitbucket": "Bitbucket",
-        "jira": "Jira",
-        "confluence": "Confluence",
-        "slack": "Slack",
-        "nginx": "Nginx",
-        "apache": "Apache",
-        "linux": "Linux",
-        "ubuntu": "Ubuntu",
-        "centos": "CentOS",
-        "windows": "Windows",
-        "macos": "macOS",
-        "bash": "Bash",
-        "powershell": "PowerShell",
-        "vim": "Vim",
-        "vscode": "VS Code",
-        "intellij": "IntelliJ IDEA",
-    }
-    
-    normalized_skills = []
-    seen_skills = set()
-    
-    for skill in skills:
-        if not skill or not skill.strip():
-            continue
+        try:
+            data_dir = os.path.join(os.path.dirname(__file__), '..', 'data')
             
+            # Load skills from roles.json
+            with open(os.path.join(data_dir, 'roles.json'), 'r') as f:
+                roles_data = json.load(f)
+                for role, role_data in roles_data.items():
+                    for level, level_skills in role_data.items():
+                        if level != 'category':
+                            skills.update(level_skills.keys())
+            
+            # Add skills from synonyms.json
+            for canonical, variants in self.synonyms.items():
+                skills.add(canonical)
+                if isinstance(variants, list):
+                    skills.update(variants)
+                elif isinstance(variants, str):
+                    skills.add(variants)
+                    
+        except FileNotFoundError as e:
+            logger.warning(f"Could not load skills data: {e}")
+        
+        return list(skills)
+    
+    def normalize_skill(self, skill: str) -> str:
+        """
+        Normalize a skill name using synonyms mapping
+        
+        Args:
+            skill: Raw skill name
+            
+        Returns:
+            Normalized skill name
+        """
+        if not skill:
+            return ""
+        
         # Clean the skill name
-        clean_skill = skill.strip()
+        clean_skill = skill.strip().lower()
         
-        # Normalize using mapping
-        lookup_key = clean_skill.lower()
-        normalized = normalization_map.get(lookup_key, clean_skill)
+        # Check synonyms mapping
+        if clean_skill in self.synonyms:
+            return self.synonyms[clean_skill]
         
-        # Avoid duplicates (case-insensitive)
-        if normalized.lower() not in seen_skills:
-            seen_skills.add(normalized.lower())
-            normalized_skills.append(normalized)
+        # Return title case if no mapping found
+        return skill.strip().title()
     
-    return sorted(normalized_skills)
+    def extract_skills_fallback(self, resume_text: str) -> List[str]:
+        """
+        Fallback skill extraction using keyword matching and patterns
+        
+        Args:
+            resume_text: Raw resume content
+            
+        Returns:
+            List of extracted skills
+        """
+        if not resume_text:
+            return []
+        
+        # Get known skills from roles and synonyms
+        known_skills = self.known_skills
+        
+        # Normalize resume text for better matching
+        resume_lower = resume_text.lower()
+        cleaned_resume = self._clean_resume_text(resume_lower)
+        
+        found_skills = []
+        
+        # Direct skill matching against known skills
+        for skill in known_skills:
+            if self._skill_matches_in_text(skill, cleaned_resume):
+                found_skills.append(skill)
+        
+        # Pattern-based extraction for additional skills
+        pattern_skills = self._extract_skills_by_patterns(resume_text)
+        found_skills.extend(pattern_skills)
+        
+        # Normalize all extracted skills
+        normalized_skills = []
+        for skill in found_skills:
+            normalized = self.normalize_skill(skill)
+            if normalized and normalized not in normalized_skills:
+                normalized_skills.append(normalized)
+        
+        return normalized_skills
+    
+    async def extract_skills_hybrid(self, resume_text: str) -> List[str]:
+        """
+        Hybrid skill extraction using AI + fallback approach
+        
+        Args:
+            resume_text: Raw resume content
+            
+        Returns:
+            Combined list of extracted skills from both AI and fallback
+        """
+        if not resume_text:
+            logger.warning("No resume text provided for skill extraction")
+            return []
+        
+        logger.info(f"Starting hybrid skill extraction for resume with {len(resume_text)} characters")
+        
+        # Try AI extraction first - use direct client to bypass SSL issues
+        ai_skills = []
+        
+        # Try direct Gemini client first (bypasses SSL issues)
+        if direct_gemini_client.is_available():
+            try:
+                logger.info("Attempting AI-powered skill extraction with direct client...")
+                ai_skills = await direct_gemini_client.extract_skills_from_resume(resume_text)
+                # Normalize AI-extracted skills
+                ai_skills = [self.normalize_skill(skill) for skill in ai_skills if skill]
+                logger.info(f"Direct AI extraction completed: {len(ai_skills)} skills found")
+            except Exception as e:
+                logger.warning(f"Direct AI skill extraction failed: {e}")
+        
+        # Fallback to original gemini service if direct client failed
+        if not ai_skills and gemini_service.is_available():
+            try:
+                logger.info("Attempting AI-powered skill extraction with original client...")
+                ai_skills = await gemini_service.extract_skills_from_resume(resume_text)
+                # Normalize AI-extracted skills
+                ai_skills = [self.normalize_skill(skill) for skill in ai_skills if skill]
+                logger.info(f"Original AI extraction completed: {len(ai_skills)} skills found")
+            except Exception as e:
+                logger.error(f"Original AI skill extraction failed: {e}")
+        
+        if not ai_skills:
+            logger.info("AI not available or failed, using fallback extraction only")
+        
+        # Always run fallback extraction
+        logger.info("Running fallback skill extraction...")
+        fallback_skills = self.extract_skills_fallback(resume_text)
+        logger.info(f"Fallback extraction completed: {len(fallback_skills)} skills found")
+        
+        # Merge and deduplicate skills
+        all_skills = list(set(ai_skills + fallback_skills))
+        
+        # Filter out empty or invalid skills
+        valid_skills = [skill for skill in all_skills if skill and len(skill) > 1]
+        
+        logger.info(f"Total unique skills extracted: {len(valid_skills)} (AI: {len(ai_skills)}, Fallback: {len(fallback_skills)})")
+        
+        return sorted(valid_skills)
+    
+    def calculate_compatibility_score(
+        self, 
+        user_skills: List[str], 
+        role_skills: Dict[str, Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        """
+        Calculate compatibility score based on weighted skills
+        
+        Args:
+            user_skills: Skills extracted from user's resume
+            role_skills: Role requirements with weights and resources
+            
+        Returns:
+            Detailed compatibility analysis
+        """
+        if not role_skills:
+            return {
+                "score": 0.0,
+                "matched_skills": [],
+                "missing_skills": [],
+                "total_weight": 0,
+                "matched_weight": 0
+            }
+        
+        # Normalize user skills for comparison
+        user_skills_normalized = [self.normalize_skill(skill) for skill in user_skills]
+        user_skills_set = set(skill.lower() for skill in user_skills_normalized if skill)
+        
+        matched_skills = []
+        missing_skills = []
+        total_weight = 0
+        matched_weight = 0
+        
+        # Process each required skill
+        for skill_name, skill_data in role_skills.items():
+            weight = skill_data.get("weight", 1)
+            resources = skill_data.get("resources", [])
+            total_weight += weight
+            
+            # Check if user has this skill (fuzzy matching)
+            is_matched = self._is_skill_matched(skill_name, user_skills_set)
+            
+            if is_matched:
+                matched_skills.append({
+                    "skill": skill_name,
+                    "weight": weight,
+                    "resources": resources
+                })
+                matched_weight += weight
+            else:
+                missing_skills.append({
+                    "skill": skill_name,
+                    "weight": weight,
+                    "resources": resources
+                })
+        
+        # Calculate score as percentage
+        raw_score = (matched_weight / total_weight * 100) if total_weight > 0 else 0
+        
+        # Ensure score is between 0 and 100, rounded to 1 decimal place
+        score = min(100.0, max(0.0, round(raw_score, 1)))
+        
+        # Sort missing skills by weight (descending)
+        missing_skills.sort(key=lambda x: x["weight"], reverse=True)
+        
+        # Log scoring details for debugging
+        logger.debug(f"Compatibility scoring: matched_weight={matched_weight}, "
+                    f"total_weight={total_weight}, raw_score={raw_score}, final_score={score}")
+        
+        return {
+            "score": score,
+            "matched_skills": matched_skills,
+            "missing_skills": missing_skills,
+            "total_weight": total_weight,
+            "matched_weight": matched_weight
+        }
+    
+    def _is_skill_matched(self, required_skill: str, user_skills_set: Set[str]) -> bool:
+        """
+        Check if a required skill is matched by user skills with fuzzy matching
+        
+        Args:
+            required_skill: Required skill name
+            user_skills_set: Set of user skills (lowercase)
+            
+        Returns:
+            True if skill is matched
+        """
+        required_lower = required_skill.lower()
+        
+        # Direct match
+        if required_lower in user_skills_set:
+            return True
+        
+        # Fuzzy matching for variations
+        for user_skill in user_skills_set:
+            if self._skills_are_similar(required_lower, user_skill):
+                return True
+        
+        return False
+    
+    def _skills_are_similar(self, skill1: str, skill2: str) -> bool:
+        """Check if two skills are similar enough to be considered a match"""
+        if not skill1 or not skill2:
+            return False
+        
+        # Exact match
+        if skill1 == skill2:
+            return True
+        
+        # Check if one contains the other (for cases like "react" vs "react.js")
+        if skill1 in skill2 or skill2 in skill1:
+            return True
+        
+        # Check through synonyms
+        normalized1 = self.normalize_skill(skill1)
+        normalized2 = self.normalize_skill(skill2)
+        
+        return normalized1.lower() == normalized2.lower()
+    
+    def _clean_resume_text(self, text: str) -> str:
+        """Clean resume text for better skill matching"""
+        # Remove common resume noise words
+        noise_words = [
+            "experience", "years", "year", "months", "month", "proficient", 
+            "familiar", "knowledge", "skilled", "expert", "advanced", "basic",
+            "intermediate", "working", "hands-on", "strong", "excellent", "good"
+        ]
+        
+        # Replace noise words with spaces
+        for word in noise_words:
+            text = re.sub(rf'\b{word}\b', ' ', text, flags=re.IGNORECASE)
+        
+        # Clean up extra whitespace
+        text = re.sub(r'\s+', ' ', text).strip()
+        
+        return text
+    
+    def _skill_matches_in_text(self, skill: str, text: str) -> bool:
+        """Check if a skill matches in the text with various patterns"""
+        skill_lower = skill.lower()
+        
+        # Direct word boundary match
+        if re.search(rf'\b{re.escape(skill_lower)}\b', text):
+            return True
+        
+        # Match with common variations
+        variations = self._get_skill_variations(skill_lower)
+        for variation in variations:
+            if re.search(rf'\b{re.escape(variation)}\b', text):
+                return True
+        
+        return False
+    
+    def _get_skill_variations(self, skill: str) -> List[str]:
+        """Get common variations of a skill name"""
+        variations = []
+        
+        # Common abbreviations and variations
+        variation_map = {
+            "javascript": ["js", "ecmascript"],
+            "typescript": ["ts"],
+            "python": ["py"],
+            "c#": ["csharp", "c-sharp"],
+            "c++": ["cpp", "cplusplus"],
+            "postgresql": ["postgres", "psql"],
+            "mongodb": ["mongo"],
+            "kubernetes": ["k8s"],
+            "amazon web services": ["aws"],
+            "google cloud platform": ["gcp", "google cloud"],
+            "microsoft azure": ["azure"],
+            "react": ["reactjs", "react.js"],
+            "vue.js": ["vue", "vuejs"],
+            "node.js": ["nodejs", "node"],
+            "express.js": ["express", "expressjs"],
+        }
+        
+        # Add variations from map
+        for key, vars_list in variation_map.items():
+            if skill.lower() == key:
+                variations.extend(vars_list)
+            elif skill.lower() in vars_list:
+                variations.append(key)
+                variations.extend([v for v in vars_list if v != skill.lower()])
+        
+        return variations
+    
+    def _extract_skills_by_patterns(self, text: str) -> List[str]:
+        """Extract skills using common resume patterns"""
+        skills = []
+        
+        # Pattern 1: "Skills: X, Y, Z"
+        skills_sections = re.findall(
+            r'(?:skills?|technologies?|tools?|languages?)[:\s-]+([^.\n]+)', 
+            text, 
+            re.IGNORECASE
+        )
+        
+        for section in skills_sections:
+            # Split by common separators
+            items = re.split(r'[,;|&\n]+', section)
+            for item in items:
+                clean_item = item.strip()
+                if len(clean_item) > 1 and len(clean_item) < 30:
+                    skills.append(clean_item)
+        
+        # Pattern 2: Programming languages pattern
+        prog_langs = re.findall(
+            r'\b(Java|Python|JavaScript|C\+\+|C#|PHP|Ruby|Go|Swift|Kotlin|Rust|TypeScript|Scala)\b',
+            text,
+            re.IGNORECASE
+        )
+        skills.extend(prog_langs)
+        
+        return skills
 
 
-def merge_ai_and_fallback_skills(ai_skills: List[str], fallback_skills: List[str]) -> List[str]:
-    """
-    Merge AI and fallback skills, giving preference to AI results
-    
-    Args:
-        ai_skills: Skills extracted using AI
-        fallback_skills: Skills extracted using keyword matching
-        
-    Returns:
-        Merged and normalized skills list
-    """
-    # Combine both lists
-    all_skills = (ai_skills or []) + (fallback_skills or [])
-    
-    # Normalize the combined list (this also deduplicates)
-    return normalize_skills(all_skills)
+# Global service instance
+skill_service = SkillService()

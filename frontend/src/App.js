@@ -6,6 +6,7 @@ import PastAnalyses from './components/PastAnalyses';
 import SuggestedRoles from './components/SuggestedRoles';
 import FullScreenLoader from './components/FullScreenLoader';
 import { saveAnalysis, updateLearnedSkills, getAnalysis, isStorageAvailable } from './utils/localStorage';
+import { API_ENDPOINTS, fetchWithFallback } from './config/api';
 
 function App() {
   const [analysisData, setAnalysisData] = useState(null);
@@ -33,27 +34,21 @@ function App() {
     setError(null);
     setShowResults(false); // Hide previous results immediately
     
-    const apiUrls = [
-      'http://127.0.0.1:8000/api/v1/analyze',
-      'http://localhost:8000/api/v1/analyze'
-    ];
-    
-    for (const url of apiUrls) {
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData)
-        });
+    try {
+      const response = await fetchWithFallback(API_ENDPOINTS.analyze, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.detail || 'Analysis failed');
-        }
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Analysis failed');
+      }
 
-        const data = await response.json();
+      const data = await response.json();
         
         console.log('Analysis response data:', {
           session_id: data.session_id,
@@ -120,17 +115,14 @@ function App() {
           }, 500);
         }, 100);
 
-        return; // Success, exit the function
-        
-      } catch (error) {
-        console.log(`Failed to analyze with ${url}:`, error.message);
-      }
+      return; // Success, exit the function
+      
+    } catch (error) {
+      console.log('Analysis failed:', error.message);
+      setError('Unable to connect to the analysis service. Please ensure the backend server is running.');
+      setIsAnalyzing(false);
+      setCurrentAnalysis(null);
     }
-    
-    // If all URLs failed
-    setError('Unable to connect to the analysis service. Please ensure the backend server is running.');
-    setIsAnalyzing(false);
-    setCurrentAnalysis(null);
   };
 
   const handleSkillsUpdated = (updatedData) => {
