@@ -4,11 +4,13 @@ import InteractiveResumeForm from './components/InteractiveResumeForm';
 import InteractiveScoreCard from './components/InteractiveScoreCard';
 import PastAnalyses from './components/PastAnalyses';
 import SuggestedRoles from './components/SuggestedRoles';
+import FullScreenLoader from './components/FullScreenLoader';
 import { saveAnalysis, updateLearnedSkills, getAnalysis, isStorageAvailable } from './utils/localStorage';
 
 function App() {
   const [analysisData, setAnalysisData] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [currentAnalysis, setCurrentAnalysis] = useState(null); // Track current role being analyzed
   const [showResults, setShowResults] = useState(false);
   const [showPastAnalyses, setShowPastAnalyses] = useState(false);
   const [error, setError] = useState(null);
@@ -27,7 +29,9 @@ function App() {
 
   const handleAnalyze = async (formData) => {
     setIsAnalyzing(true);
+    setCurrentAnalysis({ role: formData.role, level: formData.level });
     setError(null);
+    setShowResults(false); // Hide previous results immediately
     
     const apiUrls = [
       'http://127.0.0.1:8000/api/v1/analyze',
@@ -102,15 +106,20 @@ function App() {
           }
         }
         
-        // Smooth scroll to results
+        // Smooth scroll to results and clear loading after UI renders
         setTimeout(() => {
           const resultsElement = document.getElementById('results-section');
           if (resultsElement) {
             resultsElement.scrollIntoView({ behavior: 'smooth' });
           }
+          
+          // Clear loading state after results are shown and scroll completes
+          setTimeout(() => {
+            setIsAnalyzing(false);
+            setCurrentAnalysis(null);
+          }, 500);
         }, 100);
 
-        setIsAnalyzing(false);
         return; // Success, exit the function
         
       } catch (error) {
@@ -121,6 +130,7 @@ function App() {
     // If all URLs failed
     setError('Unable to connect to the analysis service. Please ensure the backend server is running.');
     setIsAnalyzing(false);
+    setCurrentAnalysis(null);
   };
 
   const handleSkillsUpdated = (updatedData) => {
@@ -164,6 +174,8 @@ function App() {
     setShowResults(false);
     setShowPastAnalyses(false);
     setError(null);
+    setIsAnalyzing(false);
+    setCurrentAnalysis(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -429,6 +441,13 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Full Screen Loader */}
+      <FullScreenLoader 
+        isVisible={isAnalyzing}
+        message={currentAnalysis ? `Analyzing ${currentAnalysis.role} Role` : "Analyzing your profile..."}
+        subMessage={currentAnalysis ? `Evaluating your skills for ${currentAnalysis.level} level position` : "Please wait while we process your request"}
+      />
     </div>
   );
 }

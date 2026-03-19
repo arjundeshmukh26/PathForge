@@ -45,7 +45,7 @@ const SuggestedRoles = ({
     if (analyzingRole) {
       const timeout = setTimeout(() => {
         setAnalyzingRole(null);
-      }, 5000); // Clear after 5 seconds max
+      }, 10000); // Clear after 10 seconds max (increased since App.js handles main loading)
 
       return () => clearTimeout(timeout);
     }
@@ -144,12 +144,13 @@ const SuggestedRoles = ({
     // Scroll to top smoothly before starting analysis
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
-    // Show a brief "Starting analysis..." message
+    // Clear local loading state since App.js will handle the main loading
+    setAnalyzingRole(null);
+    
+    // Start the analysis - App.js will show the full screen loader
     setTimeout(() => {
-      // The loading state will be cleared when the parent component updates
-      // or when a new analysis result is received
       onAnalyzeRole(newAnalysisData);
-    }, 800); // Slightly longer delay to show the loading state and allow scroll
+    }, 300); // Brief delay for smooth transition
   };
 
   const handleResumeSelected = (selectedResumeText) => {
