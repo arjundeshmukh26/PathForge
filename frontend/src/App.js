@@ -13,38 +13,49 @@ function App() {
     setIsAnalyzing(true);
     setError(null);
     
-    try {
-      const response = await fetch('http://localhost:8000/api/v1/analyze', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
+    const apiUrls = [
+      'http://127.0.0.1:8000/api/v1/analyze',
+      'http://localhost:8000/api/v1/analyze'
+    ];
+    
+    for (const url of apiUrls) {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Analysis failed');
-      }
-
-      const data = await response.json();
-      setAnalysisData(data);
-      setShowResults(true);
-      
-      // Smooth scroll to results
-      setTimeout(() => {
-        const resultsElement = document.getElementById('results-section');
-        if (resultsElement) {
-          resultsElement.scrollIntoView({ behavior: 'smooth' });
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || 'Analysis failed');
         }
-      }, 100);
 
-    } catch (error) {
-      setError(error.message);
-      console.error('Analysis error:', error);
-    } finally {
-      setIsAnalyzing(false);
+        const data = await response.json();
+        setAnalysisData(data);
+        setShowResults(true);
+        
+        // Smooth scroll to results
+        setTimeout(() => {
+          const resultsElement = document.getElementById('results-section');
+          if (resultsElement) {
+            resultsElement.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+
+        setIsAnalyzing(false);
+        return; // Success, exit the function
+        
+      } catch (error) {
+        console.log(`Failed to analyze with ${url}:`, error.message);
+      }
     }
+    
+    // If all URLs failed
+    setError('Unable to connect to the analysis service. Please ensure the backend server is running.');
+    setIsAnalyzing(false);
   };
 
   const handleSkillsUpdated = (updatedData) => {

@@ -11,6 +11,7 @@ from typing import List, Dict, Set, Any, Optional, Tuple
 from collections import Counter
 
 from .gemini_service import gemini_service
+from .direct_gemini_client import direct_gemini_client
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -118,19 +119,33 @@ class EnhancedSkillService:
         
         logger.info(f"Starting hybrid skill extraction for resume with {len(resume_text)} characters")
         
-        # Try AI extraction first
+        # Try AI extraction first - use direct client to bypass SSL issues
         ai_skills = []
-        if gemini_service.is_available():
+        
+        # Try direct Gemini client first (bypasses SSL issues)
+        if direct_gemini_client.is_available():
             try:
-                logger.info("Attempting AI-powered skill extraction...")
+                logger.info("Attempting AI-powered skill extraction with direct client...")
+                ai_skills = await direct_gemini_client.extract_skills_from_resume(resume_text)
+                # Normalize AI-extracted skills
+                ai_skills = [self.normalize_skill(skill) for skill in ai_skills if skill]
+                logger.info(f"Direct AI extraction completed: {len(ai_skills)} skills found")
+            except Exception as e:
+                logger.warning(f"Direct AI skill extraction failed: {e}")
+        
+        # Fallback to original gemini service if direct client failed
+        if not ai_skills and gemini_service.is_available():
+            try:
+                logger.info("Attempting AI-powered skill extraction with original client...")
                 ai_skills = await gemini_service.extract_skills_from_resume(resume_text)
                 # Normalize AI-extracted skills
                 ai_skills = [self.normalize_skill(skill) for skill in ai_skills if skill]
-                logger.info(f"AI extraction completed: {len(ai_skills)} skills found")
+                logger.info(f"Original AI extraction completed: {len(ai_skills)} skills found")
             except Exception as e:
-                logger.error(f"AI skill extraction failed, using fallback only: {e}")
-        else:
-            logger.info("AI not available, using fallback extraction only")
+                logger.error(f"Original AI skill extraction failed: {e}")
+        
+        if not ai_skills:
+            logger.info("AI not available or failed, using fallback extraction only")
         
         # Always run fallback extraction
         logger.info("Running fallback skill extraction...")

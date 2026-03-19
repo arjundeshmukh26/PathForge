@@ -14,30 +14,89 @@ from google.generativeai.types import HarmCategory, HarmBlockThreshold
 # Configure logging
 logger = logging.getLogger(__name__)
 
-# Apply SSL fixes for Windows/corporate network issues
-def apply_ssl_fixes():
-    """Apply SSL certificate fixes for common Windows/corporate network issues"""
+# Disable SSL verification completely for personal project
+def disable_ssl_verification():
+    """Completely disable SSL verification for personal/development use"""
     try:
         # Disable SSL verification warnings
         import urllib3
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         
-        # Set environment variables to bypass SSL verification
+        # Set environment variables to completely bypass SSL verification
         os.environ['PYTHONHTTPSVERIFY'] = '0'
         os.environ['REQUESTS_CA_BUNDLE'] = ''
         os.environ['CURL_CA_BUNDLE'] = ''
+        os.environ['SSL_VERIFY'] = 'false'
+        os.environ['GRPC_SSL_CIPHER_SUITES'] = 'HIGH'
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS_JSON'] = ''
+        os.environ['GRPC_VERBOSITY'] = 'ERROR'
+        os.environ['GRPC_TRACE'] = ''
         
-        # Create unverified SSL context
+        # Create completely unverified SSL context
         ssl._create_default_https_context = ssl._create_unverified_context
         
-        logger.info("SSL certificate fixes applied successfully")
+        # Aggressively patch all HTTP libraries to disable SSL verification
+        try:
+            import requests
+            import httpx
+            
+            # Patch requests session to always use verify=False
+            original_request = requests.Session.request
+            def patched_request(self, *args, **kwargs):
+                kwargs['verify'] = False
+                return original_request(self, *args, **kwargs)
+            requests.Session.request = patched_request
+            
+            # Patch default requests functions
+            original_get = requests.get
+            original_post = requests.post
+            original_put = requests.put
+            original_delete = requests.delete
+            
+            def patched_get(*args, **kwargs):
+                kwargs['verify'] = False
+                return original_get(*args, **kwargs)
+            def patched_post(*args, **kwargs):
+                kwargs['verify'] = False
+                return original_post(*args, **kwargs)
+            def patched_put(*args, **kwargs):
+                kwargs['verify'] = False
+                return original_put(*args, **kwargs)
+            def patched_delete(*args, **kwargs):
+                kwargs['verify'] = False
+                return original_delete(*args, **kwargs)
+                
+            requests.get = patched_get
+            requests.post = patched_post
+            requests.put = patched_put
+            requests.delete = patched_delete
+            
+            # Also patch httpx if available
+            try:
+                original_httpx_get = httpx.get
+                original_httpx_post = httpx.post
+                def patched_httpx_get(*args, **kwargs):
+                    kwargs['verify'] = False
+                    return original_httpx_get(*args, **kwargs)
+                def patched_httpx_post(*args, **kwargs):
+                    kwargs['verify'] = False
+                    return original_httpx_post(*args, **kwargs)
+                httpx.get = patched_httpx_get
+                httpx.post = patched_httpx_post
+            except:
+                pass
+                
+        except ImportError:
+            pass
+        
+        logger.info("SSL verification completely disabled for development")
         return True
     except Exception as e:
-        logger.warning(f"Could not apply SSL fixes: {e}")
+        logger.warning(f"Could not disable SSL verification: {e}")
         return False
 
-# Apply SSL fixes on import
-apply_ssl_fixes()
+# Disable SSL verification on import
+disable_ssl_verification()
 
 # Configure Gemini API
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -53,8 +112,57 @@ class GeminiService:
     def __init__(self):
         if GEMINI_API_KEY and GEMINI_API_KEY != "your_gemini_api_key_here":
             try:
+                # Aggressively patch Google's transport layers to disable SSL verification
+                try:
+                    import google.auth.transport.requests
+                    import google.auth.transport._http_client
+                    
+                    # Monkey patch Google's HTTP client to disable SSL verification
+                    original_request_init = google.auth.transport.requests.Request.__init__
+                    def patched_init(self, session=None, timeout=None):
+                        if session is None:
+                            import requests
+                            session = requests.Session()
+                            session.verify = False
+                        return original_request_init(self, session, timeout)
+                    google.auth.transport.requests.Request.__init__ = patched_init
+                    
+                    # Also patch the underlying HTTP client if it exists
+                    try:
+                        import google.api_core.client_info
+                        import google.api_core.client_options
+                        
+                        # Patch any HTTP clients in the Google API core
+                        original_build_api_call_settings = getattr(google.api_core, '_build_api_call_settings', None)
+                        if original_build_api_call_settings:
+                            def patched_build_api_call_settings(*args, **kwargs):
+                                result = original_build_api_call_settings(*args, **kwargs)
+                                # Try to set verify=False on any HTTP settings
+                                if hasattr(result, 'transport') and hasattr(result.transport, 'verify'):
+                                    result.transport.verify = False
+                                return result
+                            google.api_core._build_api_call_settings = patched_build_api_call_settings
+                    except:
+                        pass
+                    
+                except Exception as e:
+                    logger.warning(f"Could not patch Google auth transport: {e}")
+                
+                # Try to patch the generative AI client specifically
+                try:
+                    import google.generativeai.client
+                    import google.generativeai._client
+                    
+                    # If we can access the client's HTTP session, patch it
+                    logger.info("Attempting to patch Google GenerativeAI client for SSL bypass")
+                except:
+                    pass
+                
                 # Configure Gemini with API key
-                genai.configure(api_key=GEMINI_API_KEY)
+                genai.configure(
+                    api_key=GEMINI_API_KEY,
+                    transport='rest'  # Use REST transport
+                )
                 
                 self.model = genai.GenerativeModel(
                     model_name=MODEL_NAME,
@@ -65,7 +173,7 @@ class GeminiService:
                         HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
                     }
                 )
-                logger.info("Gemini service initialized successfully")
+                logger.info("Gemini service initialized with aggressive SSL verification disabled")
             except Exception as e:
                 logger.error(f"Failed to initialize Gemini service: {e}")
                 self.model = None
@@ -118,7 +226,7 @@ class GeminiService:
         
         try:
             logger.info("Calling Gemini API for skill extraction...")
-            # Set a timeout for the API call
+            # Set a shorter timeout for faster fallback
             response = await asyncio.wait_for(
                 asyncio.to_thread(
                     self.model.generate_content,
@@ -128,7 +236,7 @@ class GeminiService:
                         max_output_tokens=1000,
                     )
                 ),
-                timeout=15.0  # 15 second timeout
+                timeout=10.0  # 10 second timeout for faster fallback
             )
             
             logger.info(f"Gemini API response received: {len(response.text)} characters")
@@ -145,8 +253,21 @@ class GeminiService:
             logger.info(f"AI extracted {len(extracted_skills)} skills: {extracted_skills[:5]}...")
             return extracted_skills
             
+        except asyncio.TimeoutError:
+            logger.warning("Gemini API call timed out, using fallback")
+            return []
+        except asyncio.TimeoutError:
+            logger.warning("Gemini API call timed out, using fallback")
+            return []
+        except ssl.SSLError as e:
+            logger.warning(f"SSL error in Gemini API call (using fallback): {e}")
+            return []
         except Exception as e:
-            logger.error(f"Gemini skill extraction failed: {e}")
+            error_msg = str(e).lower()
+            if 'ssl' in error_msg or 'certificate' in error_msg or 'handshake' in error_msg:
+                logger.warning(f"SSL-related error in Gemini API call (using fallback): {e}")
+            else:
+                logger.error(f"Gemini skill extraction failed: {e}")
             return []
     
     async def enhance_gap_analysis(
@@ -196,13 +317,16 @@ class GeminiService:
         """
         
         try:
-            response = await asyncio.to_thread(
-                self.model.generate_content,
-                prompt,
-                generation_config=genai.types.GenerationConfig(
-                    temperature=0.3,
-                    max_output_tokens=1500,
-                )
+            response = await asyncio.wait_for(
+                asyncio.to_thread(
+                    self.model.generate_content,
+                    prompt,
+                    generation_config=genai.types.GenerationConfig(
+                        temperature=0.3,
+                        max_output_tokens=1500,
+                    )
+                ),
+                timeout=10.0  # 10 second timeout for analysis
             )
             
             content = response.text.strip()
@@ -229,8 +353,24 @@ class GeminiService:
                 "summary": analysis.get("summary")
             }
             
+        except asyncio.TimeoutError:
+            logger.warning("Gemini gap analysis timed out, using basic results")
+            return {
+                "enhanced_missing_skills": missing_skills,
+                "summary": None
+            }
+        except ssl.SSLError as e:
+            logger.warning(f"SSL error in Gemini gap analysis (using basic results): {e}")
+            return {
+                "enhanced_missing_skills": missing_skills,
+                "summary": None
+            }
         except Exception as e:
-            print(f"Gemini gap analysis enhancement failed: {e}")
+            error_msg = str(e).lower()
+            if 'ssl' in error_msg or 'certificate' in error_msg or 'handshake' in error_msg:
+                logger.warning(f"SSL-related error in Gemini gap analysis (using basic results): {e}")
+            else:
+                logger.error(f"Gemini gap analysis enhancement failed: {e}")
             return {
                 "enhanced_missing_skills": missing_skills,
                 "summary": None

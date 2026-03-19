@@ -32,14 +32,25 @@ const InteractiveResumeForm = ({ onAnalyze, isAnalyzing = false }) => {
   }, [selectedCategory, roles, categories]);
 
   const fetchRoles = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/api/v1/roles');
-      const data = await response.json();
-      setRoles(data.roles);
-      setCategories(data.categories);
-    } catch (error) {
-      console.error('Failed to fetch roles:', error);
+    const apiUrls = [
+      'http://127.0.0.1:8000/api/v1/roles',
+      'http://localhost:8000/api/v1/roles'
+    ];
+    
+    for (const url of apiUrls) {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setRoles(data.roles);
+        setCategories(data.categories);
+        return; // Success, exit the loop
+      } catch (error) {
+        console.log(`Failed to fetch from ${url}:`, error.message);
+      }
     }
+    
+    // If all URLs failed
+    console.error('Failed to fetch roles from all endpoints');
   };
 
   const handleInputChange = (e) => {

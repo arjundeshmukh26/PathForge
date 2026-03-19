@@ -12,6 +12,7 @@ from datetime import datetime
 
 from services.enhanced_skill_service import skill_service
 from services.gemini_service import gemini_service
+from services.direct_gemini_client import direct_gemini_client
 
 router = APIRouter()
 
@@ -136,8 +137,27 @@ async def analyze_resume(request: AnalyzeRequest):
         # Enhance analysis with AI insights (optional - graceful fallback)
         ai_summary = None
         enhanced_missing_skills = compatibility_analysis["missing_skills"]
+        ai_enhancement_successful = False
         
-        if gemini_service.is_available() and compatibility_analysis["missing_skills"]:
+        # Try direct Gemini client first (bypasses SSL issues)
+        if direct_gemini_client.is_available() and compatibility_analysis["missing_skills"]:
+            try:
+                ai_enhancement = await direct_gemini_client.enhance_gap_analysis(
+                    request.resume,
+                    request.role,
+                    request.level,
+                    compatibility_analysis["missing_skills"]
+                )
+                ai_summary = ai_enhancement.get("summary")
+                enhanced_missing_skills = ai_enhancement.get("enhanced_missing_skills", 
+                                                           compatibility_analysis["missing_skills"])
+                ai_enhancement_successful = True
+                print("AI enhancement completed using direct client")
+            except Exception as e:
+                print(f"Direct AI enhancement failed: {e}")
+        
+        # Fallback to original gemini service if direct client failed
+        if not ai_enhancement_successful and gemini_service.is_available() and compatibility_analysis["missing_skills"]:
             try:
                 ai_enhancement = await gemini_service.enhance_gap_analysis(
                     request.resume,
@@ -148,8 +168,9 @@ async def analyze_resume(request: AnalyzeRequest):
                 ai_summary = ai_enhancement.get("summary")
                 enhanced_missing_skills = ai_enhancement.get("enhanced_missing_skills", 
                                                            compatibility_analysis["missing_skills"])
+                print("AI enhancement completed using original client")
             except Exception as e:
-                print(f"AI enhancement failed, using deterministic results: {e}")
+                print(f"Original AI enhancement failed, using deterministic results: {e}")
         
         # Create session for updates
         session_id = str(uuid.uuid4())

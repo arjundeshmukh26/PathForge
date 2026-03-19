@@ -77,23 +77,33 @@ const InteractiveScoreCard = ({
     const newLearnedSkills = new Set([...learnedSkills, skill]);
     setLearnedSkills(newLearnedSkills);
     
-    try {
-      const response = await fetch('http://localhost:8000/api/v1/update-skills', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          session_id: sessionId,
-          learned_skills: Array.from(newLearnedSkills)
-        })
-      });
-      
-      if (response.ok) {
-        const updatedData = await response.json();
-        onSkillsUpdated && onSkillsUpdated(updatedData);
+    const apiUrls = [
+      'http://127.0.0.1:8000/api/v1/update-skills',
+      'http://localhost:8000/api/v1/update-skills'
+    ];
+    
+    for (const url of apiUrls) {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            session_id: sessionId,
+            learned_skills: Array.from(newLearnedSkills)
+          })
+        });
+        
+        if (response.ok) {
+          const updatedData = await response.json();
+          onSkillsUpdated && onSkillsUpdated(updatedData);
+          return; // Success
+        }
+      } catch (error) {
+        console.log(`Failed to update skills with ${url}:`, error.message);
       }
-    } catch (error) {
-      console.error('Failed to update skills:', error);
     }
+    
+    console.error('Failed to update skills on all endpoints');
   };
 
   const tabs = [
