@@ -1,0 +1,1141 @@
+{
+  "JavaScript": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "You're debugging a web form where users complain that clicking 'Submit' sometimes doesn't work. You notice the submit button is dynamically added after page load. What's the most likely cause and solution?",
+      "options": [
+        "The button needs a higher z-index, use CSS to fix it",
+        "Event listeners were attached before the button existed, use event delegation",
+        "The button needs an id attribute, add one in HTML",
+        "The form needs a method attribute, add method='POST'"
+      ],
+      "correct": 1,
+      "explanation": "Dynamically added elements don't have event listeners that were attached before they existed. Event delegation solves this by attaching listeners to parent elements."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "Your e-commerce site needs to display product prices. The API returns prices as strings like '19.99'. Users see '$19.99undefined' in the browser. What's the issue?",
+      "options": [
+        "Use parseInt() to convert the string to number",
+        "The string concatenation is mixing with number addition, use parseFloat()",
+        "Add a CSS currency symbol instead",
+        "Use a different API endpoint"
+      ],
+      "correct": 1,
+      "explanation": "String concatenation with undefined variables causes this issue. parseFloat() properly converts price strings to numbers for calculations."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "You're optimizing a real-time chat app. Users report messages appearing out of order during network lag. The app uses async/await for API calls. How do you ensure message ordering?",
+      "options": [
+        "Add setTimeout delays between API calls",
+        "Use Promise.all() to batch all requests",
+        "Implement a message queue with sequence numbers and reorder on client",
+        "Switch to synchronous XMLHttpRequest"
+      ],
+      "correct": 2,
+      "explanation": "Network requests can complete in different orders. A client-side queue with sequence numbers allows proper reordering based on timestamps or sequence IDs."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "Your SaaS dashboard loads slowly because it makes 50+ API calls on page load. Each component fetches its own data. What's the best architectural solution?",
+      "options": [
+        "Use localStorage to cache all API responses permanently",
+        "Implement GraphQL with a single query fetching all needed data",
+        "Add loading spinners to hide the delay",
+        "Use CDN for faster API responses"
+      ],
+      "correct": 1,
+      "explanation": "GraphQL allows fetching all required data in a single request, eliminating the waterfall effect of multiple API calls and reducing network overhead."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "You're building a collaborative text editor. Multiple users edit simultaneously, causing conflicts when saving. How do you implement conflict resolution?",
+      "options": [
+        "Lock the document when someone is editing",
+        "Implement Operational Transformation (OT) or Conflict-free Replicated Data Types (CRDTs)",
+        "Save changes every second to prevent conflicts",
+        "Show a warning message when conflicts occur"
+      ],
+      "correct": 1,
+      "explanation": "OT and CRDTs are algorithms specifically designed for real-time collaborative editing, allowing concurrent edits while maintaining consistency."
+    }
+  ],
+  "React": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your React todo app has a list where clicking 'Delete' on any item deletes the wrong item. The list items are rendered without keys. What happens when you add keys?",
+      "options": [
+        "React will re-render the entire list faster",
+        "React will properly track which component corresponds to which todo item",
+        "The delete button will change color",
+        "React will automatically sort the todos"
+      ],
+      "correct": 1,
+      "explanation": "Keys help React identify which items have changed, been added, or removed, ensuring the correct component instances are updated or destroyed."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "You have a search input that should filter a product list as you type. The filtering works but is very slow with 10,000+ products. What React optimization should you use?",
+      "options": [
+        "Use useCallback to memorize the filter function",
+        "Use useMemo to memorize the filtered results",
+        "Use useEffect to delay the filtering",
+        "Use useState with a different initial value"
+      ],
+      "correct": 1,
+      "explanation": "useMemo prevents recalculating expensive operations (filtering large arrays) unless dependencies change, improving performance significantly."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your React app has a memory leak where components continue updating after unmounting. Users navigate between pages frequently. What's the most likely cause and solution?",
+      "options": [
+        "Components are not using keys, add unique keys to all components",
+        "Async operations (setInterval, fetch) aren't cleaned up, implement cleanup in useEffect",
+        "Too many useState hooks, reduce to fewer state variables",
+        "React Router is caching components, add key prop to routes"
+      ],
+      "correct": 1,
+      "explanation": "Memory leaks occur when async operations continue after component unmount. useEffect cleanup functions should cancel timers, requests, and subscriptions."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "You're building a data visualization dashboard with 1000+ chart components. Re-renders are causing performance issues. What advanced pattern should you implement?",
+      "options": [
+        "Use React.memo for all components",
+        "Implement virtualization to only render visible charts",
+        "Use useCallback for all event handlers",
+        "Add more useState hooks to track rendering"
+      ],
+      "correct": 1,
+      "explanation": "Virtualization renders only visible items in large lists/grids, dramatically reducing DOM nodes and improving performance with large datasets."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "Your team is building a microfrontend architecture with multiple React apps. State needs to be shared between different micro-apps. What's the best approach?",
+      "options": [
+        "Use localStorage to share state between apps",
+        "Implement a shared state management solution with module federation",
+        "Use URL parameters to pass state",
+        "Create a shared database for frontend state"
+      ],
+      "correct": 1,
+      "explanation": "Module federation allows sharing state managers and components between microfrontends while maintaining independence and avoiding tight coupling."
+    }
+  ],
+  "Python": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your Python script processes user files but crashes with 'FileNotFoundError' when files don't exist. Users are frustrated by the sudden crashes. How should you handle this?",
+      "options": [
+        "Check if file exists with os.path.exists() before opening",
+        "Use try-except blocks to catch the exception and show user-friendly message",
+        "Always create empty files beforehand",
+        "Use a different programming language"
+      ],
+      "correct": 1,
+      "explanation": "Exception handling with try-except allows graceful error handling, letting you provide user-friendly messages instead of crashes."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "You need to process a CSV file with 1 million rows. Your current approach loads everything into memory and causes crashes on smaller machines. What's a better approach?",
+      "options": [
+        "Buy more RAM for all users",
+        "Process the file in chunks using pandas.read_csv(chunksize=1000)",
+        "Convert CSV to a different format",
+        "Use a database instead of CSV"
+      ],
+      "correct": 1,
+      "explanation": "Processing large files in chunks prevents memory overflow by handling manageable portions at a time instead of loading everything into memory."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your Python web scraper is getting blocked by websites after a few requests. You need to scrape 10,000+ pages for data analysis. What's the most effective solution?",
+      "options": [
+        "Add random delays between requests and rotate user agents",
+        "Use multiple IP addresses with proxy rotation and implement respectful rate limiting",
+        "Scrape faster to avoid detection",
+        "Use a different programming language"
+      ],
+      "correct": 1,
+      "explanation": "Professional scraping requires proxy rotation, rate limiting, and respecting robots.txt to avoid being blocked while gathering large datasets."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "Your Python API handles 1000+ concurrent requests but response times are inconsistent. Database queries are the bottleneck. What's the best optimization strategy?",
+      "options": [
+        "Add more print statements for debugging",
+        "Implement connection pooling, query optimization, and async database operations",
+        "Use a faster web framework",
+        "Increase server RAM"
+      ],
+      "correct": 1,
+      "explanation": "Database performance issues require connection pooling to reuse connections, query optimization for faster queries, and async operations for better concurrency."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "You're building a machine learning pipeline that processes terabytes of data. The current single-threaded approach takes days. How do you optimize for big data processing?",
+      "options": [
+        "Use faster SSDs for storage",
+        "Implement distributed processing with Dask or PySpark for parallel computation",
+        "Use more powerful CPU",
+        "Process smaller datasets"
+      ],
+      "correct": 1,
+      "explanation": "Big data requires distributed processing frameworks like Dask or PySpark that can parallelize computations across multiple cores or machines."
+    }
+  ],
+  "Docker": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your team's application works on your machine but fails on colleagues' computers due to different Python versions and dependencies. How does Docker solve this?",
+      "options": [
+        "Docker makes applications run faster",
+        "Docker containers include the exact environment, ensuring consistency across machines",
+        "Docker automatically fixes code bugs",
+        "Docker provides better security than virtual machines"
+      ],
+      "correct": 1,
+      "explanation": "Docker containers package applications with their entire runtime environment, eliminating 'works on my machine' problems."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "You're deploying a web application that needs a database. Currently, you manually install and configure both on each server. How should Docker help streamline this?",
+      "options": [
+        "Create separate Docker containers for the app and database, use docker-compose to orchestrate them",
+        "Install Docker on each server manually",
+        "Use Docker to only containerize the database",
+        "Docker can't help with databases"
+      ],
+      "correct": 0,
+      "explanation": "Docker Compose allows you to define and run multi-container applications, orchestrating both application and database containers together."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your production Docker application has security vulnerabilities from base images and runs as root. What's the comprehensive security hardening strategy?",
+      "options": [
+        "Use latest tags for all images",
+        "Use distroless/minimal base images, run as non-root user, scan for vulnerabilities, and implement multi-stage builds",
+        "Add more environment variables",
+        "Use larger container instances"
+      ],
+      "correct": 1,
+      "explanation": "Container security requires minimal attack surface (distroless images), non-root execution, vulnerability scanning, and multi-stage builds to exclude build tools from production."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "Your microservices architecture has 50+ containers with complex networking requirements. Service discovery and load balancing are becoming unmanageable. What's the solution?",
+      "options": [
+        "Use more powerful servers",
+        "Implement Kubernetes for container orchestration with built-in service discovery and load balancing",
+        "Reduce the number of microservices",
+        "Use Docker Swarm with manual configuration"
+      ],
+      "correct": 1,
+      "explanation": "Kubernetes provides enterprise-grade container orchestration with automatic service discovery, load balancing, and scaling for complex microservices architectures."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "Your Docker images are 2GB+ each, causing slow deployments and high storage costs. The application only needs specific libraries. How do you optimize?",
+      "options": [
+        "Use larger storage volumes",
+        "Implement multi-stage builds, use Alpine Linux base images, and optimize layer caching",
+        "Compress images after building",
+        "Use fewer containers"
+      ],
+      "correct": 1,
+      "explanation": "Multi-stage builds exclude build dependencies from final images, Alpine Linux is minimal, and proper layer ordering maximizes cache utilization."
+    }
+  ],
+  "SQL": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your e-commerce site needs to show customers their order history. You have 'orders' and 'customers' tables. What query approach gets customer names with their orders?",
+      "options": [
+        "Use two separate SELECT queries",
+        "Use INNER JOIN to combine customers and orders tables",
+        "Use only the orders table",
+        "Use UNION to combine the tables"
+      ],
+      "correct": 1,
+      "explanation": "INNER JOIN combines related data from multiple tables based on a common key, allowing you to get customer names with their corresponding orders."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "Users complain that your product search is too restrictive. Searching 'phone' doesn't find 'iPhone' or 'smartphone'. How do you make the search more flexible?",
+      "options": [
+        "Use LIKE with wildcards: WHERE product_name LIKE '%phone%'",
+        "Use = operator with exact matches",
+        "Use > operator for comparisons",
+        "Use COUNT to find products"
+      ],
+      "correct": 0,
+      "explanation": "LIKE with wildcards (%) allows partial matching, so '%phone%' will match 'iPhone', 'smartphone', and any text containing 'phone'."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your analytics dashboard query takes 45 seconds to load daily sales reports from 10 million records. The query filters by date range and product category. How do you optimize?",
+      "options": [
+        "Add more RAM to the database server",
+        "Create composite indexes on (date, category) and consider partitioning by date",
+        "Use a faster programming language",
+        "Query smaller date ranges"
+      ],
+      "correct": 1,
+      "explanation": "Composite indexes on frequently queried columns and table partitioning by date dramatically improve query performance on large datasets."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "Your financial application processes transactions where data integrity is critical. Multiple users update account balances simultaneously, causing race conditions. What SQL feature prevents this?",
+      "options": [
+        "Use faster queries",
+        "Implement database transactions with proper isolation levels (SERIALIZABLE)",
+        "Add more indexes",
+        "Use stored procedures only"
+      ],
+      "correct": 1,
+      "explanation": "Database transactions with appropriate isolation levels ensure data consistency and prevent race conditions in concurrent environments."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "You're designing a social media platform's database. Users can follow each other (many-to-many relationship). How do you efficiently find mutual connections between two users?",
+      "options": [
+        "Store all connections in a single table",
+        "Use a junction table with optimized queries using EXISTS or window functions",
+        "Create separate tables for each user",
+        "Use NoSQL instead of SQL"
+      ],
+      "correct": 1,
+      "explanation": "Many-to-many relationships require junction tables, and finding mutual connections efficiently requires optimized queries with EXISTS or advanced SQL features."
+    }
+  ],
+  "AWS": [
+    {
+      "id": 1,
+      "difficulty": "easy", 
+      "question": "Your startup's website crashes every time it gets featured on social media due to traffic spikes. You're currently using a single EC2 instance. What AWS solution handles variable traffic?",
+      "options": [
+        "Buy a larger EC2 instance permanently",
+        "Use Auto Scaling Groups with Elastic Load Balancer to automatically add/remove instances based on traffic",
+        "Add more storage to the current instance", 
+        "Use CloudFront for faster loading"
+      ],
+      "correct": 1,
+      "explanation": "Auto Scaling Groups automatically adjust capacity based on demand, while Load Balancers distribute traffic across multiple instances."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "Your mobile app needs to store user photos. Currently, you store them in your database, but it's becoming expensive and slow. What AWS service is designed for this use case?",
+      "options": [
+        "Store photos in EC2 instance storage",
+        "Use Amazon S3 for object storage with CDN distribution",
+        "Use RDS to store photos",
+        "Keep photos in application memory"
+      ],
+      "correct": 1,
+      "explanation": "S3 is designed for storing files like images, with high durability, scalability, and integration with CloudFront CDN for global distribution."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your company processes millions of IoT sensor readings. Data arrives continuously and needs real-time analysis for fraud detection. What AWS architecture handles this at scale?",
+      "options": [
+        "Store everything in RDS and query periodically",
+        "Use Kinesis Data Streams → Lambda → DynamoDB/ElasticSearch for real-time processing",
+        "Use EC2 instances with cron jobs",
+        "Store data in S3 and process daily"
+      ],
+      "correct": 1,
+      "explanation": "Kinesis handles streaming data, Lambda provides serverless processing, and DynamoDB/ElasticSearch enable real-time analytics at scale."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "Your global SaaS application needs sub-100ms response times worldwide, handles sensitive data, and requires 99.99% uptime. What comprehensive AWS architecture do you implement?",
+      "options": [
+        "Use a single region with powerful instances",
+        "Deploy multi-region architecture with Route 53, CloudFront, RDS read replicas, and cross-region backup",
+        "Use only serverless functions",
+        "Implement manual failover processes"
+      ],
+      "correct": 1,
+      "explanation": "Global applications require multi-region deployment, intelligent DNS routing, CDN, database replication, and automated disaster recovery."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "Your fintech startup needs to be SOC 2 compliant. AWS resources must be secured, monitored, and auditable. What comprehensive security and compliance strategy do you implement?",
+      "options": [
+        "Use strong passwords for all services",
+        "Implement IAM policies, CloudTrail logging, GuardDuty threat detection, Config compliance monitoring, and VPC security",
+        "Enable encryption on all services",
+        "Use multi-factor authentication only"
+      ],
+      "correct": 1,
+      "explanation": "Compliance requires comprehensive security: identity management, audit logging, threat detection, compliance monitoring, and network security."
+    }
+  ],
+  "Node.js": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your Node.js API becomes unresponsive when processing large file uploads. Users can't access other endpoints during uploads. What's the likely cause?",
+      "options": [
+        "Node.js is single-threaded and blocking operations freeze the event loop",
+        "The server needs more RAM",
+        "Node.js doesn't support file uploads",
+        "The database is slow"
+      ],
+      "correct": 0,
+      "explanation": "Node.js uses an event loop. Blocking operations (like synchronous file processing) prevent other requests from being handled."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "You're building a REST API that needs to handle JSON requests. Users get errors when sending POST requests with JSON data. What middleware do you need?",
+      "options": [
+        "express.static() for serving files",
+        "express.json() to parse JSON request bodies",
+        "express.urlencoded() for form data only",
+        "No middleware is needed"
+      ],
+      "correct": 1,
+      "explanation": "express.json() middleware is required to parse JSON request bodies and make them accessible via req.body."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your Node.js microservice handles 10,000+ concurrent connections but memory usage keeps growing until crashes occur. What's the most likely issue and solution?",
+      "options": [
+        "Use a different programming language",
+        "Implement proper connection pooling, check for memory leaks, and add garbage collection monitoring",
+        "Add more server RAM",
+        "Reduce the number of routes"
+      ],
+      "correct": 1,
+      "explanation": "Memory leaks from unclosed connections, event listeners, or circular references require proper resource management and monitoring."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "Your real-time chat application using WebSockets needs to scale to multiple servers. Users on different servers can't see each other's messages. How do you solve this?",
+      "options": [
+        "Use HTTP polling instead of WebSockets",
+        "Implement Redis as a message broker between server instances with sticky sessions",
+        "Use a single powerful server",
+        "Store all messages in database"
+      ],
+      "correct": 1,
+      "explanation": "Multi-server WebSocket applications require message brokers like Redis to synchronize messages across server instances and sticky sessions for connection consistency."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "Your Node.js application processes CPU-intensive tasks (image processing, data analysis) which blocks the event loop. What's the best architectural solution?",
+      "options": [
+        "Use synchronous processing",
+        "Offload CPU-intensive tasks to worker threads or separate microservices with message queues",
+        "Add more CPU cores",
+        "Use callbacks instead of promises"
+      ],
+      "correct": 1,
+      "explanation": "CPU-intensive tasks should be offloaded to worker threads or separate services to keep the main event loop responsive for I/O operations."
+    }
+  ],
+  "TypeScript": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your JavaScript project has frequent runtime errors like 'Cannot read property of undefined'. The team wants to catch these errors during development. How does TypeScript help?",
+      "options": [
+        "TypeScript makes JavaScript run faster",
+        "TypeScript provides compile-time type checking to catch errors before runtime",
+        "TypeScript automatically fixes bugs",
+        "TypeScript changes JavaScript syntax completely"
+      ],
+      "correct": 1,
+      "explanation": "TypeScript's static type system catches type-related errors during compilation, preventing many runtime errors."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "You're working with an API that returns user data. Sometimes 'age' is a number, sometimes a string. How do you handle this type uncertainty in TypeScript?",
+      "options": [
+        "Use 'any' type for everything",
+        "Create a union type: age: number | string, then use type guards to handle each case",
+        "Ignore TypeScript errors",
+        "Always convert everything to strings"
+      ],
+      "correct": 1,
+      "explanation": "Union types represent values that can be multiple types, and type guards allow safe handling of each possibility."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "You're building a generic data service that works with different entity types (User, Product, Order). Each has different properties but similar CRUD operations. How do you implement this in TypeScript?",
+      "options": [
+        "Create separate classes for each entity type",
+        "Use generics with constraints: class DataService<T extends BaseEntity> to ensure type safety across different entities",
+        "Use 'any' type for flexibility",
+        "Use inheritance for all entity types"
+      ],
+      "correct": 1,
+      "explanation": "Generics with constraints provide type safety while allowing reusable code across different types that share common properties."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "Your team uses a large third-party JavaScript library without TypeScript definitions. The library has complex nested objects and methods. What's the best approach for type safety?",
+      "options": [
+        "Ignore types for the library",
+        "Create declaration files (.d.ts) with proper type definitions or use module augmentation",
+        "Rewrite the library in TypeScript",
+        "Use 'any' for all library interactions"
+      ],
+      "correct": 1,
+      "explanation": "Declaration files provide type information for JavaScript libraries, enabling type checking and IntelliSense without modifying the original library."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "You're implementing a complex state management system where state shape changes based on user permissions. Different users see different data structures. How do you handle this with TypeScript?",
+      "options": [
+        "Use separate interfaces for each permission level",
+        "Implement conditional types and mapped types to dynamically generate state shapes based on user roles",
+        "Use union types for all possible states",
+        "Avoid TypeScript for complex state management"
+      ],
+      "correct": 1,
+      "explanation": "Advanced TypeScript features like conditional types and mapped types allow dynamic type generation based on runtime conditions while maintaining type safety."
+    }
+  ],
+  "Redux": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your React app's state is scattered across many components, making debugging difficult. Child components need data from distant parent components. How does Redux solve this?",
+      "options": [
+        "Redux makes components load faster",
+        "Redux provides a centralized store accessible by any component without prop drilling",
+        "Redux automatically optimizes component rendering",
+        "Redux replaces React components entirely"
+      ],
+      "correct": 1,
+      "explanation": "Redux creates a single source of truth for application state, eliminating prop drilling and making state accessible from any component."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "You dispatch an action to update user profile data, but the component doesn't re-render with new data. The action and reducer look correct. What's likely missing?",
+      "options": [
+        "The component needs to be wrapped with connect() or use useSelector hook",
+        "Redux needs to be reinstalled",
+        "The action type needs to be different",
+        "The reducer needs to return undefined"
+      ],
+      "correct": 0,
+      "explanation": "Components must be connected to the Redux store using connect() (class components) or useSelector hook (function components) to receive state updates."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your e-commerce app has performance issues. The product list re-renders whenever any part of the store updates, even unrelated changes like user notifications. How do you optimize?",
+      "options": [
+        "Use fewer Redux actions",
+        "Implement memoized selectors with reselect library and optimize component subscriptions",
+        "Store less data in Redux",
+        "Use local state instead of Redux"
+      ],
+      "correct": 1,
+      "explanation": "Reselect creates memoized selectors that only recompute when relevant state changes, preventing unnecessary re-renders and improving performance."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "Your application needs to handle complex async flows: user authentication, data fetching with retry logic, and optimistic updates. What middleware architecture do you implement?",
+      "options": [
+        "Use only synchronous actions",
+        "Implement Redux-Saga or Redux-Thunk with custom middleware for side effects management",
+        "Handle all async logic in components",
+        "Use setTimeout for all async operations"
+      ],
+      "correct": 1,
+      "explanation": "Redux middleware like Saga or Thunk handle complex async flows, side effects, and provide better control over async operations than component-level handling."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "You're building a collaborative document editor where multiple users edit simultaneously. The Redux store needs to handle real-time updates, conflict resolution, and offline support. What architecture do you design?",
+      "options": [
+        "Use a single reducer for all document changes",
+        "Implement operational transformation with Redux, WebSocket middleware, and offline-first architecture with conflict resolution",
+        "Store document state in localStorage",
+        "Use polling to check for updates"
+      ],
+      "correct": 1,
+      "explanation": "Real-time collaborative applications require operational transformation algorithms, WebSocket integration, and sophisticated conflict resolution within Redux architecture."
+    }
+  ],
+  "PostgreSQL": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your web application stores user data in PostgreSQL. You need to ensure email addresses are unique across all users. What database feature prevents duplicate emails?",
+      "options": [
+        "Add a CHECK constraint",
+        "Create a UNIQUE constraint on the email column",
+        "Use a different data type",
+        "Store emails in a separate table"
+      ],
+      "correct": 1,
+      "explanation": "UNIQUE constraints ensure that no two rows can have the same value in specified columns, preventing duplicate email addresses."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "You're building a blog platform. Posts belong to users, and you need to efficiently find all posts by a specific user. What should you implement?",
+      "options": [
+        "Store user information in each post record",
+        "Create a foreign key relationship with an index on the user_id column",
+        "Use a separate database for each user",
+        "Store posts and users in the same table"
+      ],
+      "correct": 1,
+      "explanation": "Foreign keys establish relationships between tables, and indexes on foreign key columns optimize queries that filter by related entities."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your analytics application queries become slow as data grows to 100+ million rows. You need to maintain data history but improve query performance on recent data. What partitioning strategy do you implement?",
+      "options": [
+        "Add more indexes to all columns",
+        "Implement table partitioning by date ranges with automated partition management",
+        "Use a faster server",
+        "Delete old data regularly"
+      ],
+      "correct": 1,
+      "explanation": "Table partitioning divides large tables into smaller, manageable pieces based on date ranges, improving query performance on recent data while maintaining history."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "Your financial application requires complex reporting with hierarchical data (company → departments → teams → employees). Queries need to traverse multiple levels efficiently. What PostgreSQL features do you use?",
+      "options": [
+        "Use multiple JOIN operations",
+        "Implement Common Table Expressions (CTEs) with recursive queries and window functions for hierarchical analysis",
+        "Store data in a flat structure",
+        "Use separate databases for each level"
+      ],
+      "correct": 1,
+      "explanation": "Recursive CTEs efficiently handle hierarchical queries, while window functions provide advanced analytics capabilities for complex organizational structures."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "Your e-commerce platform stores product catalogs with complex attributes (size, color, material, etc.) that vary by product type. Traditional columns become unwieldy. What PostgreSQL solution handles this flexibility?",
+      "options": [
+        "Create separate tables for each product type",
+        "Use JSONB columns with GIN indexes for flexible schema and efficient querying of semi-structured data",
+        "Store all attributes as strings",
+        "Use a NoSQL database instead"
+      ],
+      "correct": 1,
+      "explanation": "JSONB provides flexible schema for varying attributes while GIN indexes enable efficient querying of JSON data, combining NoSQL flexibility with ACID guarantees."
+    }
+  ],
+  "Security": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your web application allows users to submit comments that are displayed to other users. Some users report seeing strange pop-ups when viewing certain comments. What security vulnerability is this and how do you fix it?",
+      "options": [
+        "SQL Injection - use parameterized queries",
+        "Cross-Site Scripting (XSS) - sanitize user input and escape output",
+        "CSRF - add CSRF tokens to forms",
+        "Authentication bypass - strengthen password requirements"
+      ],
+      "correct": 1,
+      "explanation": "XSS occurs when user input is displayed without sanitization, allowing malicious scripts to execute. Always sanitize input and escape output."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "Your application stores user passwords in the database. During a security audit, you're told storing plain text passwords is a major vulnerability. What should you implement?",
+      "options": [
+        "Encrypt passwords with AES encryption",
+        "Hash passwords using a strong algorithm like bcrypt with salt",
+        "Base64 encode the passwords",
+        "Store passwords in environment variables"
+      ],
+      "correct": 1,
+      "explanation": "Passwords should be hashed (not encrypted) using secure algorithms like bcrypt, scrypt, or Argon2 with proper salting to prevent rainbow table attacks."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your API is experiencing a sophisticated attack where attackers are making requests that appear to come from legitimate users, causing unwanted actions. Users aren't clicking malicious links. What attack is this and how do you prevent it?",
+      "options": [
+        "XSS attack - implement Content Security Policy",
+        "SQL Injection - use prepared statements",
+        "Cross-Site Request Forgery (CSRF) - implement anti-CSRF tokens and SameSite cookies",
+        "DDoS attack - implement rate limiting"
+      ],
+      "correct": 2,
+      "explanation": "CSRF attacks trick users' browsers into making unwanted requests to authenticated sites. Prevent with anti-CSRF tokens, SameSite cookies, and proper CORS policies."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "You're implementing OAuth2 for a financial application. The security team requires zero-trust architecture principles. What comprehensive security measures do you implement?",
+      "options": [
+        "Use HTTPS for login pages only",
+        "Implement PKCE, token rotation, JWT signing with RS256, proper token storage, and continuous verification",
+        "Store tokens in localStorage permanently",
+        "Use basic authentication with strong passwords"
+      ],
+      "correct": 1,
+      "explanation": "Zero-trust OAuth2 requires PKCE (Proof Key for Code Exchange), token rotation, proper JWT signing, secure token storage, and continuous verification of access."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "Your microservices architecture handles sensitive financial data. You need to implement security between services, data encryption, and audit logging. What comprehensive approach do you take?",
+      "options": [
+        "Use API keys for everything",
+        "Implement mTLS between services, encrypt data at rest and in transit, comprehensive audit logging, and service mesh security",
+        "Trust internal network traffic",
+        "Use VPN for all connections"
+      ],
+      "correct": 1,
+      "explanation": "Enterprise security requires mutual TLS (mTLS) for service-to-service communication, encryption everywhere, comprehensive logging, and service mesh security policies."
+    }
+  ],
+  "Configuration Management": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your team manually configures servers, leading to inconsistencies and deployment failures. Different servers have different software versions and settings. How does configuration management solve this?",
+      "options": [
+        "Provides automated, consistent server configuration using code-based definitions",
+        "Makes servers run faster",
+        "Automatically fixes application bugs",
+        "Provides better monitoring"
+      ],
+      "correct": 0,
+      "explanation": "Configuration management tools like Ansible, Chef, or Puppet ensure consistent server configurations by defining infrastructure as code, eliminating configuration drift."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "You need to deploy the same application configuration across 50+ servers. Doing it manually is time-consuming and error-prone. What configuration management approach should you use?",
+      "options": [
+        "Create a shell script to run on each server",
+        "Use configuration management tools like Ansible playbooks or Chef recipes to automate deployment",
+        "Configure each server individually for accuracy",
+        "Use a single master server and copy files"
+      ],
+      "correct": 1,
+      "explanation": "Configuration management tools provide declarative, idempotent automation that ensures consistent deployment across multiple servers while being repeatable and version-controlled."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your infrastructure spans multiple cloud providers and on-premises servers. You need consistent configuration management, compliance checking, and drift detection. What strategy do you implement?",
+      "options": [
+        "Use different tools for each environment",
+        "Implement Infrastructure as Code with Terraform, Ansible for configuration, and automated compliance scanning",
+        "Manually manage each environment",
+        "Use only cloud-native tools"
+      ],
+      "correct": 1,
+      "explanation": "Multi-environment consistency requires IaC tools (Terraform) for provisioning, configuration management (Ansible/Chef/Puppet) for setup, and automated compliance tools for drift detection."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "Your organization requires PCI DSS compliance for payment processing. Configuration management must ensure security baselines, audit trails, and immutable infrastructure. How do you architect this?",
+      "options": [
+        "Use manual configuration with documentation",
+        "Implement immutable infrastructure with versioned configuration, automated security baselines, and comprehensive audit logging",
+        "Trust developers to follow security guidelines",
+        "Use only certified pre-built images"
+      ],
+      "correct": 1,
+      "explanation": "PCI DSS compliance requires immutable infrastructure, version-controlled configurations, automated security baseline enforcement, and detailed audit trails of all changes."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "You're implementing GitOps for a large-scale Kubernetes deployment. Configuration changes must be reviewed, tested, and rolled back if issues occur. What comprehensive workflow do you establish?",
+      "options": [
+        "Allow direct kubectl access to all developers",
+        "Implement Git-based workflows with automated testing, staged deployments, canary releases, and automated rollback mechanisms",
+        "Use manual approval processes only",
+        "Deploy changes during maintenance windows"
+      ],
+      "correct": 1,
+      "explanation": "GitOps requires Git as single source of truth, automated testing pipelines, progressive deployment strategies (canary/blue-green), and automated rollback capabilities."
+    }
+  ],
+  "Monitoring": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your web application is experiencing slow response times, but you don't know which components are causing the issue. Users are complaining but you have no visibility into system performance. What monitoring approach should you implement?",
+      "options": [
+        "Check server logs manually when issues occur",
+        "Implement Application Performance Monitoring (APM) with metrics, logs, and distributed tracing",
+        "Ask users to report issues via email",
+        "Monitor only CPU and memory usage"
+      ],
+      "correct": 1,
+      "explanation": "APM provides comprehensive visibility into application performance through metrics collection, centralized logging, and distributed tracing to identify bottlenecks."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "Your application goes down at 2 AM and nobody notices until morning when customers complain. How do you prevent this from happening again?",
+      "options": [
+        "Check the application manually every few hours",
+        "Set up automated health checks with alerting to notify on-call engineers immediately",
+        "Ask customers to call when they notice issues",
+        "Schedule daily maintenance checks"
+      ],
+      "correct": 1,
+      "explanation": "Automated monitoring with health checks and alerting ensures immediate notification of issues, enabling rapid response and minimizing downtime."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your microservices architecture has intermittent failures that are difficult to trace across service boundaries. You need comprehensive observability to identify root causes. What monitoring strategy do you implement?",
+      "options": [
+        "Monitor each service separately with individual dashboards",
+        "Implement distributed tracing with correlation IDs, structured logging, and service mesh observability",
+        "Only monitor external APIs and databases",
+        "Use simple ping checks for each service"
+      ],
+      "correct": 1,
+      "explanation": "Distributed tracing with correlation IDs allows tracking requests across service boundaries, while structured logging and service mesh provide comprehensive observability for root cause analysis."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "You're managing a high-traffic e-commerce platform that needs proactive monitoring to prevent outages during peak shopping periods. What comprehensive monitoring approach do you establish?",
+      "options": [
+        "Monitor only business metrics like sales numbers",
+        "Implement SLI/SLO-based monitoring with predictive alerting, capacity planning, and automated incident response",
+        "Rely on customer feedback for monitoring",
+        "Monitor infrastructure metrics only"
+      ],
+      "correct": 1,
+      "explanation": "SLI/SLO-based monitoring provides service-level objectives, predictive alerting enables proactive responses, and capacity planning prevents resource exhaustion during traffic spikes."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "Your organization needs compliance monitoring for SOC 2 and requires detailed audit trails, security monitoring, and performance baselines. How do you architect this monitoring solution?",
+      "options": [
+        "Use basic server monitoring tools",
+        "Implement comprehensive SIEM integration, compliance dashboards, automated security monitoring, and detailed audit logging",
+        "Rely on annual compliance audits",
+        "Monitor only critical production systems"
+      ],
+      "correct": 1,
+      "explanation": "SOC 2 compliance requires SIEM integration for security monitoring, automated compliance checks, detailed audit trails, and continuous monitoring of security controls."
+    }
+  ],
+  "Testing": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your team keeps introducing bugs when adding new features to the web application. Manual testing is time-consuming and doesn't catch everything. What testing strategy should you implement?",
+      "options": [
+        "Hire more manual testers",
+        "Implement automated unit tests, integration tests, and continuous integration pipelines",
+        "Test only critical features manually",
+        "Test in production after deployment"
+      ],
+      "correct": 1,
+      "explanation": "Automated testing with unit tests for individual components, integration tests for interactions, and CI pipelines ensures consistent quality and rapid feedback."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "You're developing a user registration form with email validation, password requirements, and duplicate email checking. What testing approach ensures it works correctly?",
+      "options": [
+        "Test manually by trying to register once",
+        "Write unit tests for validation logic and integration tests for the complete registration flow",
+        "Only test with valid inputs",
+        "Test only on your local machine"
+      ],
+      "correct": 1,
+      "explanation": "Unit tests verify individual validation functions work correctly, while integration tests ensure the complete registration workflow functions as expected with various inputs."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your e-commerce checkout process involves payment processing, inventory updates, and email notifications. How do you test this complex workflow without affecting real payments and inventory?",
+      "options": [
+        "Test with real payments using small amounts",
+        "Implement test doubles (mocks/stubs) for external services, use test databases, and create isolated test environments",
+        "Skip testing the payment integration",
+        "Only test individual components separately"
+      ],
+      "correct": 1,
+      "explanation": "Test doubles isolate external dependencies, test databases provide clean state for each test, and isolated environments prevent interference with production systems."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "You're implementing test-driven development (TDD) for a complex financial calculation service that must handle edge cases and comply with regulations. What comprehensive testing strategy do you follow?",
+      "options": [
+        "Write tests only after implementation is complete",
+        "Follow red-green-refactor cycle with comprehensive test cases, property-based testing, and mutation testing for critical paths",
+        "Test only the happy path scenarios",
+        "Rely on integration tests only"
+      ],
+      "correct": 1,
+      "explanation": "TDD's red-green-refactor ensures design quality, property-based testing handles edge cases systematically, and mutation testing verifies test quality for critical financial logic."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "Your organization requires testing strategy for a distributed system with microservices, external APIs, and complex business workflows. How do you ensure comprehensive test coverage?",
+      "options": [
+        "Test everything manually in staging",
+        "Implement testing pyramid: unit tests for logic, contract tests for APIs, integration tests for workflows, and E2E tests for critical paths",
+        "Only test at the UI level",
+        "Use only smoke tests in production"
+      ],
+      "correct": 1,
+      "explanation": "Testing pyramid provides optimal coverage: unit tests for fast feedback, contract tests ensure API compatibility, integration tests verify workflows, E2E tests validate critical user journeys."
+    }
+  ],
+  "Selenium": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "Your team needs to automate testing of a web application's login form. The form has username, password fields, and a submit button. What's the basic Selenium approach?",
+      "options": [
+        "Take screenshots of the form manually",
+        "Use Selenium WebDriver to locate elements, input data, and verify results",
+        "Only test the backend API endpoints",
+        "Test manually with different browsers"
+      ],
+      "correct": 1,
+      "explanation": "Selenium WebDriver provides programmatic control over browsers to automate user interactions like form filling and submission."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "Your automated test fails because Selenium can't find a button element. The HTML shows the button exists. What's the most likely issue and solution?",
+      "options": [
+        "The browser is too slow, add Thread.sleep()",
+        "Use explicit waits to ensure the element is loaded and visible before interaction",
+        "Switch to a different browser",
+        "Refresh the page and try again"
+      ],
+      "correct": 1,
+      "explanation": "Timing issues are common in web automation. Explicit waits ensure elements are ready for interaction before attempting to use them."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "You're implementing a Selenium test suite for a complex SPA with dynamic content loading. Elements appear/disappear based on user actions. What comprehensive strategy ensures reliable tests?",
+      "options": [
+        "Use only Thread.sleep() with long delays",
+        "Implement Page Object Model with custom wait strategies, element state validation, and retry mechanisms",
+        "Test only static elements",
+        "Run tests multiple times hoping they pass"
+      ],
+      "correct": 1,
+      "explanation": "SPAs require sophisticated waiting strategies, proper page abstraction through Page Object Model, and robust element state management for reliable automation."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "Your organization needs to run Selenium tests across 20+ browser/OS combinations for every deployment. Tests take 2 hours sequentially. What scalable solution do you implement?",
+      "options": [
+        "Run tests one by one on a single machine",
+        "Set up Selenium Grid with Docker containers and parallel execution across multiple nodes",
+        "Only test on Chrome locally",
+        "Use cloud services without any local setup"
+      ],
+      "correct": 1,
+      "explanation": "Selenium Grid enables distributed test execution across multiple browsers and platforms, dramatically reducing execution time through parallelization."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "Your Selenium tests are flaky in CI/CD pipeline - sometimes passing, sometimes failing for the same code. You need enterprise-grade reliability. What comprehensive approach do you take?",
+      "options": [
+        "Ignore flaky tests and focus on new features",
+        "Implement headless browsers, containerized environments, proper wait strategies, screenshot capture on failure, and retry mechanisms",
+        "Run tests only locally",
+        "Increase all wait times to maximum values"
+      ],
+      "correct": 1,
+      "explanation": "Enterprise Selenium requires headless execution for CI/CD, containerization for consistency, intelligent waits, proper failure diagnostics, and strategic retry logic."
+    }
+  ],
+  "Git": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "You're working on a team project and need to share your code changes. You've made several commits on your local branch. What's the proper Git workflow to contribute your changes?",
+      "options": [
+        "Email your code files to teammates",
+        "Create a pull request after pushing your branch to the remote repository",
+        "Copy and paste code changes in chat",
+        "Directly push to the main branch"
+      ],
+      "correct": 1,
+      "explanation": "Pull requests enable code review, discussion, and controlled integration of changes into the main codebase, following best practices for team collaboration."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "You accidentally committed sensitive information (like an API key) to your Git repository. The commit hasn't been pushed yet. How do you fix this?",
+      "options": [
+        "Just add the files to .gitignore and continue",
+        "Use git reset or git rebase to remove the commit and properly exclude the sensitive files",
+        "Push quickly and hope no one notices",
+        "Delete the repository and start over"
+      ],
+      "correct": 1,
+      "explanation": "Git reset or interactive rebase can safely remove commits from local history. Always exclude sensitive files with .gitignore before committing."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "Your team's main branch has diverged significantly from your feature branch. You need to integrate your changes while maintaining a clean history. What Git strategy do you employ?",
+      "options": [
+        "Force push your branch to overwrite main",
+        "Use git rebase to replay your commits on top of the latest main, then create a clean pull request",
+        "Merge without any preparation",
+        "Start a new branch from scratch"
+      ],
+      "correct": 1,
+      "explanation": "Git rebase creates a linear history by replaying your commits on the latest main branch, resulting in cleaner project history and easier tracking of changes."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "You're implementing GitOps for a production system where every change must be traceable, reviewable, and rollback-ready. What comprehensive Git workflow do you establish?",
+      "options": [
+        "Allow direct pushes to main branch",
+        "Implement protected branches, required reviews, signed commits, automated testing, and tag-based releases",
+        "Use only local repositories",
+        "Allow anyone to merge without review"
+      ],
+      "correct": 1,
+      "explanation": "Production GitOps requires branch protection, mandatory code reviews, commit signing for authenticity, CI/CD integration, and semantic versioning for reliable deployments."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "Your monorepo contains microservices where changes to one service shouldn't trigger deployments of others. You need sophisticated Git workflows for selective CI/CD. How do you architect this?",
+      "options": [
+        "Trigger all deployments for any change",
+        "Implement path-based triggers, conditional workflows, and service-specific branching strategies with automated dependency tracking",
+        "Manually deploy each service",
+        "Split into separate repositories"
+      ],
+      "correct": 1,
+      "explanation": "Monorepo CI/CD requires path-based change detection, conditional pipeline execution, service isolation strategies, and automated dependency management for efficient deployments."
+    }
+  ],
+  "HTML": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "You're building a contact form for a business website. The form needs name, email, and message fields. What HTML structure ensures proper semantics and accessibility?",
+      "options": [
+        "Use only div elements with onclick handlers",
+        "Use semantic form elements with proper labels, input types, and form validation attributes",
+        "Use table layout for form structure",
+        "Use only paragraph tags with inline styles"
+      ],
+      "correct": 1,
+      "explanation": "Semantic HTML with proper form elements, labels, and input types provides accessibility, built-in validation, and better user experience across devices and assistive technologies."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "Your website's navigation menu isn't working properly on mobile devices and screen readers. Users can't understand the page structure. What HTML approach fixes this?",
+      "options": [
+        "Use div elements with custom CSS classes",
+        "Implement semantic HTML5 elements like nav, header, main, and proper heading hierarchy",
+        "Add more images to make it visual",
+        "Use only inline styles"
+      ],
+      "correct": 1,
+      "explanation": "Semantic HTML5 elements provide meaning and structure that browsers, screen readers, and search engines can understand and navigate effectively."
+    },
+    {
+      "id": 3,
+      "difficulty": "hard",
+      "question": "You're building an e-commerce product catalog that needs to be accessible, SEO-friendly, and performant across all devices. What comprehensive HTML strategy do you implement?",
+      "options": [
+        "Use only JavaScript to generate all content",
+        "Implement semantic HTML with microdata, proper heading structure, accessible images with alt text, and progressive enhancement",
+        "Use tables for all layout",
+        "Rely only on CSS for content structure"
+      ],
+      "correct": 1,
+      "explanation": "E-commerce requires semantic markup for SEO, microdata for rich snippets, accessibility features, and progressive enhancement for performance across all devices and network conditions."
+    },
+    {
+      "id": 4,
+      "difficulty": "hard",
+      "question": "Your web application needs to handle complex forms with real-time validation, file uploads, and dynamic sections. What modern HTML approach ensures robust functionality?",
+      "options": [
+        "Use only JavaScript for all form handling",
+        "Leverage HTML5 form validation, input types, custom validity APIs, and progressive enhancement with JavaScript",
+        "Use server-side rendering only",
+        "Avoid form validation entirely"
+      ],
+      "correct": 1,
+      "explanation": "Modern HTML5 provides built-in validation, specialized input types, and custom validity APIs that work with progressive enhancement for robust, accessible forms."
+    },
+    {
+      "id": 5,
+      "difficulty": "hard",
+      "question": "You're implementing a content management system where editors need to create rich, accessible content without coding knowledge. What HTML strategy empowers them while maintaining quality?",
+      "options": [
+        "Allow unrestricted HTML input",
+        "Provide semantic HTML templates, WYSIWYG editors with accessibility checking, and content validation rules",
+        "Use only plain text",
+        "Generate everything programmatically"
+      ],
+      "correct": 1,
+      "explanation": "Content management requires structured templates, accessibility-aware editing tools, and validation systems that guide content creators toward semantic, accessible HTML output."
+    }
+  ]
+}

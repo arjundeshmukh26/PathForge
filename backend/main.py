@@ -23,6 +23,7 @@ logging.basicConfig(
 
 from routes.enhanced_analyze import router as analyze_router
 from routes.pdf_routes import router as pdf_router
+from routes.quiz_routes import router as quiz_router
 
 app = FastAPI(
     title="Skill-Bridge Career Navigator",
@@ -47,6 +48,7 @@ app.add_middleware(
 # Include routers
 app.include_router(analyze_router, prefix="/api/v1")
 app.include_router(pdf_router, prefix="/api/v1")
+app.include_router(quiz_router, prefix="/api/v1")
 
 
 @app.get("/")

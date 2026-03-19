@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { calculateCompatibilityScore, updateMissingSkills, debugScoring } from '../utils/scoringUtils';
+import SkillQuizModal from './SkillQuizModal';
 
 const InteractiveScoreCard = ({ 
   score, 
@@ -13,6 +14,8 @@ const InteractiveScoreCard = ({
   const [animatedScore, setAnimatedScore] = useState(0);
   const [selectedTab, setSelectedTab] = useState('overview');
   const [learnedSkills, setLearnedSkills] = useState(new Set(initialLearnedSkills));
+  const [showQuizModal, setShowQuizModal] = useState(false);
+  const [quizSkill, setQuizSkill] = useState(null);
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -81,7 +84,16 @@ const InteractiveScoreCard = ({
 
   const scoreData = getScoreData(score);
 
-  const handleMarkAsLearned = async (skill) => {
+  const handleMarkAsLearned = (skill) => {
+    // Show quiz modal instead of directly marking as learned
+    setQuizSkill(skill);
+    setShowQuizModal(true);
+  };
+
+  const handleQuizPass = async (skill, quizResults) => {
+    console.log(`Quiz passed for skill: ${skill}`, quizResults);
+    
+    // Now proceed with marking the skill as learned
     const newLearnedSkills = new Set([...learnedSkills, skill]);
     setLearnedSkills(newLearnedSkills);
     
@@ -157,6 +169,17 @@ const InteractiveScoreCard = ({
       
       onSkillsUpdated && onSkillsUpdated(updatedData);
     }
+  };
+
+  const handleQuizFail = (skill, quizResults) => {
+    console.log(`Quiz failed for skill: ${skill}`, quizResults);
+    // Do nothing - skill is not marked as learned
+    // Modal will show results and user can review answers
+  };
+
+  const handleCloseQuizModal = () => {
+    setShowQuizModal(false);
+    setQuizSkill(null);
   };
 
   const tabs = [
@@ -409,6 +432,15 @@ const InteractiveScoreCard = ({
           </div>
         </div>
       </div>
+
+      {/* Skill Quiz Modal */}
+      <SkillQuizModal
+        isOpen={showQuizModal}
+        skill={quizSkill}
+        onClose={handleCloseQuizModal}
+        onPass={handleQuizPass}
+        onFail={handleQuizFail}
+      />
     </div>
   );
 };
