@@ -40,7 +40,7 @@ class DirectGeminiClient:
             logger.warning("Direct Gemini client not available - no valid API key")
         return available
     
-    async def generate_content(self, prompt: str, model: str = "gemini-1.5-flash", timeout: int = 10) -> str:
+    async def generate_content(self, prompt: str, model: str = "gemini-3.1-flash-lite-preview", timeout: int = 10) -> str:
         """
         Generate content using direct HTTP API call to Gemini
         
@@ -69,8 +69,8 @@ class DirectGeminiClient:
                 }]
             }],
             "generationConfig": {
-                "temperature": 0.1,
-                "maxOutputTokens": 1000,
+                "temperature": 0.2,
+                "maxOutputTokens": 2000,
                 "topP": 0.8,
                 "topK": 10
             },
@@ -140,28 +140,61 @@ class DirectGeminiClient:
             return []
         
         prompt = f"""
-        Extract all technical skills from this resume. Focus on:
-        - Programming languages
-        - Frameworks and libraries
-        - Tools and technologies
-        - Cloud platforms
-        - Databases
-        - Development methodologies
+        You are a senior technical recruiter with deep expertise in software engineering. Analyze this resume comprehensively to extract ALL technical skills, both explicitly mentioned and implicitly demonstrated.
 
-        Return ONLY a JSON array of skill names. Use standard naming conventions:
-        - "JavaScript" not "js" or "javascript"
-        - "Node.js" not "nodejs" or "node"
-        - "React" not "react.js" or "reactjs"
-        
-        Resume:
+        **EXTRACTION GUIDELINES:**
+
+        1. **Direct Skills**: Extract explicitly mentioned technologies, languages, frameworks, tools
+        2. **Implied Skills**: Infer skills from project descriptions, achievements, and context
+        3. **Experience Depth**: Consider not just mentions but evidence of practical usage
+        4. **Modern Equivalents**: If outdated technologies are mentioned, consider if modern equivalents are implied
+        5. **Related Technologies**: Extract complementary skills that would be necessary for described work
+
+        **SKILL CATEGORIES TO ANALYZE:**
+        - **Programming Languages**: Java, Python, JavaScript, TypeScript, Go, Rust, C++, C#, PHP, Ruby, Swift, Kotlin, Scala
+        - **Frontend Technologies**: React, Vue.js, Angular, Svelte, HTML5, CSS3, Sass, Tailwind, Bootstrap, jQuery
+        - **Backend Frameworks**: Node.js, Express.js, Django, Flask, FastAPI, Spring Boot, Laravel, Ruby on Rails, ASP.NET
+        - **Databases**: PostgreSQL, MySQL, MongoDB, Redis, Elasticsearch, SQLite, Oracle, Cassandra, DynamoDB
+        - **Cloud & DevOps**: AWS, Google Cloud, Microsoft Azure, Docker, Kubernetes, Jenkins, GitLab CI, GitHub Actions, Terraform, Ansible
+        - **Development Tools**: Git, VS Code, IntelliJ, Webpack, Vite, ESLint, Prettier, Jest, Cypress, Postman
+        - **Methodologies**: Agile, Scrum, TDD, CI/CD, Microservices, REST APIs, GraphQL, WebSockets
+        - **Data & Analytics**: Pandas, NumPy, TensorFlow, PyTorch, Apache Spark, Kafka, Airflow, ETL
+        - **Mobile**: React Native, Swift, Kotlin, Flutter, iOS, Android
+        - **Other Technologies**: Blockchain, Machine Learning, AI, Data Science, Security, Performance Optimization
+
+        **INFERENCE EXAMPLES:**
+        - "Built a web application with user authentication" → infer: JWT, Sessions, Password Hashing, Authentication
+        - "Deployed scalable microservices" → infer: Docker, Load Balancing, API Gateway, Service Discovery
+        - "Managed large datasets" → infer: Data Pipeline, ETL, Database Optimization
+        - "Developed mobile-responsive interfaces" → infer: Responsive Design, CSS Grid, Flexbox
+        - "Implemented real-time features" → infer: WebSockets, Server-Sent Events, Real-time Protocols
+        - "Built APIs for external integrations" → infer: REST APIs, API Design, Documentation, Rate Limiting
+        - "Optimized application performance" → infer: Performance Monitoring, Caching, Code Optimization
+
+        **CONTEXT ANALYSIS:**
+        - Look for years of experience with each technology
+        - Consider project complexity to gauge skill level
+        - Extract skills from job titles, company types, and project descriptions
+        - Identify leadership/architecture skills from role descriptions
+        - Recognize testing, security, and best practices from project contexts
+
+        **NAMING CONVENTIONS:**
+        - Use industry-standard names: "JavaScript" not "js", "Node.js" not "nodejs", "PostgreSQL" not "postgres"
+        - Include specific versions when mentioned: "React 18", "Python 3.9"
+        - Use full names for clarity: "Amazon Web Services" can be "AWS", "Machine Learning" not "ML"
+
+        **RESUME TO ANALYZE:**
         {resume_text}
+
+        **OUTPUT REQUIREMENTS:**
+        Return a comprehensive JSON array of ALL technical skills found or reasonably inferred. Be thorough but accurate.
         
-        Response format: ["skill1", "skill2", "skill3"]
+        Format: ["skill1", "skill2", "skill3", ...]
         """
         
         try:
             logger.info("Calling direct Gemini API for skill extraction...")
-            response_text = await self.generate_content(prompt)
+            response_text = await self.generate_content(prompt, timeout=15)
             
             # Parse JSON response
             content = response_text.strip()
@@ -210,27 +243,76 @@ class DirectGeminiClient:
         skills_list = [skill["skill"] for skill in missing_skills[:10]]  # Limit to top 10
         
         prompt = f"""
-        Analyze this resume for a {level} {role} position. The candidate is missing these key skills:
-        {', '.join(skills_list)}
+        You are a senior technical hiring manager with 10+ years of experience evaluating candidates for {level} {role} positions. 
 
-        For each missing skill, provide a 1-2 line explanation of why it matters for this role.
-        Also provide an overall 2-3 sentence summary of the candidate's readiness.
+        **CANDIDATE PROFILE ANALYSIS:**
+        Analyze this resume deeply to understand the candidate's technical background, experience depth, and potential for growth.
 
-        Resume:
+        **CURRENT SKILLS ASSESSMENT:**
+        Before focusing on missing skills, first evaluate:
+        1. **Transferable Skills**: What existing skills could bridge to the missing ones?
+        2. **Experience Depth**: How deep is their experience in related areas?
+        3. **Learning Trajectory**: What does their skill progression show about adaptability?
+        4. **Project Complexity**: What level of technical challenges have they handled?
+
+        **MISSING SKILLS ANALYSIS:**
+        For each missing skill, provide nuanced analysis considering:
+
+        **Missing Skills to Evaluate:** {', '.join(skills_list)}
+
+        **EVALUATION FRAMEWORK:**
+
+        1. **Skill Criticality**: How essential is this skill for day-to-day success?
+        2. **Learning Curve**: Given their background, how quickly could they acquire this?
+        3. **Transferable Knowledge**: What existing skills make this easier to learn?
+        4. **Compensation Strategies**: How could their other strengths offset this gap?
+        5. **Market Reality**: How common is this skill gap among successful candidates?
+
+        **SPECIFIC CONSIDERATIONS FOR {level.upper()} {role.upper()}:**
+
+        - **Entry Level**: Focus on foundational learning ability, related coursework, personal projects
+        - **Junior Level**: Assess growth potential, related experience, ability to learn on the job
+        - **Senior Level**: Evaluate architectural thinking, leadership potential, deep expertise in core areas
+
+        **TRANSFERABLE SKILLS ANALYSIS:**
+        Consider these potential bridges:
+        - **Language Similarity**: Java ↔ C#, JavaScript ↔ TypeScript, Python ↔ Ruby
+        - **Framework Patterns**: React ↔ Vue ↔ Angular (component-based thinking)
+        - **Database Concepts**: SQL skills transfer across PostgreSQL, MySQL, SQL Server
+        - **Cloud Principles**: AWS experience helps with Google Cloud, Azure
+        - **DevOps Mindset**: CI/CD, containerization concepts transfer across tools
+        - **Architectural Thinking**: Microservices, APIs, system design principles are universal
+
+        **RESUME CONTEXT:**
         {resume_text}
 
-        Return JSON in this exact format:
+        **OUTPUT REQUIREMENTS:**
+        For each missing skill, provide:
+        1. **Why it matters**: Role-specific importance and daily usage
+        2. **Learning assessment**: Difficulty given their background (Easy/Moderate/Challenging)
+        3. **Bridging skills**: What they already know that helps
+        4. **Business impact**: How this gap affects immediate productivity vs long-term growth
+
+        **OVERALL ASSESSMENT CRITERIA:**
+        - **Technical Readiness**: Can they contribute meaningfully from day 1?
+        - **Growth Potential**: How quickly will they close critical gaps?
+        - **Cultural Fit**: Do their experiences align with team needs?
+        - **Risk Assessment**: What are the hiring risks vs potential upside?
+
+        **OUTPUT FORMAT - RETURN VALID JSON:**
         {{
             "skill_explanations": {{
-                "Skill Name": "Why this skill matters for the role..."
+                "Skill Name": "**Why Critical**: [Specific importance for role]. **Learning Path**: [Easy/Moderate/Challenging given their [specific related experience]]. **Bridging Skills**: [What they know that helps]. **Business Impact**: [Immediate vs future productivity impact]."
             }},
-            "summary": "Overall assessment of candidate readiness..."
+            "summary": "Technical Assessment: [Current capability level and readiness]. Growth Trajectory: [Learning potential and speed]. Hiring Recommendation: [Strong fit/Good potential/Risky hire/Not recommended] because [specific reasoning]. Key Strengths: [What they excel at]. Development Areas: [Priority skills to develop]."
         }}
+        
+        IMPORTANT: The "summary" field must be a single string, not a JSON object. Combine all assessment parts into one continuous text string.
         """
         
         try:
             logger.info("Calling direct Gemini API for gap analysis...")
-            response_text = await self.generate_content(prompt)
+            response_text = await self.generate_content(prompt, timeout=20)
             
             content = response_text.strip()
             if content.startswith('```json'):
@@ -251,10 +333,22 @@ class DirectGeminiClient:
                     enhanced_skill["why_it_matters"] = explanations[skill_name]
                 enhanced_skills.append(enhanced_skill)
             
+            # Handle summary formatting - convert structured response to string if needed
+            summary = analysis.get("summary")
+            if isinstance(summary, dict):
+                # Convert structured summary to formatted string
+                summary_parts = []
+                for key, value in summary.items():
+                    if value:  # Only include non-empty values
+                        summary_parts.append(f"**{key}**: {value}")
+                summary = " | ".join(summary_parts)
+            elif not isinstance(summary, str):
+                summary = str(summary) if summary else None
+            
             logger.info("Direct Gemini gap analysis completed successfully")
             return {
                 "enhanced_missing_skills": enhanced_skills,
-                "summary": analysis.get("summary")
+                "summary": summary
             }
             
         except asyncio.TimeoutError:
