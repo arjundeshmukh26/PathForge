@@ -1,13 +1,12 @@
 """
-Direct Gemini API Client - Bypasses google-generativeai library SSL issues
-Uses raw HTTP requests with verify=False
+Direct Gemini API Client - Direct HTTP client for Gemini API
+Uses standard HTTP requests with proper SSL verification
 """
 
 import os
 import json
 import asyncio
 import logging
-import ssl
 from typing import List, Dict, Any, Optional
 import aiohttp
 
@@ -18,18 +17,13 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_API_BASE_URL = "https://generativelanguage.googleapis.com/v1beta"
 
 class DirectGeminiClient:
-    """Direct HTTP client for Gemini API that bypasses SSL verification"""
+    """Direct HTTP client for Gemini API with standard SSL verification"""
     
     def __init__(self):
         self.api_key = GEMINI_API_KEY
         self.base_url = GEMINI_API_BASE_URL
         
-        # Create SSL context that doesn't verify certificates
-        self.ssl_context = ssl.create_default_context()
-        self.ssl_context.check_hostname = False
-        self.ssl_context.verify_mode = ssl.CERT_NONE
-        
-        logger.info("DirectGeminiClient initialized with SSL verification disabled")
+        logger.info("DirectGeminiClient initialized with standard SSL verification")
     
     def is_available(self) -> bool:
         """Check if API key is available"""
@@ -97,8 +91,7 @@ class DirectGeminiClient:
         timeout_config = aiohttp.ClientTimeout(total=timeout)
         
         async with aiohttp.ClientSession(
-            timeout=timeout_config,
-            connector=aiohttp.TCPConnector(ssl=False)  # Disable SSL verification
+            timeout=timeout_config
         ) as session:
             logger.info(f"Making direct API call to Gemini: {url}")
             
@@ -243,10 +236,10 @@ class DirectGeminiClient:
         skills_list = [skill["skill"] for skill in missing_skills[:10]]  # Limit to top 10
         
         prompt = f"""
-        You are a senior technical hiring manager with 10+ years of experience evaluating candidates for {level} {role} positions. 
+        You are a senior technical hiring manager with 10+ years of experience evaluating candidates for {level} {role} positions. You're having a direct, honest conversation with a candidate about their fit for this role.
 
-        **CANDIDATE PROFILE ANALYSIS:**
-        Analyze this resume deeply to understand the candidate's technical background, experience depth, and potential for growth.
+        **YOUR PROFILE ANALYSIS:**
+        Analyze this resume deeply to understand your technical background, experience depth, and potential for growth. Speak directly to the candidate using "you" and "your".
 
         **CURRENT SKILLS ASSESSMENT:**
         Before focusing on missing skills, first evaluate:
@@ -287,27 +280,27 @@ class DirectGeminiClient:
         {resume_text}
 
         **OUTPUT REQUIREMENTS:**
-        For each missing skill, provide:
-        1. **Why it matters**: Role-specific importance and daily usage
-        2. **Learning assessment**: Difficulty given their background (Easy/Moderate/Challenging)
-        3. **Bridging skills**: What they already know that helps
-        4. **Business impact**: How this gap affects immediate productivity vs long-term growth
+        For each missing skill, provide (using second person - "you"):
+        1. **Why it matters**: Role-specific importance and daily usage for you
+        2. **Learning assessment**: Difficulty given your background (Easy/Moderate/Challenging)
+        3. **Bridging skills**: What you already know that helps
+        4. **Business impact**: How this gap affects your immediate productivity vs long-term growth
 
         **OVERALL ASSESSMENT CRITERIA:**
-        - **Technical Readiness**: Can they contribute meaningfully from day 1?
-        - **Growth Potential**: How quickly will they close critical gaps?
-        - **Cultural Fit**: Do their experiences align with team needs?
-        - **Risk Assessment**: What are the hiring risks vs potential upside?
+        - **Technical Readiness**: Can you contribute meaningfully from day 1?
+        - **Growth Potential**: How quickly will you close critical gaps?
+        - **Cultural Fit**: Do your experiences align with team needs?
+        - **Risk Assessment**: What are the hiring risks vs your potential upside?
 
         **OUTPUT FORMAT - RETURN VALID JSON:**
         {{
             "skill_explanations": {{
-                "Skill Name": "**Why Critical**: [Specific importance for role]. **Learning Path**: [Easy/Moderate/Challenging given their [specific related experience]]. **Bridging Skills**: [What they know that helps]. **Business Impact**: [Immediate vs future productivity impact]."
+                "Skill Name": "**Why Critical**: [Specific importance for role]. **Learning Path**: [Easy/Moderate/Challenging given your [specific related experience]]. **Bridging Skills**: [What you already know that helps]. **Business Impact**: [How this gap affects your immediate productivity vs long-term growth]."
             }},
-            "summary": "Technical Assessment: [Current capability level and readiness]. Growth Trajectory: [Learning potential and speed]. Hiring Recommendation: [Strong fit/Good potential/Risky hire/Not recommended] because [specific reasoning]. Key Strengths: [What they excel at]. Development Areas: [Priority skills to develop]."
+            "summary": "Your resume shows [current capability level and readiness for this role]. Your growth trajectory looks [learning potential and speed]. You're a [Strong fit/Good potential/Risky hire/Not recommended] for this role because [specific reasoning based on your background]. Your key strengths include [what you excel at that's relevant]. To improve your candidacy, you should focus on developing [priority skills to develop with specific recommendations]."
         }}
         
-        IMPORTANT: The "summary" field must be a single string, not a JSON object. Combine all assessment parts into one continuous text string.
+        IMPORTANT: The "summary" field must be a single string, not a JSON object. Use second person throughout - address the candidate directly as "you" and "your".
         """
         
         try:

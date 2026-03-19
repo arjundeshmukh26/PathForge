@@ -139,7 +139,7 @@ async def analyze_resume(request: AnalyzeRequest):
         enhanced_missing_skills = compatibility_analysis["missing_skills"]
         ai_enhancement_successful = False
         
-        # Try direct Gemini client first (bypasses SSL issues)
+        # Try direct Gemini client first
         if direct_gemini_client.is_available() and compatibility_analysis["missing_skills"]:
             try:
                 ai_enhancement = await direct_gemini_client.enhance_gap_analysis(
@@ -398,34 +398,34 @@ async def suggest_matching_roles(request: dict):
         skills_text = ", ".join(user_skills[:20]) if user_skills else "Skills extracted from resume"
         
         prompt = f"""
-        You are a senior career counselor specializing in technology career transitions. Analyze the candidate's profile and suggest the top 3-4 alternative roles that would be the best matches.
+        You are a senior career counselor specializing in technology career transitions. Analyze this candidate's profile and suggest the top 3-4 alternative roles that would be the best matches for them.
 
-        **CANDIDATE PROFILE:**
+        **YOUR PROFILE:**
         Current Target Role: {current_role}
         Experience Level: {current_level.title()}
-        Key Skills: {skills_text}
+        Your Key Skills: {skills_text}
         
-        Resume Context:
+        Your Resume Context:
         {resume_text[:1000] if resume_text else "No additional context provided"}
 
         **AVAILABLE ROLES TO CONSIDER:**
         {json.dumps(available_roles[:15], indent=2)}  # Limit to prevent token overflow
 
         **ANALYSIS CRITERIA:**
-        1. **Skill Overlap**: How many of their current skills transfer to this role?
-        2. **Learning Curve**: How manageable is the transition given their experience level?
-        3. **Career Progression**: Does this role offer good growth opportunities?
+        1. **Skill Overlap**: How many of your current skills transfer to this role?
+        2. **Learning Curve**: How manageable is the transition given your experience level?
+        3. **Career Progression**: Does this role offer good growth opportunities for you?
         4. **Market Demand**: Is this role in high demand in the current market?
         5. **Salary Potential**: Does this role offer competitive compensation?
 
         **MATCHING LOGIC:**
-        - Prioritize roles where 40%+ of their skills are relevant
-        - Consider complementary skills that show natural progression
-        - Factor in the experience level (don't suggest roles too advanced or too basic)
+        - Prioritize roles where 40%+ of your skills are relevant
+        - Consider complementary skills that show natural progression from your background
+        - Factor in your experience level (don't suggest roles too advanced or too basic)
         - Look for roles in growing fields with good career prospects
 
         **OUTPUT FORMAT:**
-        Return a JSON array of the top 3-4 role suggestions, ordered by match strength:
+        Return a JSON array of the top 3-4 role suggestions, ordered by match strength. Use second person ("you", "your") throughout:
 
         [
           {{
@@ -433,10 +433,10 @@ async def suggest_matching_roles(request: dict):
             "category": "role category",
             "match_percentage": 75,
             "transition_difficulty": "Easy|Moderate|Challenging",
-            "why_good_fit": "2-3 sentence explanation of why this role matches their profile and what makes the transition feasible.",
+            "why_good_fit": "2-3 sentence explanation of why this role matches your profile and what makes the transition feasible for you.",
             "key_overlapping_skills": ["skill1", "skill2", "skill3"],
             "skills_to_learn": ["newskill1", "newskill2"],
-            "growth_potential": "Brief description of career growth opportunities",
+            "growth_potential": "Brief description of career growth opportunities for you",
             "market_outlook": "Brief market demand assessment"
           }}
         ]
@@ -527,7 +527,7 @@ async def suggest_matching_roles(request: dict):
                             "why_good_fit": f"You already have {overlap} relevant skills for this {role_info['category']} role. The transition appears {difficulty.lower()} based on your current skill set.",
                             "key_overlapping_skills": [skill for skill in role_info["skills"][:3] if skill.lower() in user_skills_lower],
                             "skills_to_learn": [skill for skill in role_info["skills"][:3] if skill.lower() not in user_skills_lower],
-                            "growth_potential": f"Good growth opportunities in the {role_info['category']} field",
+                            "growth_potential": f"Good growth opportunities for you in the {role_info['category']} field",
                             "market_outlook": "Growing demand in tech industry"
                         })
             
@@ -541,10 +541,10 @@ async def suggest_matching_roles(request: dict):
                 "category": "general",
                 "match_percentage": 0,
                 "transition_difficulty": "Moderate",
-                "why_good_fit": "Based on your skills, consider exploring roles in adjacent fields that leverage your existing expertise.",
+                "why_good_fit": "Based on your skills, you should consider exploring roles in adjacent fields that leverage your existing expertise.",
                 "key_overlapping_skills": user_skills[:3] if user_skills else [],
                 "skills_to_learn": ["Research specific roles", "Identify skill gaps"],
-                "growth_potential": "Many growth opportunities available",
+                "growth_potential": "Many growth opportunities available for you",
                 "market_outlook": "Technology roles continue to be in demand"
             }]
         

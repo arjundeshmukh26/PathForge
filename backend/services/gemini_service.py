@@ -6,97 +6,12 @@ import os
 import json
 import asyncio
 import logging
-import ssl
 from typing import List, Dict, Any, Optional
 import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
 
 # Configure logging
 logger = logging.getLogger(__name__)
-
-# Disable SSL verification completely for personal project
-def disable_ssl_verification():
-    """Completely disable SSL verification for personal/development use"""
-    try:
-        # Disable SSL verification warnings
-        import urllib3
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        
-        # Set environment variables to completely bypass SSL verification
-        os.environ['PYTHONHTTPSVERIFY'] = '0'
-        os.environ['REQUESTS_CA_BUNDLE'] = ''
-        os.environ['CURL_CA_BUNDLE'] = ''
-        os.environ['SSL_VERIFY'] = 'false'
-        os.environ['GRPC_SSL_CIPHER_SUITES'] = 'HIGH'
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS_JSON'] = ''
-        os.environ['GRPC_VERBOSITY'] = 'ERROR'
-        os.environ['GRPC_TRACE'] = ''
-        
-        # Create completely unverified SSL context
-        ssl._create_default_https_context = ssl._create_unverified_context
-        
-        # Aggressively patch all HTTP libraries to disable SSL verification
-        try:
-            import requests
-            import httpx
-            
-            # Patch requests session to always use verify=False
-            original_request = requests.Session.request
-            def patched_request(self, *args, **kwargs):
-                kwargs['verify'] = False
-                return original_request(self, *args, **kwargs)
-            requests.Session.request = patched_request
-            
-            # Patch default requests functions
-            original_get = requests.get
-            original_post = requests.post
-            original_put = requests.put
-            original_delete = requests.delete
-            
-            def patched_get(*args, **kwargs):
-                kwargs['verify'] = False
-                return original_get(*args, **kwargs)
-            def patched_post(*args, **kwargs):
-                kwargs['verify'] = False
-                return original_post(*args, **kwargs)
-            def patched_put(*args, **kwargs):
-                kwargs['verify'] = False
-                return original_put(*args, **kwargs)
-            def patched_delete(*args, **kwargs):
-                kwargs['verify'] = False
-                return original_delete(*args, **kwargs)
-                
-            requests.get = patched_get
-            requests.post = patched_post
-            requests.put = patched_put
-            requests.delete = patched_delete
-            
-            # Also patch httpx if available
-            try:
-                original_httpx_get = httpx.get
-                original_httpx_post = httpx.post
-                def patched_httpx_get(*args, **kwargs):
-                    kwargs['verify'] = False
-                    return original_httpx_get(*args, **kwargs)
-                def patched_httpx_post(*args, **kwargs):
-                    kwargs['verify'] = False
-                    return original_httpx_post(*args, **kwargs)
-                httpx.get = patched_httpx_get
-                httpx.post = patched_httpx_post
-            except:
-                pass
-                
-        except ImportError:
-            pass
-        
-        logger.info("SSL verification completely disabled for development")
-        return True
-    except Exception as e:
-        logger.warning(f"Could not disable SSL verification: {e}")
-        return False
-
-# Disable SSL verification on import
-disable_ssl_verification()
 
 # Configure Gemini API
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -130,7 +45,7 @@ class GeminiService:
                         HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
                     }
                 )
-                logger.info("Gemini service initialized with aggressive SSL verification disabled")
+                logger.info("Gemini service initialized successfully")
             except Exception as e:
                 logger.error(f"Failed to initialize Gemini service: {e}")
                 self.model = None
@@ -288,10 +203,10 @@ class GeminiService:
         skills_list = [skill["skill"] for skill in missing_skills[:10]]  # Limit to top 10
         
         prompt = f"""
-        You are a senior technical hiring manager with 10+ years of experience evaluating candidates for {level} {role} positions. 
+        You are a senior technical hiring manager with 10+ years of experience evaluating candidates for {level} {role} positions. You're having a direct, honest conversation with a candidate about their fit for this role.
 
-        **CANDIDATE PROFILE ANALYSIS:**
-        Analyze this resume deeply to understand the candidate's technical background, experience depth, and potential for growth.
+        **YOUR PROFILE ANALYSIS:**
+        Analyze this resume deeply to understand your technical background, experience depth, and potential for growth. Speak directly to the candidate using "you" and "your".
 
         **CURRENT SKILLS ASSESSMENT:**
         Before focusing on missing skills, first evaluate:
@@ -332,27 +247,27 @@ class GeminiService:
         {resume_text}
 
         **OUTPUT REQUIREMENTS:**
-        For each missing skill, provide:
-        1. **Why it matters**: Role-specific importance and daily usage
-        2. **Learning assessment**: Difficulty given their background (Easy/Moderate/Challenging)
-        3. **Bridging skills**: What they already know that helps
-        4. **Business impact**: How this gap affects immediate productivity vs long-term growth
+        For each missing skill, provide (using second person - "you"):
+        1. **Why it matters**: Role-specific importance and daily usage for you
+        2. **Learning assessment**: Difficulty given your background (Easy/Moderate/Challenging)
+        3. **Bridging skills**: What you already know that helps
+        4. **Business impact**: How this gap affects your immediate productivity vs long-term growth
 
         **OVERALL ASSESSMENT CRITERIA:**
-        - **Technical Readiness**: Can they contribute meaningfully from day 1?
-        - **Growth Potential**: How quickly will they close critical gaps?
-        - **Cultural Fit**: Do their experiences align with team needs?
-        - **Risk Assessment**: What are the hiring risks vs potential upside?
+        - **Technical Readiness**: Can you contribute meaningfully from day 1?
+        - **Growth Potential**: How quickly will you close critical gaps?
+        - **Cultural Fit**: Do your experiences align with team needs?
+        - **Risk Assessment**: What are the hiring risks vs your potential upside?
 
         **OUTPUT FORMAT - RETURN VALID JSON:**
         {{
             "skill_explanations": {{
-                "Skill Name": "**Why Critical**: [Specific importance for role]. **Learning Path**: [Easy/Moderate/Challenging given their [specific related experience]]. **Bridging Skills**: [What they know that helps]. **Business Impact**: [Immediate vs future productivity impact]."
+                "Skill Name": "**Why Critical**: [Specific importance for role]. **Learning Path**: [Easy/Moderate/Challenging given your [specific related experience]]. **Bridging Skills**: [What you already know that helps]. **Business Impact**: [How this gap affects your immediate productivity vs long-term growth]."
             }},
-            "summary": "Technical Assessment: [Current capability level and readiness]. Growth Trajectory: [Learning potential and speed]. Hiring Recommendation: [Strong fit/Good potential/Risky hire/Not recommended] because [specific reasoning]. Key Strengths: [What they excel at]. Development Areas: [Priority skills to develop]."
+            "summary": "Your resume shows [current capability level and readiness for this role]. Your growth trajectory looks [learning potential and speed]. You're a [Strong fit/Good potential/Risky hire/Not recommended] for this role because [specific reasoning based on your background]. Your key strengths include [what you excel at that's relevant]. To improve your candidacy, you should focus on developing [priority skills to develop with specific recommendations]."
         }}
         
-        IMPORTANT: The "summary" field must be a single string, not a JSON object. Combine all assessment parts into one continuous text string.
+        IMPORTANT: The "summary" field must be a single string, not a JSON object. Use second person throughout - address the candidate directly as "you" and "your".
         """
         
         try:

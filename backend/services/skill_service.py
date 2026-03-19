@@ -138,10 +138,10 @@ class SkillService:
         
         logger.info(f"Starting hybrid skill extraction for resume with {len(resume_text)} characters")
         
-        # Try AI extraction first - use direct client to bypass SSL issues
+        # Try AI extraction first - use direct client for better performance
         ai_skills = []
         
-        # Try direct Gemini client first (bypasses SSL issues)
+        # Try direct Gemini client first
         if direct_gemini_client.is_available():
             try:
                 logger.info("Attempting AI-powered skill extraction with direct client...")

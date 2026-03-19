@@ -1,4 +1,4 @@
-# Skill-Bridge Career Navigator
+# PathForge: Skill-Bridge Career Navigator
 
 **Candidate Name:** Arjun Deshmukh
 
