@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PDFUpload from './PDFUpload';
 
 const InteractiveResumeForm = ({ onAnalyze, isAnalyzing = false }) => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,8 @@ const InteractiveResumeForm = ({ onAnalyze, isAnalyzing = false }) => {
   const [wordCount, setWordCount] = useState(0);
   const [formErrors, setFormErrors] = useState({});
   const [showPreview, setShowPreview] = useState(false);
+  const [inputMethod, setInputMethod] = useState('text'); // 'text' or 'pdf'
+  const [pdfMetadata, setPdfMetadata] = useState(null);
 
   useEffect(() => {
     fetchRoles();
@@ -114,6 +117,26 @@ const InteractiveResumeForm = ({ onAnalyze, isAnalyzing = false }) => {
       role: type === 'frontend' ? 'Frontend Engineer' : 
             type === 'backend' ? 'Backend Engineer' : 'Full Stack Engineer'
     }));
+    setInputMethod('text'); // Switch to text input when loading example
+    setPdfMetadata(null);
+  };
+
+  const handlePDFTextExtracted = (extractedText, metadata) => {
+    setFormData(prev => ({
+      ...prev,
+      resume: extractedText
+    }));
+    setPdfMetadata(metadata);
+    setFormErrors(prev => ({ ...prev, resume: null })); // Clear resume errors
+  };
+
+  const handleInputMethodChange = (method) => {
+    setInputMethod(method);
+    if (method === 'text') {
+      setPdfMetadata(null);
+    }
+    // Clear existing errors when switching methods
+    setFormErrors(prev => ({ ...prev, resume: null }));
   };
 
   return (
@@ -154,6 +177,11 @@ const InteractiveResumeForm = ({ onAnalyze, isAnalyzing = false }) => {
                     Resume Content
                   </label>
                   <div className="flex items-center space-x-2">
+                    {pdfMetadata && (
+                      <div className="text-sm text-blue-600 font-medium">
+                        PDF: {pdfMetadata.filename}
+                      </div>
+                    )}
                     <div className="text-sm text-gray-600">
                       {wordCount} words
                     </div>
@@ -162,32 +190,88 @@ const InteractiveResumeForm = ({ onAnalyze, isAnalyzing = false }) => {
                     )}
                   </div>
                 </div>
-                
-                <div className="relative">
-                  <textarea
-                    name="resume"
-                    value={formData.resume}
-                    onChange={handleInputChange}
-                    placeholder="Paste your resume text here... Include your experience, skills, education, and projects."
-                    className={`w-full h-64 px-6 py-4 text-base border-2 rounded-2xl bg-gray-50 focus:bg-white focus:border-slate-500 focus:outline-none transition-all duration-200 resize-none ${
-                      formErrors.resume ? 'border-red-400 bg-red-50' : 'border-gray-200'
-                    }`}
+
+                {/* Input Method Toggle */}
+                <div className="flex items-center space-x-1 p-1 bg-gray-100 rounded-xl w-fit">
+                  <button
+                    type="button"
+                    onClick={() => handleInputMethodChange('text')}
                     disabled={isAnalyzing}
-                  />
-                  {wordCount > 0 && (
-                    <div className="absolute bottom-4 right-6 flex items-center space-x-2">
-                      <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        wordCount >= 100 ? 'bg-emerald-100 text-emerald-800' :
-                        wordCount >= 50 ? 'bg-amber-100 text-amber-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {wordCount >= 100 ? 'Excellent length' :
-                         wordCount >= 50 ? 'Good length' : 'Too short'}
-                      </div>
-                    </div>
-                  )}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${
+                      inputMethod === 'text'
+                        ? 'bg-white text-slate-900 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    <span>Type Text</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleInputMethodChange('pdf')}
+                    disabled={isAnalyzing}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${
+                      inputMethod === 'pdf'
+                        ? 'bg-white text-slate-900 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <span>Upload PDF</span>
+                  </button>
                 </div>
                 
+                {inputMethod === 'text' ? (
+                  <div className="relative">
+                    <textarea
+                      name="resume"
+                      value={formData.resume}
+                      onChange={handleInputChange}
+                      placeholder="Paste your resume text here... Include your experience, skills, education, and projects."
+                      className={`w-full h-64 px-6 py-4 text-base border-2 rounded-2xl bg-gray-50 focus:bg-white focus:border-slate-500 focus:outline-none transition-all duration-200 resize-none ${
+                        formErrors.resume ? 'border-red-400 bg-red-50' : 'border-gray-200'
+                      }`}
+                      disabled={isAnalyzing}
+                    />
+                    {wordCount > 0 && (
+                      <div className="absolute bottom-4 right-6 flex items-center space-x-2">
+                        <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          wordCount >= 100 ? 'bg-emerald-100 text-emerald-800' :
+                          wordCount >= 50 ? 'bg-amber-100 text-amber-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {wordCount >= 100 ? 'Excellent length' :
+                           wordCount >= 50 ? 'Good length' : 'Too short'}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <PDFUpload
+                    onTextExtracted={handlePDFTextExtracted}
+                    disabled={isAnalyzing}
+                  />
+                )}
+                
+                {/* PDF Extraction Info */}
+                {pdfMetadata && inputMethod === 'text' && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <div className="flex items-center space-x-2 text-blue-800 text-sm">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>
+                        Text extracted from <strong>{pdfMetadata.filename}</strong> using {pdfMetadata.extractionMethod}
+                        • {pdfMetadata.wordCount} words
+                      </span>
+                    </div>
+                  </div>
+                )}
+
                 {formErrors.resume && (
                   <p className="text-red-600 text-sm flex items-center">
                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { calculateCompatibilityScore, updateMissingSkills, debugScoring } from '../utils/scoringUtils';
 
 const InteractiveScoreCard = ({ 
   score, 
@@ -132,21 +133,19 @@ const InteractiveScoreCard = ({
     if (!serverUpdated) {
       console.log('Using client-side skill update fallback');
       
-      // Calculate updated score (simplified calculation)
       const learnedSkillsArray = Array.from(newLearnedSkills);
       
-      const updatedMissingSkills = missingSkills.filter(
-        skillItem => !learnedSkillsArray.includes(skillItem.skill)
-      );
+      // Use centralized scoring utility for consistency
+      const scoreCalculation = calculateCompatibilityScore(matchedSkills, missingSkills, learnedSkillsArray);
+      const updatedMissingSkills = updateMissingSkills(missingSkills, learnedSkillsArray);
       
-      // Simple score recalculation based on remaining missing skills
-      const totalSkillsCount = matchedSkills.length + missingSkills.length;
-      const matchedSkillsCount = matchedSkills.length + learnedSkillsArray.length;
-      const updatedScore = totalSkillsCount > 0 ? (matchedSkillsCount / totalSkillsCount) * 100 : 0;
+      // Debug logging for scoring transparency
+      const debugInfo = debugScoring(matchedSkills, missingSkills, learnedSkillsArray);
+      console.log('Client-side scoring debug:', debugInfo);
       
       const updatedData = {
         session_id: sessionId,
-        compatibility_score: Math.round(updatedScore),
+        compatibility_score: scoreCalculation.score,
         matched_skills: matchedSkills,
         missing_skills: updatedMissingSkills,
         learned_skills: learnedSkillsArray,
@@ -154,6 +153,7 @@ const InteractiveScoreCard = ({
       };
       
       console.log('Client-side fallback: Updated learned skills to', learnedSkillsArray);
+      console.log('Client-side fallback: Score updated from ? to', scoreCalculation.score);
       
       onSkillsUpdated && onSkillsUpdated(updatedData);
     }

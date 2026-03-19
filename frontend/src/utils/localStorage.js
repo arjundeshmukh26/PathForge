@@ -1,6 +1,7 @@
 /**
  * Local Storage utility for managing past analyses
  */
+import { calculateCompatibilityScore, updateMissingSkills } from './scoringUtils';
 
 const STORAGE_KEYS = {
   ANALYSES: 'skill_bridge_analyses',
@@ -105,23 +106,24 @@ export const updateLearnedSkills = (analysisId, learnedSkills) => {
     analyses[analysisIndex].learned_skills = learnedSkills;
     analyses[analysisIndex].last_updated = new Date().toISOString();
     
-    // Recalculate compatibility score based on learned skills
-    const totalSkills = (analyses[analysisIndex].matched_skills?.length || 0) + (analyses[analysisIndex].missing_skills?.length || 0);
-    const learnedCount = learnedSkills.length;
-    const originalMatchedCount = analyses[analysisIndex].matched_skills?.length || 0;
+    // Recalculate compatibility score using centralized utility (ensures consistency)
+    const matchedSkills = analyses[analysisIndex].matched_skills || [];
+    const missingSkills = analyses[analysisIndex].missing_skills || [];
     
-    if (totalSkills > 0) {
-      const newMatchedCount = originalMatchedCount + learnedCount;
-      analyses[analysisIndex].compatibility_score = Math.round((newMatchedCount / totalSkills) * 100);
-    }
+    // Use centralized scoring calculation
+    const scoreCalculation = calculateCompatibilityScore(matchedSkills, missingSkills, learnedSkills);
+    analyses[analysisIndex].compatibility_score = scoreCalculation.score;
     
-    // Recalculate missing skills by removing learned ones
-    if (analyses[analysisIndex].missing_skills) {
-      const learnedSkillsSet = new Set(learnedSkills);
-      analyses[analysisIndex].missing_skills = analyses[analysisIndex].missing_skills.filter(
-        skill => !learnedSkillsSet.has(skill.skill)
-      );
-    }
+    // Update missing skills by removing learned ones
+    analyses[analysisIndex].missing_skills = updateMissingSkills(missingSkills, learnedSkills);
+    
+    console.log('localStorage scoring update:', {
+      analysisId: analyses[analysisIndex].id,
+      learnedSkillsCount: learnedSkills.length,
+      scoreDetails: scoreCalculation,
+      newScore: scoreCalculation.score,
+      remainingMissingSkills: analyses[analysisIndex].missing_skills.length
+    });
     
     // Save back to localStorage
     localStorage.setItem(STORAGE_KEYS.ANALYSES, JSON.stringify(analyses));

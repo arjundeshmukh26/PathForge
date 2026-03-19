@@ -219,13 +219,20 @@ class EnhancedSkillService:
                 })
         
         # Calculate score as percentage
-        score = (matched_weight / total_weight * 100) if total_weight > 0 else 0
+        raw_score = (matched_weight / total_weight * 100) if total_weight > 0 else 0
+        
+        # Ensure score is between 0 and 100, rounded to 1 decimal place
+        score = min(100.0, max(0.0, round(raw_score, 1)))
         
         # Sort missing skills by weight (descending)
         missing_skills.sort(key=lambda x: x["weight"], reverse=True)
         
+        # Log scoring details for debugging
+        logger.debug(f"Compatibility scoring: matched_weight={matched_weight}, "
+                    f"total_weight={total_weight}, raw_score={raw_score}, final_score={score}")
+        
         return {
-            "score": round(score, 1),
+            "score": score,
             "matched_skills": matched_skills,
             "missing_skills": missing_skills,
             "total_weight": total_weight,
