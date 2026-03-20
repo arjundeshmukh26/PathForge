@@ -1,7 +1,7 @@
 # PathForge: Skill-Bridge Career Navigator
 
 **Candidate Name:** Arjun Deshmukh
-
+**Youtube Recording:** https://www.youtube.com/watch?v=X8eFl87cURY
 **Scenario Chosen:** AI-Powered Career Skill Analysis Platform
 
 **Estimated Time Spent:** 5.5-6 hours
