@@ -55,11 +55,10 @@ AI initially suggested using a simple count-based scoring system for skill compa
 ## Tradeoffs & Prioritization
 
 **What did you cut to stay within the 4–6 hour limit?**
-- Advanced user authentication and persistence (used localStorage instead)
+- Advanced user authentication and persistence (used localStorage instead to save setup and integration time)
 - Comprehensive role database (limited to 8 key tech roles)
 - Advanced AI prompt engineering (kept prompts effective but not overly complex)
-- Detailed UI animations and micro-interactions
-- Advanced error recovery and retry mechanisms
+- Used synthetic datasets
 
 **What would you build next if you had more time?**
 - User authentication with profile persistence
